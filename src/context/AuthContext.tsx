@@ -15,11 +15,16 @@ type AuthContextType = {
     email: string,
     password: string
   ) => Promise<firebase.auth.UserCredential | void>;
+  login: (
+    email: string,
+    password: string
+  ) => Promise<firebase.auth.UserCredential | void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
   currentUser: null,
   signup: (email: string, password: string) => Promise.resolve(),
+  login: (email: string, password: string) => Promise.resolve(),
 });
 
 export const useAuth = () => {
@@ -37,6 +42,10 @@ const AuthProvider: FC<Props> = ({ children }) => {
     return auth.createUserWithEmailAndPassword(email, password);
   };
 
+  const login = (email: string, password: string) => {
+    return auth.signInWithEmailAndPassword(email, password);
+  };
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
@@ -47,6 +56,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
   const value = {
     currentUser,
     signup,
+    login,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
