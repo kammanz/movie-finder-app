@@ -1,11 +1,12 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import Signup from './Signup';
 import Login from './Login';
 // import Form from './Form';
 import Form3 from './Form3';
 import UserPage from './UserPage';
+import PrivateRoute from './PrivateRoute';
 
 const App = () => {
   return (
@@ -17,7 +18,9 @@ const App = () => {
         <Route path="/login" element={<Login />} />
       </Routes>
       <Routes>
-        <Route path="/userPage" element={<UserPage />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/userPage" element={<UserPage />} />
+        </Route>
       </Routes>
     </Container>
   );
