@@ -3,11 +3,11 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-type Props = {
+export type Props = {
   formType: string;
 };
 
-const Form3: FC<Props> = ({ formType }) => {
+const Form: FC<Props> = ({ formType }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -101,4 +101,4 @@ const Form3: FC<Props> = ({ formType }) => {
   );
 };
 
-export default Form3;
+export default Form;

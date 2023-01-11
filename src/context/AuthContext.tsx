@@ -8,6 +8,12 @@ import React, {
 } from 'react';
 import firebase from 'firebase/compat/app';
 import { auth } from '../firebaseSetup';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+} from 'firebase/auth';
 
 type AuthContextType = {
   currentUser: firebase.User | null;
@@ -49,7 +55,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
   };
 
   const logout = () => {
-    return auth.signOut();
+    return signOut(auth);
   };
 
   useEffect(() => {
