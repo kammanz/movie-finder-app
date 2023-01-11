@@ -1,7 +1,7 @@
-import React, { useState, FC, useMemo, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import React, { useState, FC, useMemo, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export type Props = {
   formType: string;
@@ -10,15 +10,15 @@ export type Props = {
 const Form: FC<Props> = ({ formType }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const {
     formState: { errors },
     handleSubmit,
     register,
   } = useForm({
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
   });
 
@@ -33,68 +33,70 @@ const Form: FC<Props> = ({ formType }) => {
           if (!email && !password) return;
           setIsLoading(true);
           try {
-            if (formType === 'signup') {
-              await signup(email, password);
-            } else if (formType === 'login') {
+            if (formType === "signup") {
               await login(email, password);
+            } else if (formType === "login") {
+              await signup(email, password);
             }
-            navigate('/userPage');
+            navigate("/userPage");
           } catch (error) {
             if (error instanceof Error) {
               let errorString = await error.message.slice(
-                error.message.indexOf(' '),
-                error.message.indexOf('(')
+                error.message.indexOf(" "),
+                error.message.indexOf("(")
               );
               setErrorMessage(errorString);
             }
           }
           setIsLoading(false);
-        })}>
+        })}
+      >
         <label htmlFor="email">Email</label>
         <br />
         <input
           id="email"
-          {...register('email', {
-            required: 'Email required',
+          {...register("email", {
+            required: "Email required",
           })}
           placeholder="Enter your email"
-          onChange={() => errorMessage && setErrorMessage('')}
+          onChange={() => errorMessage && setErrorMessage("")}
         />
-        <p>{(errors['email']?.message as unknown) as string}</p>
-        <p>{formType === 'signup' && errorMessage}</p>
+        <p>{errors["email"]?.message as unknown as string}</p>
+        <p>{formType === "signup" && errorMessage}</p>
         <br />
         <label htmlFor="password">Password</label>
         <br />
         <input
-          type={isPasswordVisible ? 'text' : 'password'}
+          type={isPasswordVisible ? "text" : "password"}
           id="password"
-          {...register('password', {
-            required: 'password required',
+          {...register("password", {
+            required: "password required",
             minLength: {
               value: 6,
-              message: 'Password must be 6 characters',
+              message: "Password must be 6 characters",
             },
           })}
           placeholder="Enter your password"
-          onChange={() => errorMessage && setErrorMessage('')}
+          onChange={() => errorMessage && setErrorMessage("")}
         />
         <button
           type="button"
-          onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
-          {isPasswordVisible ? 'Hide Password' : 'Show Password'}
+          onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+        >
+          {isPasswordVisible ? "Hide Password" : "Show Password"}
         </button>
         <br />
-        <p>{(errors['password']?.message as unknown) as string}</p>
+        <p>{errors["password"]?.message as unknown as string}</p>
         <p>{errorMessage}</p>
         <br />
         <button type="submit" disabled={isLoading ? true : false}>
           Submit
         </button>
         <br />
-        <Link to={formType === 'signup' ? '/login' : '/'}>
-          {formType === 'signup'
-            ? 'Already have an account? Click here to log in'
-            : 'Dont have an account? Click here to sign up'}
+        <Link to={formType === "signup" ? "/login" : "/"}>
+          {formType === "signup"
+            ? "Already have an account? Click here to log in"
+            : "Dont have an account? Click here to sign up"}
         </Link>
       </form>
     </div>
