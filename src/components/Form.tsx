@@ -34,9 +34,9 @@ const Form: FC<Props> = ({ formType }) => {
           setIsLoading(true);
           try {
             if (formType === 'signup') {
-              await signup(email, password);
-            } else if (formType === 'login') {
               await login(email, password);
+            } else if (formType === 'login') {
+              await signup(email, password);
             }
             navigate('/userPage');
           } catch (error) {
