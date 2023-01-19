@@ -54,6 +54,7 @@ const Form: FC<Props> = ({ formType }) => {
         <br />
         <input
           id="email"
+          data-testid="email"
           {...register('email', {
             required: 'Email required',
           })}
@@ -66,10 +67,11 @@ const Form: FC<Props> = ({ formType }) => {
         <label htmlFor="password">Password</label>
         <br />
         <input
+          data-testid="password"
           type={isPasswordVisible ? 'text' : 'password'}
           id="password"
           {...register('password', {
-            required: 'password required',
+            required: 'Password required',
             minLength: {
               value: 6,
               message: 'Password must be 6 characters',
@@ -87,15 +89,18 @@ const Form: FC<Props> = ({ formType }) => {
         <p>{(errors['password']?.message as unknown) as string}</p>
         <p>{errorMessage}</p>
         <br />
-        <button type="submit" disabled={isLoading ? true : false}>
+        <button
+          data-testid="submit"
+          type="submit"
+          disabled={isLoading ? true : false}>
           Submit
         </button>
         <br />
-        <Link to={formType === 'signup' ? '/login' : '/'}>
+        {/* <Link to={formType === 'signup' ? '/login' : '/'}>
           {formType === 'signup'
             ? 'Already have an account? Click here to log in'
             : 'Dont have an account? Click here to sign up'}
-        </Link>
+        </Link> */}
       </form>
     </div>
   );
