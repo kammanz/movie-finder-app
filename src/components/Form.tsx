@@ -30,21 +30,24 @@ const Form: FC<Props> = ({ formType }) => {
       <h2>{formType}</h2>
       <form
         onSubmit={handleSubmit(async ({ email, password }) => {
+          console.log('here');
           if (!email && !password) return;
           setIsLoading(true);
           try {
             if (formType === 'signup') {
-              await login(email, password);
-            } else if (formType === 'login') {
               await signup(email, password);
+            } else if (formType === 'login') {
+              await login(email, password);
             }
             navigate('/userPage');
           } catch (error) {
+            // console.log('catching custom err: ', error);
             if (error instanceof Error) {
-              let errorString = await error.message.slice(
+              let errorString = error.message.slice(
                 error.message.indexOf(' '),
                 error.message.indexOf('(')
               );
+              console.log('errorString: ', errorString);
               setErrorMessage(errorString);
             }
           }
