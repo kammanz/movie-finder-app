@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import List from './List';
 
 const UserPage = () => {
   const { currentUser, logout } = useAuth();
@@ -20,6 +21,9 @@ const UserPage = () => {
     <div>
       <h1>Welcome to your homepage</h1>
       <p>Your email address is {currentUser?.email}</p>
+      <div>
+        <List />
+      </div>
       <button onClick={handleClick}>Logout</button>
       {error}
     </div>
