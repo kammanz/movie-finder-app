@@ -1,114 +1,109 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, FC, useMemo, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import styles from './Form.module.css';
 
-type Props = {
-  isSignup: boolean;
+export type Props = {
+  formType: string;
 };
 
-const Form: React.FC<Props> = ({ isSignup }) => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [isError, setIsError] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const passwordRef = useRef<HTMLInputElement | null>(null);
+const Form: FC<Props> = ({ formType }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+  } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
   const { signup, login } = useAuth();
-  let navigate = useNavigate();
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    if (isError) {
-      setIsError(false);
-    }
-  };
-
-  const handleSubmit = async (e: React.SyntheticEvent<Element, Event>) => {
-    e.preventDefault();
-    console.log('clicked');
-
-    if (email && password && passwordRef.current) {
-      console.log('isSignup', isSignup);
-      try {
-        if (isSignup) {
-          setIsLoading(true);
-          await signup(email, password);
-          setIsLoading(false);
-          navigate('login');
-        } else {
-          console.log('login');
-          setIsLoading(true);
-          await login(email, password);
-          setIsLoading(false);
-          window.location.pathname.replace('/login', '');
-          navigate(`/userPage`);
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          let newString = error.message.slice(
-            error.message.indexOf(' '),
-            error.message.indexOf('.')
-          );
-          setErrorMessage(newString);
-        }
-        setIsError(true);
-        setIsLoading(false);
-        setPassword('');
-        passwordRef.current.focus();
-      }
-    }
-  };
+  const navigate = useNavigate();
 
   return (
-    <div className={styles.formContainer}>
-      <h2>{isSignup}</h2>
-      <form>
-        <fieldset id="email">
-          <label htmlFor="email">Email</label>
-          <br />
-          <input
-            required
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => handleEmailChange(e)}
-          />
-        </fieldset>
-        <fieldset id="password">
-          <label htmlFor="password">Password</label>
-          <br />
-          <input
-            required
-            type="password"
-            ref={passwordRef}
-            id="password"
-            value={password}
-            onChange={(e) => handlePasswordChange(e)}
-          />
-        </fieldset>
+    <div>
+      <h2>{formType}</h2>
+      <form
+        onSubmit={handleSubmit(async ({ email, password }) => {
+          console.log('here');
+          if (!email && !password) return;
+          setIsLoading(true);
+          try {
+            if (formType === 'signup') {
+              await signup(email, password);
+            } else if (formType === 'login') {
+              await login(email, password);
+            }
+            navigate('/userPage');
+          } catch (error) {
+            // console.log('catching custom err: ', error);
+            if (error instanceof Error) {
+              let errorString = error.message.slice(
+                error.message.indexOf(' '),
+                error.message.indexOf('(')
+              );
+              console.log('errorString: ', errorString);
+              setErrorMessage(errorString);
+            }
+          }
+          setIsLoading(false);
+        })}>
+        <label htmlFor="email">Email</label>
         <br />
-        {isError && (
-          <div style={{ color: 'red', fontSize: 12, padding: '10px 20px' }}>
-            {errorMessage}
-          </div>
-        )}
+        <input
+          id="email"
+          data-testid="email"
+          {...register('email', {
+            required: 'Email required',
+          })}
+          placeholder="Enter your email"
+          onChange={() => errorMessage && setErrorMessage('')}
+        />
+        <p>{(errors['email']?.message as unknown) as string}</p>
+        <p>{formType === 'signup' && errorMessage}</p>
+        <br />
+        <label htmlFor="password">Password</label>
+        <br />
+        <input
+          data-testid="password"
+          type={isPasswordVisible ? 'text' : 'password'}
+          id="password"
+          {...register('password', {
+            required: 'Password required',
+            minLength: {
+              value: 6,
+              message: 'Password must be 6 characters',
+            },
+          })}
+          placeholder="Enter your password"
+          onChange={() => errorMessage && setErrorMessage('')}
+        />
         <button
-          className="w-100"
-          type="submit"
-          onClick={handleSubmit}
-          disabled={isLoading ? true : false}>
-          {isSignup ? 'Sign Up' : 'Login'}
+          type="button"
+          onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
+          {isPasswordVisible ? 'Hide Password' : 'Show Password'}
         </button>
-        <Link to={isSignup ? '/login' : '/'}>
-          {isSignup
+        <br />
+        <p>{(errors['password']?.message as unknown) as string}</p>
+        <p>{errorMessage}</p>
+        <br />
+        <button
+          data-testid="submit"
+          type="submit"
+          disabled={isLoading ? true : false}>
+          Submit
+        </button>
+        <br />
+        {/* <Link to={formType === 'signup' ? '/login' : '/'}>
+          {formType === 'signup'
             ? 'Already have an account? Click here to log in'
-            : 'Need an account? Click here to sign up'}
-        </Link>
+            : 'Dont have an account? Click here to sign up'}
+        </Link> */}
       </form>
     </div>
   );
