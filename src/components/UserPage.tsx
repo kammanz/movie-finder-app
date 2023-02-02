@@ -21,9 +21,7 @@ const UserPage = () => {
     <div>
       <h1>Welcome to your homepage</h1>
       <p>Your email address is {currentUser?.email}</p>
-      <div>
-        <List />
-      </div>
+      <div>{/* <List /> */}</div>
       <button onClick={handleClick}>Logout</button>
       {error}
     </div>

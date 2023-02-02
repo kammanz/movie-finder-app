@@ -96,11 +96,11 @@ const Form: FC<Props> = ({ formType }) => {
           Submit
         </button>
         <br />
-        <Link to={formType === 'signup' ? '/login' : '/'}>
+        {/* <Link to={formType === 'signup' ? '/login' : '/'}>
           {formType === 'signup'
             ? 'Already have an account? Click here to log in'
             : 'Dont have an account? Click here to sign up'}
-        </Link>
+        </Link> */}
       </form>
     </div>
   );

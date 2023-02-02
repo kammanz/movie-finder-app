@@ -4,6 +4,7 @@ import { Container } from 'react-bootstrap';
 import Form from './Form';
 import UserPage from './UserPage';
 import PrivateRoute from './PrivateRoute';
+import List from './List';
 
 const App = () => {
   return (
@@ -18,6 +19,9 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path="/userPage" element={<UserPage />} />
         </Route>
+      </Routes>
+      <Routes>
+        <Route path="/list" element={<List />} />
       </Routes>
     </Container>
   );
