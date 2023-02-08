@@ -11,6 +11,7 @@ const Form: FC<Props> = ({ formType }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
   const {
     formState: { errors },
     handleSubmit,
