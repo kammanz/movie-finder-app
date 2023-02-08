@@ -5,10 +5,10 @@ import { Container } from 'react-bootstrap';
 import { useQueryClient, QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
-import Form from './Form';
-import UserPage from './UserPage';
+import Form from '../pages/signin/Form';
+import UserPage from '../pages/user/UserPage';
 import PrivateRoute from './PrivateRoute';
-import List from './List';
+import List from '../pages/list/List';
 
 const queryClient = new QueryClient();
 
