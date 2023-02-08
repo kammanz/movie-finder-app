@@ -8,12 +8,7 @@ import React, {
 } from 'react';
 import firebase from 'firebase/compat/app';
 import { auth } from '../firebaseSetup';
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-} from 'firebase/auth';
+import { signOut } from 'firebase/auth';
 
 type AuthContextType = {
   currentUser: firebase.User | null;

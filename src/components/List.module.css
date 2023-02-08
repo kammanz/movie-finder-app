@@ -1,0 +1,33 @@
+/* .container {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: 10px 20px;
+    background-color: pink;
+    list-style: none;
+} */
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: lightyellow;
+    gap: 10px;
+    list-style: none;
+  }
+  
+  .card {
+    padding: 10px 20px;
+    flex-basis: 250px; /* width: 350px; */
+  }
+
+/* .container {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 5vw);
+    grid-gap: 15px;
+} */
+
+.card {
+    background-color: lightgrey;
+}

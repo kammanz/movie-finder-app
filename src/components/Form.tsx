@@ -1,4 +1,4 @@
-import React, { useState, FC, useMemo, useEffect } from 'react';
+import React, { useState, FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -11,6 +11,7 @@ const Form: FC<Props> = ({ formType }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
   const {
     formState: { errors },
     handleSubmit,
@@ -30,7 +31,6 @@ const Form: FC<Props> = ({ formType }) => {
       <h2>{formType}</h2>
       <form
         onSubmit={handleSubmit(async ({ email, password }) => {
-          console.log('here');
           if (!email && !password) return;
           setIsLoading(true);
           try {
@@ -41,13 +41,11 @@ const Form: FC<Props> = ({ formType }) => {
             }
             navigate('/userPage');
           } catch (error) {
-            // console.log('catching custom err: ', error);
             if (error instanceof Error) {
               let errorString = error.message.slice(
                 error.message.indexOf(' '),
                 error.message.indexOf('(')
               );
-              console.log('errorString: ', errorString);
               setErrorMessage(errorString);
             }
           }
@@ -64,7 +62,7 @@ const Form: FC<Props> = ({ formType }) => {
           placeholder="Enter your email"
           onChange={() => errorMessage && setErrorMessage('')}
         />
-        <p>{(errors['email']?.message as unknown) as string}</p>
+        <p>{errors['email']?.message as unknown as string}</p>
         <p>{formType === 'signup' && errorMessage}</p>
         <br />
         <label htmlFor="password">Password</label>
@@ -89,7 +87,7 @@ const Form: FC<Props> = ({ formType }) => {
           {isPasswordVisible ? 'Hide Password' : 'Show Password'}
         </button>
         <br />
-        <p>{(errors['password']?.message as unknown) as string}</p>
+        <p>{errors['password']?.message as unknown as string}</p>
         <p>{errorMessage}</p>
         <br />
         <button
