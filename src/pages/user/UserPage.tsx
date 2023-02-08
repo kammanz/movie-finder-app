@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import List from './List';
+import { useAuth } from '../../context/AuthContext';
+import List from '../list/List';
 
 const UserPage = () => {
   const { currentUser, logout } = useAuth();

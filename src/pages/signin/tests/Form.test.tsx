@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Form from './Form';
+import Form from '../Form';
 import userEvent from '@testing-library/user-event';
 
 const mockNavigate = jest.fn();
@@ -12,7 +12,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-jest.mock('../context/AuthContext', () => ({
+jest.mock('../../../../context/AuthContext', () => ({
   useAuth: () => ({ signup: mockSignUp, login: mockLogin }),
 }));
 
@@ -110,12 +110,5 @@ test.only('custom error display', async () => {
   });
 
   await expect(mockSignUp).toHaveBeenCalledWith('jane@gmail.com', 'secretCode');
-  // await expect(
-  //   screen.getByText(
-  //     'There is no user record corresponding to this identifier. The user may have been deleted.'
-  //   )
-  // ).toBeInTheDocument();
-
-  // expect(mockNavigate).toHaveBeenCalledWith('/userPage');
 });
 export {};

@@ -18,5 +18,6 @@
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "types": ["cypress"]
   },
-  "include": ["./src", "cypress.d.ts"]
+  "include": ["./src", "cypress.d.ts"],
+  "exclude": ["cypress"], 
 }
