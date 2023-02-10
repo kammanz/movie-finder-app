@@ -36,6 +36,9 @@ describe('List', () => {
     const selectOption = await screen.findByRole('option', { name: /newest/i });
     expect(selectOption).toBeTruthy();
 
+    // test: menu takes user's selection
+    // expect the handler to be called with the user's selection
+
     // await user.click(selectOption);
 
     // expect(selectOption).selected

@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { moviesAPI } from '../api';
+import { moviesAPI, ThrillersUrl } from '../api';
 
 const mockMovies = [
   {
@@ -23,7 +23,7 @@ const mockMovies = [
 ];
 
 export const handlers = [
-  rest.get(moviesAPI, (req, res, ctx) => {
+  rest.get('https://www.google.com', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ results: mockMovies }));
   }),
 ];
