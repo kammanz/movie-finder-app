@@ -1,16 +1,4 @@
-import axios from 'axios';
-
-const moviesApi = axios.create({
-  baseURL: 'https://api.themoviedb.org/3/discover/movie',
-});
-
-export const getMovies = async () => {
-  const response = await moviesApi.get(
-    'api_key=fc28873a448c0edccf9ab243ad3ae982&with_genres=53'
-  );
-
-  return response.data;
-};
+//
 
 const thrillerId = 53;
 const url = 'https://api.themoviedb.org';

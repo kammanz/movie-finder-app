@@ -2,6 +2,8 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import styles from './List.module.css';
 import { imgUrl, moviesAPI } from '../../api';
+import { Dropdown } from 'react-bootstrap';
+import DropdownMenu from './DropdownMenu';
 
 export type Movie = {
   id: number;
@@ -47,7 +49,8 @@ const List = () => {
   return (
     <>
       <h1>List page</h1>
-      <ul>{movieList()}</ul>
+      <DropdownMenu />
+      <ul className={styles.listContainer}>{movieList()}</ul>
     </>
   );
 };

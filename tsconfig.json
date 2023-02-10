@@ -19,5 +19,5 @@
     "types": ["cypress"]
   },
   "include": ["./src", "cypress.d.ts"],
-  "exclude": ["cypress"], 
+  "exclude": ["cypress"] 
 }

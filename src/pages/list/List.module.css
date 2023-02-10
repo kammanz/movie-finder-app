@@ -7,7 +7,7 @@
     list-style: none;
 } */
 
-.container {
+.listContainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -15,6 +15,12 @@
     gap: 10px;
     list-style: none;
   }
+
+  /* .list 
+    { 
+      display: 'flex'; 
+      flex-wrap: 'wrap'; list-style: 'none' } */
+
   
   .card {
     padding: 10px 20px;
