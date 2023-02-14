@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState, FC } from 'react';
 import { useQuery } from 'react-query';
 import styles from './List.module.css';
 import { imgUrl, moviesAPI } from '../../api';
-import { Dropdown } from 'react-bootstrap';
-import DropdownMenu from './DropdownMenu';
+import { sortByProperty, newReleases } from '../../utils/utils';
 
 export type Movie = {
   id: number;
@@ -12,45 +11,74 @@ export type Movie = {
   title: string;
 };
 
-const fetchMovies = async () => {
+export const fetchMovies = async (sortType: string) => {
   try {
-    const response = await fetch(moviesAPI);
-    return response.json();
+    const { results: movies } = await (await fetch(moviesAPI)).json();
+    switch (sortType) {
+      case 'newest':
+        return movies;
+      case 'oldest':
+        return sortByProperty(movies, 'release_date', false);
+      case 'thirty-days':
+        return newReleases(movies, 3);
+      default:
+        return;
+    }
   } catch (error) {
     throw new Error(typeof error);
   }
 };
 
 const List = () => {
+  const [selectedMovieSort, setSelectedMovieSort] = useState('newest');
   const {
     data: movies,
     isLoading,
-    isRefetching,
-  } = useQuery('movies', fetchMovies);
+    isError,
+    error,
+  } = useQuery(['movies', selectedMovieSort], () =>
+    fetchMovies(selectedMovieSort)
+  );
 
-  if (isLoading) console.log('isLoading: ', isLoading);
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
 
-  if (isRefetching) console.log('isRefetching: ', isRefetching);
+  if (isError) {
+    error instanceof Error && <span>Error: {error.message}</span>;
+  }
 
-  if (movies === undefined) return <div />;
+  const Movie = (movie: Movie) => (
+    <li className={styles.card}>
+      <img src={imgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
+      <h6>{movie.title}</h6>
+      <p>Released: {movie.release_date}</p>
+    </li>
+  );
 
-  const movieList = () => {
-    return movies.results.map((movie: Movie) => {
-      return (
-        <li key={movie.id} className={styles.card}>
-          <img src={imgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
-          <h6>{movie.title}</h6>
-          <p>Released: {movie.release_date}</p>
-        </li>
-      );
-    });
-  };
+  const MovieList = () => (
+    <ul className={styles.listContainer}>
+      {movies.length
+        ? movies.map((movie: Movie) => <Movie key={movie.id} {...movie} />)
+        : 'Your search returned no results'}
+    </ul>
+  );
 
   return (
     <>
       <h1>List page</h1>
-      <DropdownMenu />
-      <ul className={styles.listContainer}>{movieList()}</ul>
+      <form>
+        <label htmlFor="sort-movies">Sort by:</label>
+        <select
+          id="sort-movies"
+          value={selectedMovieSort}
+          onChange={(e) => setSelectedMovieSort(e.target.value)}>
+          <option value="newest">newest</option>
+          <option value="oldest">oldest</option>
+          <option value="thirty-days">last 30 days</option>
+        </select>
+      </form>
+      <MovieList />
     </>
   );
 };

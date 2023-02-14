@@ -1,16 +1,22 @@
 import React from 'react';
+import { screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { render, fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import List from '../List';
-import { renderWithQueryClient } from '../../../test-utils';
 import { expect } from '@jest/globals';
-// import { selectOptions } from '@testing-library/user-event/dist/types/utility';
+import { renderWithQueryClient } from '../../../test-utils';
+import List from '../List';
+// import { fetchMovies } from '../List';
+
+const mockFetchMovies = jest.fn();
+
+// jest.mock('../List.tsx', () => ({
+//   fetchMovies: (sortType: any) => mockFetchMovies,
+// }));
 
 describe('List', () => {
   it('renders correctly', () => {});
 
-  it('displays a list of movies', async () => {
+  it('displays a list of movies, defaulting to sorted by newest', async () => {
     renderWithQueryClient(<List />);
 
     const movieImages = (await screen.findAllByRole('img', {
@@ -26,36 +32,65 @@ describe('List', () => {
     ]);
   });
 
-  it.only('sorts movies by newest', async () => {
+  it.only('sorts movies by oldest', async () => {
     renderWithQueryClient(<List />);
-
     const user = userEvent.setup();
 
-    // expect the user to see a dropdown menu
+    const movieImages = (await screen.findAllByRole('img', {
+      name: /poster$/i,
+    })) as unknown as Array<HTMLImageElement>;
 
-    const selectOption = await screen.findByRole('option', { name: /newest/i });
-    expect(selectOption).toBeTruthy();
+    const altTextArray = movieImages.map((movie) => {
+      return movie.alt;
+    });
 
-    // test: menu takes user's selection
-    // expect the handler to be called with the user's selection
+    const selectOptionOldest = await screen.findByRole('option', {
+      name: /oldest/i,
+    });
 
-    // await user.click(selectOption);
+    console.log('typeof selectOptionOldest: ', typeof selectOptionOldest);
 
-    // expect(selectOption).selected
+    // before click
+    // expect(altTextArray).toEqual([
+    //   'Creep poster',
+    //   'Conan poster',
+    //   'Citizen Kane poster',
+    // ]);
 
-    // expect(dropdownmenu).toBeInTheDocument();
-    // expect(
-    //   screen.findByRole('option', { name: /newest/i })
-    //     .selected as HTMLFormElement
-    // ).toBe(true);
+    await user.click(selectOptionOldest);
 
-    // expect the user to open it and see options
-    // expect the user to click their option
-    // expect onchange handler to be called with thier option (newest in this case)
-    // expect the user to see movies sorted by newest
-    // if there is no movie, expect the user to see a 'no results' message
+    expect(mockFetchMovies).toBeCalledWith('oldest');
 
-    // expect(recieved).toBe([])
+    // after click
+    // await waitFor(() => {
+    //   expect(altTextArray).toEqual([
+    //     'Citizen Kane poster',
+    //     'Conan poster',
+    //     'Creep poster',
+    //   ]);
+    // });
+
+    // await waitFor(() => {
+    // expect(selectOptionOldest.selected).toBeTruthy();
+    // });
+
+    // expect(selectOptionOldest.selected).toBe(true);
+
+    // const setStateMock: any = jest.fn();
+
+    // const useStateMock: any = (useState: any) => [useState, setStateMock];
+  });
+
+  it('sorts movies by newest', async () => {
+    renderWithQueryClient(<List />);
+  });
+
+  it('sorts movies by last 30 days', async () => {
+    renderWithQueryClient(<List />);
+  });
+
+  it('displays no results message if there are no results', async () => {
+    renderWithQueryClient(<List />);
   });
 });
 

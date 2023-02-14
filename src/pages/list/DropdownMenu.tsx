@@ -1,10 +1,6 @@
 import React from 'react';
 
-const DropdownMenu = () => {
-  const handleChange = (e: any) => {
-    console.log('e.target.value: ', e.target.value);
-  };
-
+const DropdownMenu = ({ handleChange }: any) => {
   return (
     <form>
       <label htmlFor="sort-movies">Sort by:</label>
