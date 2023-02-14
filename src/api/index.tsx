@@ -1,16 +1,4 @@
-import axios from 'axios';
-
-const moviesApi = axios.create({
-  baseURL: 'https://api.themoviedb.org/3/discover/movie',
-});
-
-export const getMovies = async () => {
-  const response = await moviesApi.get(
-    'api_key=fc28873a448c0edccf9ab243ad3ae982&with_genres=53'
-  );
-
-  return response.data;
-};
+//
 
 const thrillerId = 53;
 const url = 'https://api.themoviedb.org';
@@ -20,10 +8,8 @@ export const imgUrl = (imgPath: string) =>
 
 export const ThrillersUrl = `${url}/3/discover/movie?api_key=${apiKey}&with_genres=${thrillerId}`;
 
-export const moviesAPI =
-  'https://api.themoviedb.org/3/discover/movie?api_key=fc28873a448c0edccf9ab243ad3ae982&with_genres=53';
+let currentDate = new Date().toISOString().slice(0, 10);
+
+export const moviesAPI = `https://api.themoviedb.org/3/discover/movie?api_key=fc28873a448c0edccf9ab243ad3ae982&primary_release_date.lte=${currentDate}&sort_by=release_date.desc&with_genres=53`;
 
 export const urlPath = `/3/discover/movie?api_key=${apiKey}&with_genres=${thrillerId}`;
-
-// full url:
-// https://api.themoviedb.org/3/discover/movie?api_key=fc28873a448c0edccf9ab243ad3ae982&with_genres=53

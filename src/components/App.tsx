@@ -15,7 +15,7 @@ const queryClient = new QueryClient();
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Container className="d-flex align-items-center justify-content-center">
+      <Container className="">
         <Routes>
           <Route path="/" element={<Form formType="signup" />} />
         </Routes>
