@@ -1,7 +1,7 @@
 import React, { useState, FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
-import { collection, setDoc, doc, addDoc } from 'firebase/firestore';
+import { setDoc, doc } from 'firebase/firestore';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../firebaseSetup';
 
