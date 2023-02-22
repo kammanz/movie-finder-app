@@ -57,6 +57,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
     });
+
     return unsubscribe;
   }, []);
 

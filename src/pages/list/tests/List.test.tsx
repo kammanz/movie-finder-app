@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { expect } from '@jest/globals';
@@ -48,37 +48,36 @@ describe('List', () => {
       name: /oldest/i,
     });
 
-    console.log('typeof selectOptionOldest: ', typeof selectOptionOldest);
-
     // before click
-    // expect(altTextArray).toEqual([
-    //   'Creep poster',
-    //   'Conan poster',
-    //   'Citizen Kane poster',
-    // ]);
+    expect(altTextArray).toEqual([
+      'Creep poster',
+      'Conan poster',
+      'Citizen Kane poster',
+    ]);
 
-    await user.click(selectOptionOldest);
+    // await user.click(selectOptionOldest);
 
-    expect(mockFetchMovies).toBeCalledWith('oldest');
+    // https://polvara.me/posts/testing-a-custom-select-with-react-testing-library
+    // fireEvent is better for dropdown changes than userEvent
+    await fireEvent.change(screen.getByTestId('select'), {
+      target: { value: 'oldest' },
+    });
+
+    // repeating above code
+    const movieImagesTwo = (await screen.findAllByRole('img', {
+      name: /poster$/i,
+    })) as unknown as Array<HTMLImageElement>;
+
+    const altTextArrayTwo = movieImagesTwo.map((movie) => {
+      return movie.alt;
+    });
 
     // after click
-    // await waitFor(() => {
-    //   expect(altTextArray).toEqual([
-    //     'Citizen Kane poster',
-    //     'Conan poster',
-    //     'Creep poster',
-    //   ]);
-    // });
-
-    // await waitFor(() => {
-    // expect(selectOptionOldest.selected).toBeTruthy();
-    // });
-
-    // expect(selectOptionOldest.selected).toBe(true);
-
-    // const setStateMock: any = jest.fn();
-
-    // const useStateMock: any = (useState: any) => [useState, setStateMock];
+    expect(altTextArrayTwo).toEqual([
+      'Citizen Kane poster',
+      'Conan poster',
+      'Creep poster',
+    ]);
   });
 
   it('sorts movies by newest', async () => {

@@ -1,7 +1,9 @@
 import React, { useState, FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
+import { collection, setDoc, doc, addDoc } from 'firebase/firestore';
 import { useAuth } from '../../context/AuthContext';
+import { db } from '../../firebaseSetup';
 
 export type Props = {
   formType: string;
@@ -36,6 +38,9 @@ const Form: FC<Props> = ({ formType }) => {
           try {
             if (formType === 'signup') {
               await signup(email, password);
+              await setDoc(doc(db, 'users', email), {
+                movies: [],
+              });
             } else if (formType === 'login') {
               await login(email, password);
             }
@@ -97,11 +102,11 @@ const Form: FC<Props> = ({ formType }) => {
           Submit
         </button>
         <br />
-        {/* <Link to={formType === 'signup' ? '/login' : '/'}>
+        <Link to={formType === 'signup' ? '/login' : '/'}>
           {formType === 'signup'
             ? 'Already have an account? Click here to log in'
             : 'Dont have an account? Click here to sign up'}
-        </Link> */}
+        </Link>
       </form>
     </div>
   );
