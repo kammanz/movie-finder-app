@@ -3,6 +3,9 @@ import { useQuery } from 'react-query';
 import styles from './List.module.css';
 import { imgUrl, moviesAPI } from '../../api';
 import { sortByProperty, newReleases } from '../../utils/utils';
+import firebase from 'firebase/compat/app';
+import { collection, doc, addDoc, setDoc } from 'firebase/firestore';
+import { db } from '../../firebaseSetup';
 
 export type Movie = {
   id: number;
@@ -29,8 +32,9 @@ export const fetchMovies = async (sortType: string) => {
   }
 };
 
-const List = () => {
+const List = ({ currentUser }: any) => {
   const [selectedMovieSort, setSelectedMovieSort] = useState('newest');
+
   const {
     data: movies,
     isLoading,
@@ -48,11 +52,25 @@ const List = () => {
     error instanceof Error && <span>Error: {error.message}</span>;
   }
 
+  const addMovie = async (movie: Movie) => {
+    try {
+      await setDoc(doc(db, `users/${currentUser}/movies/${movie.id}`), {
+        id: movie.id,
+        poster_path: movie.poster_path,
+        release_date: movie.release_date,
+        title: movie.title,
+      });
+    } catch (error) {
+      console.log('Error: ', error);
+    }
+  };
+
   const Movie = (movie: Movie) => (
     <li className={styles.card}>
       <img src={imgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
       <h6>{movie.title}</h6>
       <p>Released: {movie.release_date}</p>
+      <button onClick={() => addMovie(movie)}>Add</button>
     </li>
   );
 
@@ -71,6 +89,7 @@ const List = () => {
         <label htmlFor="sort-movies">Sort by:</label>
         <select
           id="sort-movies"
+          data-testid="select"
           value={selectedMovieSort}
           onChange={(e) => setSelectedMovieSort(e.target.value)}>
           <option value="newest">newest</option>
