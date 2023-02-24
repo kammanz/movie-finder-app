@@ -6,6 +6,8 @@ import { imgUrl, moviesAPI } from '../../api';
 import { sortByProperty, newReleases } from '../../utils/utils';
 import styles from './List.module.css';
 
+type MovieSortOptions = 'oldest' | 'newest' | 'thirty-days';
+
 export type Movie = {
   id: number;
   poster_path: string;
@@ -62,9 +64,10 @@ const fetchSavedMovies = async (currentUser: string) => {
 };
 
 const List = ({ currentUser }: any) => {
-  const [selectedMovieSort, setSelectedMovieSort] = useState('newest');
-  const [movies2, setMovies2] = useState<Movie[]>([]);
-  const queryClient = useQueryClient();
+  const [selectedMovieSort, setSelectedMovieSort] =
+    useState<MovieSortOptions>('newest');
+  const [sortedMovies, setSortedMovies] = useState<Movie[] | undefined>(); // is this sorted? filtered? or entire list of movies?
+  // const queryClient = useQueryClient();
 
   const { data: savedMovieIds } = useQuery(
     ['savedMovies'],
@@ -76,8 +79,9 @@ const List = ({ currentUser }: any) => {
 
   let usersSavedMovieIds = savedMovieIds;
 
+  // this data is all of your movies
   const {
-    data: movies,
+    data: allMovies,
     isLoading,
     isError,
   } = useQuery(
@@ -88,40 +92,32 @@ const List = ({ currentUser }: any) => {
       cacheTime: Infinity,
       refetchOnWindowFocus: false,
       staleTime: Infinity,
-      onSuccess: (movies: Movie[]) => setMovies2(movies),
+      onSuccess: (data: Movie[]) => setSortedMovies(data), // we don't need this // we now have data + movies to be the same thing
     }
   );
 
   if (isLoading) return <span>Loading</span>;
   if (isError) return <span>Error</span>;
-  if (movies === undefined) return <span>Undefined and Loading</span>;
+  if (allMovies === undefined) return <span>Undefined and Loading</span>;
 
-  const handleSort = (sortType: string) => {
+  const handleSort = (sortType: MovieSortOptions) => {
     setSelectedMovieSort(sortType);
-    let data: unknown = queryClient.getQueryData('movies');
-    const cachedMovies = data as Array<Movie>;
+
+    let sorted;
 
     switch (sortType) {
       case 'oldest':
-        const sortedByOldest = sortByProperty(
-          [...cachedMovies],
-          'release_date',
-          false
-        );
-        return setMovies2(sortedByOldest);
+        sorted = sortByProperty(allMovies, 'release_date', false);
+        break;
       case 'newest':
-        const sortedByNewest = sortByProperty(
-          [...cachedMovies],
-          'release_date',
-          true
-        );
-        return setMovies2(sortedByNewest);
+        sorted = sortByProperty(allMovies, 'release_date', true);
+        break;
       case 'thirty-days':
-        const sortedByRecent: any = newReleases([...cachedMovies], 3);
-        return setMovies2(sortedByRecent);
-      default:
-        return;
+        sorted = newReleases(allMovies, 3);
+        break;
     }
+
+    setSortedMovies(sorted);
   };
 
   const addMovie = async (movie: Movie) => {
@@ -158,15 +154,19 @@ const List = ({ currentUser }: any) => {
     </li>
   );
 
-  const MovieList = () => (
+  // all MovieList cares about is an array of movies
+  const MovieList = ({ movies }: { movies: Movie[] }) => (
     <ul className={styles.listContainer}>
-      {movies2.length ? (
-        movies2.map((movie: Movie) => <Movie key={movie.id} {...movie} />)
+      {movies.length > 0 ? (
+        movies.map((movie: Movie) => <Movie key={movie.id} {...movie} />)
       ) : (
         <li>'Your search returned no results'</li>
       )}
     </ul>
   );
+
+  // const a = []; // 0 // this is fine
+  // const b = undefined; // doesnt exist
 
   return (
     <>
@@ -177,13 +177,16 @@ const List = ({ currentUser }: any) => {
           id="sort-movies"
           data-testid="select"
           value={selectedMovieSort}
-          onChange={(e) => handleSort(e.target.value)}>
+          onChange={(e) => handleSort(e.target.value as MovieSortOptions)}>
           <option value="newest">newest</option>
           <option value="oldest">oldest</option>
           <option value="thirty-days">last 30 days</option>
         </select>
       </form>
-      <MovieList />
+      <MovieList movies={sortedMovies || allMovies} />
+      <button type="button" onClick={() => setSortedMovies(undefined)}>
+        Show all movies
+      </button>
     </>
   );
 };
