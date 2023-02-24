@@ -64,36 +64,7 @@ const fetchSavedMovies = async (currentUser: string) => {
 const List = ({ currentUser }: any) => {
   const [selectedMovieSort, setSelectedMovieSort] = useState('newest');
   const [movies2, setMovies2] = useState<Movie[]>([]);
-
   const queryClient = useQueryClient();
-
-  const handleSort = (sortType: string) => {
-    setSelectedMovieSort(sortType);
-    let data: unknown = queryClient.getQueryData('movies');
-    const cachedMovies = data as Array<Movie>;
-
-    switch (sortType) {
-      case 'oldest':
-        const sortedByOldest = sortByProperty(
-          [...cachedMovies],
-          'release_date',
-          false
-        );
-        return setMovies2(sortedByOldest);
-      case 'newest':
-        const sortedByNewest = sortByProperty(
-          [...cachedMovies],
-          'release_date',
-          true
-        );
-        return setMovies2(sortedByNewest);
-      case 'thirty-days':
-        const sortedByRecent: any = newReleases([...cachedMovies], 3);
-        return setMovies2(sortedByRecent);
-      default:
-        return;
-    }
-  };
 
   const { data: savedMovieIds } = useQuery(
     ['savedMovies'],
@@ -124,6 +95,34 @@ const List = ({ currentUser }: any) => {
   if (isLoading) return <span>Loading</span>;
   if (isError) return <span>Error</span>;
   if (movies === undefined) return <span>Undefined and Loading</span>;
+
+  const handleSort = (sortType: string) => {
+    setSelectedMovieSort(sortType);
+    let data: unknown = queryClient.getQueryData('movies');
+    const cachedMovies = data as Array<Movie>;
+
+    switch (sortType) {
+      case 'oldest':
+        const sortedByOldest = sortByProperty(
+          [...cachedMovies],
+          'release_date',
+          false
+        );
+        return setMovies2(sortedByOldest);
+      case 'newest':
+        const sortedByNewest = sortByProperty(
+          [...cachedMovies],
+          'release_date',
+          true
+        );
+        return setMovies2(sortedByNewest);
+      case 'thirty-days':
+        const sortedByRecent: any = newReleases([...cachedMovies], 3);
+        return setMovies2(sortedByRecent);
+      default:
+        return;
+    }
+  };
 
   const addMovie = async (movie: Movie) => {
     try {
