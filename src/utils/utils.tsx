@@ -27,6 +27,7 @@ export const sortByProperty = (
 export const newReleases = (movies: Array<Movie>, numberOfDaysAgo: number) => {
   const todaysDate = new Date();
   const filterDate = subDays(todaysDate, numberOfDaysAgo);
+
   const filteredMovies = movies.filter((movie) => {
     const releaseDate = new Date(movie.release_date);
     const isMovieReleasedAfterFilterDate = compareAsc(releaseDate, filterDate);
