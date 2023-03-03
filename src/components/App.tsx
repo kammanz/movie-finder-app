@@ -1,10 +1,8 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
-
-import { useQueryClient, QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-
 import Form from '../pages/signin/Form';
 import UserPage from '../pages/user/UserPage';
 import PrivateRoute from './PrivateRoute';

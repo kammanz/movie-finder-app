@@ -47,6 +47,6 @@ export const addMovie = async ({ movie, currentUser }: addMovieProps) => {
     // TODO: query the database by movie id, find the movie, update its isAdded property
     // page should rerender because cache has been updated
   } catch (error) {
-    console.log('Error: ', error);
+    throw error;
   }
 };
