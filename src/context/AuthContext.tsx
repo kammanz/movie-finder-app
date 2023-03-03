@@ -19,7 +19,7 @@ type AuthContextType = {
   login: (
     email: string,
     password: string
-  ) => Promise<void | firebase.auth.UserCredential>;
+  ) => Promise<firebase.auth.UserCredential | void>;
   logout: () => void;
 };
 

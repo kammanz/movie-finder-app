@@ -9,9 +9,7 @@ const Movie = (movie: TMovie, currentUser: string) => (
     <img src={imgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
     <h6>{movie.title}</h6>
     <p>Released: {movie.release_date}</p>
-    <button
-      onClick={() => addMovie({ movie, currentUser })}
-      disabled={movie.isAdded}>
+    <button onClick={() => addMovie({ movie })} disabled={movie.isAdded}>
       Add
     </button>
     <button disabled={!movie.isAdded}>Remove</button>

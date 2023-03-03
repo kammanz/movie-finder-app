@@ -10,9 +10,4 @@ export type TMovieId = {
   id: number;
 };
 
-export type addMovieProps = {
-  movie: TMovie;
-  currentUser: string;
-};
-
 export type TMovieSortOptions = 'oldest' | 'newest' | 'thirty-days';

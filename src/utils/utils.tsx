@@ -1,7 +1,11 @@
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebaseSetup';
 import { subDays, compareAsc } from 'date-fns';
-import { TMovie, addMovieProps } from '../types/types';
+import { TMovie } from '../types/types';
+import { getAuth } from 'firebase/auth';
+
+const auth = getAuth();
+const currentUserEmail = auth.currentUser?.email;
 
 export const sortByProperty = (
   array: any[],
@@ -35,9 +39,11 @@ export const newReleases = (movies: Array<TMovie>, numberOfDaysAgo: number) => {
   return filteredMovies;
 };
 
-export const addMovie = async ({ movie, currentUser }: addMovieProps) => {
+export const addMovie = async ({ movie }: { movie: TMovie }) => {
+  console.log('addMovie clicked');
+  console.log('currentUserEmail: ', currentUserEmail);
   try {
-    await setDoc(doc(db, `users/${currentUser}/movies/${movie.id}`), {
+    await setDoc(doc(db, `users/${currentUserEmail}/movies/${movie.id}`), {
       id: movie.id,
       poster_path: movie.poster_path,
       release_date: movie.release_date,
