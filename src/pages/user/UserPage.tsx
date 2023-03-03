@@ -6,7 +6,6 @@ import List from '../list/List';
 const UserPage = () => {
   const { currentUser, logout } = useAuth();
   const [error, setError] = useState('');
-  console.log('currentUser: ', currentUser);
 
   let currentUserEmail = currentUser?.email;
   const navigate = useNavigate();
