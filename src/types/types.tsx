@@ -12,16 +12,14 @@ export type TMovieId = {
 
 export type TMovieSortOptions = 'oldest' | 'newest' | 'thirty-days';
 
-export interface ICurrentUserEmail {
-  currentUserEmail: string | null | undefined;
-}
+export type TCurrentUserEmail = string | null | undefined;
 
 export type THandleAddMovie = {
   movie: TMovie;
-  currentUserEmail: ICurrentUserEmail;
+  // currentUserEmail: TCurrentUserEmail;
 };
 
 export type TMovieList = {
   movies: TMovie[];
-  currentUserEmail: ICurrentUserEmail;
+  // currentUserEmail: TCurrentUserEmail;
 };

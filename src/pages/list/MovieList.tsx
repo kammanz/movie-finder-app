@@ -1,24 +1,14 @@
 import React from 'react';
-import { getAuth } from 'firebase/auth';
 import { imgUrl } from '../../api';
 import { addMovie } from '../../utils/utils';
-import {
-  TMovie,
-  TMovieList,
-  THandleAddMovie,
-  ICurrentUserEmail,
-} from '../../types/types';
+import { TMovie, TCurrentUserEmail } from '../../types/types';
 import { useQueryClient } from 'react-query';
 import styles from './MovieList.module.css';
 
-// const auth = getAuth();
-// const currentUserEmail: ICurrentUserEmail = auth.currentUser?.email;
-
-const Movie = (movie: TMovie, currentUserEmail: ICurrentUserEmail) => {
+const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
   const queryClient = useQueryClient();
 
-  const handleAddMovie = ({ movie, currentUserEmail }: THandleAddMovie) => {
-    console.log('in MovieList, currentUserEmail: ', currentUserEmail);
+  const handleAddMovie = ({ movie, currentUserEmail }: any) => {
     addMovie(movie, currentUserEmail);
     const currentData = queryClient.getQueryData<TMovie[]>('movies');
 
@@ -52,19 +42,23 @@ const Movie = (movie: TMovie, currentUserEmail: ICurrentUserEmail) => {
   );
 };
 
-const MovieList = ({ movies, currentUserEmail }: TMovieList) => (
-  <ul className={styles.container}>
-    {movies.length > 0 ? (
-      movies.map((movie) => (
-        <div key={movie.id}>
-          {/* <Movie movie={movie} currentUserEmail={currentUserEmail} /> */}
-          {Movie(movie, currentUserEmail)}
-        </div>
-      ))
-    ) : (
-      <li>'Your search returned no results'</li>
-    )}
-  </ul>
-);
+type TMovieList = {
+  movies: TMovie[];
+  userEmail: TCurrentUserEmail;
+};
+
+const MovieList = ({ movies, userEmail }: TMovieList) => {
+  return (
+    <ul className={styles.container}>
+      {movies.length > 0 ? (
+        movies.map((movie) => (
+          <div key={movie.id}>{Movie(movie, userEmail)}</div>
+        ))
+      ) : (
+        <li>'Your search returned no results'</li>
+      )}
+    </ul>
+  );
+};
 
 export default MovieList;

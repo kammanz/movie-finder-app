@@ -4,12 +4,17 @@ import { fetchAllMovies, fetchUsersSavedMovies } from '../../api';
 import {
   TMovie,
   TMovieSortOptions,
-  ICurrentUserEmail,
+  TCurrentUserEmail,
 } from '../../types/types';
 import { sortMovies } from '../../utils/utils';
 import MovieList from './MovieList';
 
-const List = (currentUserEmail: ICurrentUserEmail) => {
+const List = ({
+  currentUserEmail,
+}: {
+  currentUserEmail: TCurrentUserEmail;
+}) => {
+  console.log('List, currentUserEmail:', currentUserEmail);
   const [selectedMovieSort, setSelectedMovieSort] =
     useState<TMovieSortOptions>('newest');
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
@@ -33,7 +38,6 @@ const List = (currentUserEmail: ICurrentUserEmail) => {
     () => usersSavedMovieIds && fetchAllMovies(usersSavedMovieIds),
     {
       enabled: !!usersSavedMovieIds,
-      cacheTime: Infinity,
       refetchOnWindowFocus: false,
       staleTime: Infinity,
     }
@@ -65,7 +69,7 @@ const List = (currentUserEmail: ICurrentUserEmail) => {
       </form>
       <MovieList
         movies={sortedMovies || allMovies}
-        currentUserEmail={currentUserEmail}
+        userEmail={currentUserEmail}
       />
       <button type="button" onClick={() => setSortedMovies(undefined)}>
         Show all movies
