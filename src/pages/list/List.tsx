@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-import { sortByProperty, newReleases } from '../../utils/utils';
-import { TMovie, TMovieSortOptions } from '../../types/types';
-import MovieList from './MovieList';
 import { fetchAllMovies, fetchUsersSavedMovies } from '../../api';
+import {
+  TMovie,
+  TMovieSortOptions,
+  ICurrentUserEmail,
+} from '../../types/types';
+import { sortMovies } from '../../utils/utils';
+import MovieList from './MovieList';
 
-const List = ({ currentUser }: any) => {
+const List = (currentUserEmail: ICurrentUserEmail) => {
   const [selectedMovieSort, setSelectedMovieSort] =
     useState<TMovieSortOptions>('newest');
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
 
   const { data: savedMovieIds } = useQuery(
     ['savedMovies'],
-    () => fetchUsersSavedMovies(currentUser),
+    () => fetchUsersSavedMovies(currentUserEmail),
     {
       refetchOnWindowFocus: false,
     }
@@ -41,19 +45,7 @@ const List = ({ currentUser }: any) => {
 
   const handleSort = (sortType: TMovieSortOptions) => {
     setSelectedMovieSort(sortType);
-    let sorted;
-    switch (sortType) {
-      case 'oldest':
-        sorted = sortByProperty(allMovies, 'release_date', false);
-        break;
-      case 'newest':
-        sorted = sortByProperty(allMovies, 'release_date', true);
-        break;
-      case 'thirty-days':
-        sorted = newReleases(allMovies, 3);
-        break;
-    }
-    setSortedMovies(sorted);
+    setSortedMovies(sortMovies(sortType, allMovies));
   };
 
   return (
@@ -71,7 +63,10 @@ const List = ({ currentUser }: any) => {
           <option value="thirty-days">last 30 days</option>
         </select>
       </form>
-      <MovieList movies={sortedMovies || allMovies} />
+      <MovieList
+        movies={sortedMovies || allMovies}
+        currentUserEmail={currentUserEmail}
+      />
       <button type="button" onClick={() => setSortedMovies(undefined)}>
         Show all movies
       </button>

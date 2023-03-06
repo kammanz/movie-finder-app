@@ -1,11 +1,7 @@
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebaseSetup';
 import { subDays, compareAsc } from 'date-fns';
-import { TMovie } from '../types/types';
-import { getAuth } from 'firebase/auth';
-
-const auth = getAuth();
-const currentUserEmail = auth.currentUser?.email;
+import { TMovie, TMovieSortOptions, ICurrentUserEmail } from '../types/types';
 
 export const sortByProperty = (
   array: any[],
@@ -39,7 +35,10 @@ export const newReleases = (movies: Array<TMovie>, numberOfDaysAgo: number) => {
   return filteredMovies;
 };
 
-export const addMovie = async ({ movie }: { movie: TMovie }) => {
+export const addMovie = async (
+  movie: TMovie,
+  currentUserEmail: ICurrentUserEmail
+) => {
   console.log('addMovie clicked');
   console.log('currentUserEmail: ', currentUserEmail);
   try {
@@ -50,9 +49,24 @@ export const addMovie = async ({ movie }: { movie: TMovie }) => {
       title: movie.title,
       isAdded: true,
     });
-    // TODO: query the database by movie id, find the movie, update its isAdded property
-    // page should rerender because cache has been updated
   } catch (error) {
     throw error;
   }
+};
+
+export const sortMovies = (sortType: TMovieSortOptions, movies: TMovie[]) => {
+  let sorted;
+  switch (sortType) {
+    case 'oldest':
+      sorted = sortByProperty(movies, 'release_date', false);
+      break;
+    case 'newest':
+      sorted = sortByProperty(movies, 'release_date', true);
+      break;
+    case 'thirty-days':
+      sorted = newReleases(movies, 3);
+      break;
+  }
+
+  return sorted;
 };

@@ -1,6 +1,6 @@
 import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../firebaseSetup';
-import { TMovie, TMovieId } from '../types/types';
+import { TMovie, TMovieId, ICurrentUserEmail } from '../types/types';
 
 const thrillerId = 53;
 const url = 'https://api.themoviedb.org';
@@ -44,7 +44,7 @@ export const fetchAllMovies = async (usersSavedMovieIds: Array<TMovieId>) => {
   }
 };
 
-export const fetchUsersSavedMovies = async (currentUser: string) => {
+export const fetchUsersSavedMovies = async (currentUser: ICurrentUserEmail) => {
   try {
     const usersMoviesRef = collection(db, `users/${currentUser}/movies`);
     const q = query(usersMoviesRef);
