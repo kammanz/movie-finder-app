@@ -23,7 +23,8 @@ const List = ({
     ['savedMovies'],
     () => fetchUsersSavedMovies(currentUserEmail),
     {
-      refetchOnWindowFocus: false,
+      // refetchOnWindowFocus: false,
+      staleTime: Infinity,
     }
   );
 
@@ -69,7 +70,7 @@ const List = ({
       </form>
       <MovieList
         movies={sortedMovies || allMovies}
-        userEmail={currentUserEmail}
+        currentUserEmail={currentUserEmail}
       />
       <button type="button" onClick={() => setSortedMovies(undefined)}>
         Show all movies
