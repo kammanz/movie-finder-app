@@ -87,13 +87,13 @@ export const fetchUsersSavedMovies = async (currentUser: TCurrentUserEmail) => {
     const usersMoviesRef = await collection(db, `users/${currentUser}/movies`);
     const q = query(usersMoviesRef);
     const querySnapshot = await getDocs(q);
-    let movieIds: Array<TMovieId> = [];
+    let savedMovies: Array<TMovieId> = [];
     querySnapshot.forEach((doc) => {
-      doc.id && movieIds.push({ id: parseInt(doc.id) });
+      doc.id && savedMovies.push({ id: parseInt(doc.id) });
     });
 
-    console.log('fetchUsersSavedMovies, movieIds: ', movieIds);
-    return movieIds;
+    console.log('fetchUsersSavedMovies, savedMovies: ', savedMovies);
+    return savedMovies;
   } catch (error) {
     throw error;
   }

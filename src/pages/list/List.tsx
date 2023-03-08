@@ -52,6 +52,7 @@ const List = ({
   };
 
   useEffect(() => {
+    console.log('use effect ran');
     // const usersSavedMovies = fetchUsersSavedMovies(currentUserEmail);
     handleUsersSavedMovies();
   }, [currentUserEmail]);

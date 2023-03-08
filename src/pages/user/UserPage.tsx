@@ -16,7 +16,6 @@ const UserPage = () => {
     setError('');
     try {
       await logout();
-      queryClient.clear();
       navigate('/login');
     } catch (error) {
       setError('Failed to log out');
