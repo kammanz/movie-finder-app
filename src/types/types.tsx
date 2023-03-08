@@ -1,9 +1,9 @@
 export type TMovie = {
+  isAdded: boolean;
   id: number;
   poster_path: string;
   release_date: string;
   title: string;
-  isAdded: boolean;
 };
 
 export type TMovieId = {

@@ -17,15 +17,50 @@ export const moviesAPI = `${baseMoviesApi}?api_key=fc28873a448c0edccf9ab243ad3ae
 
 export const urlPath = `/3/discover/movie?api_key=${apiKey}&with_genres=${thrillerId}`;
 
-const addUsersSavedMoviesToList = (
-  movies: Array<TMovie>,
-  usersSavedMovieIds: Array<TMovieId>
+// export const addUsersSavedMoviesToList = (
+//   movies: TMovie[] | undefined,
+//   userssavedMovies: Array<TMovieId>
+// ) => {
+//   console.log('addUsersSavedMoviesToList ran');
+//   console.log('addUsersSavedMoviesToList, movies: ', movies);
+//   console.log(
+//     'addUsersSavedMoviesToList, userssavedMovies: ',
+//     userssavedMovies
+//   );
+//   const moviesWithUsersSelections = movies?.map((movie) => {
+//     const match = userssavedMovies.find(
+//       (savedMovieId) => movie.id === savedMovieId.id
+//     );
+//     console.log('matchey: ', match);
+//     if (match) {
+//       console.log('match: ', match);
+//       return { ...movie, isAdded: true };
+//     } else {
+//       return { ...movie, isAdded: false };
+//     }
+//   });
+
+//   return moviesWithUsersSelections;
+// };
+
+export const addUsersSavedMoviesToList = (
+  movies: TMovie[] | undefined,
+  userssavedMovies: Array<TMovieId>
 ) => {
-  const moviesWithUsersSelections = movies.map((movie) => {
-    const match = usersSavedMovieIds.find(
+  console.log('addUsersSavedMoviesToList ran');
+  console.log('addUsersSavedMoviesToList, movies: ', movies);
+  console.log(
+    'addUsersSavedMoviesToList, userssavedMovies: ',
+    userssavedMovies
+  );
+  console.log('userssavedMovies: ', userssavedMovies);
+  const moviesWithUsersSelections = movies?.map((movie) => {
+    const match = userssavedMovies.find(
       (savedMovieId) => movie.id === savedMovieId.id
     );
+    console.log('matchey: ', match);
     if (match) {
+      console.log('match: ', match);
       return { ...movie, isAdded: true };
     } else {
       return { ...movie, isAdded: false };
@@ -35,18 +70,21 @@ const addUsersSavedMoviesToList = (
   return moviesWithUsersSelections;
 };
 
-export const fetchAllMovies = async (usersSavedMovieIds: Array<TMovieId>) => {
+export const fetchAllMovies = async () => {
+  console.log('fetchAllMovies ran');
   try {
     const { results: movies } = await (await fetch(moviesAPI)).json();
-    return addUsersSavedMoviesToList(movies, usersSavedMovieIds);
+    return movies;
+    // return addUsersSavedMoviesToList(movies, userssavedMovies);
   } catch (error) {
     throw new Error(typeof error);
   }
 };
 
 export const fetchUsersSavedMovies = async (currentUser: TCurrentUserEmail) => {
+  console.log('fetchUsersSavedMovies ran');
   try {
-    const usersMoviesRef = collection(db, `users/${currentUser}/movies`);
+    const usersMoviesRef = await collection(db, `users/${currentUser}/movies`);
     const q = query(usersMoviesRef);
     const querySnapshot = await getDocs(q);
     let movieIds: Array<TMovieId> = [];
@@ -54,6 +92,7 @@ export const fetchUsersSavedMovies = async (currentUser: TCurrentUserEmail) => {
       doc.id && movieIds.push({ id: parseInt(doc.id) });
     });
 
+    console.log('fetchUsersSavedMovies, movieIds: ', movieIds);
     return movieIds;
   } catch (error) {
     throw error;

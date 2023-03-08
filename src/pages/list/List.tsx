@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
-import { useQuery } from 'react-query';
-import { fetchAllMovies, fetchUsersSavedMovies } from '../../api';
+import React, { useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
+import {
+  fetchAllMovies,
+  fetchUsersSavedMovies,
+  addUsersSavedMoviesToList,
+} from '../../api';
 import {
   TMovie,
   TMovieSortOptions,
   TCurrentUserEmail,
+  TMovieId,
 } from '../../types/types';
 import { sortMovies } from '../../utils/utils';
 import MovieList from './MovieList';
@@ -17,32 +22,49 @@ const List = ({
   console.log('List, currentUserEmail:', currentUserEmail);
   const [selectedMovieSort, setSelectedMovieSort] =
     useState<TMovieSortOptions>('newest');
+  const queryClient = useQueryClient();
+
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
+  const movies: TMovie[] | undefined = queryClient.getQueryData('movies');
 
-  const { data: savedMovieIds } = useQuery(
-    ['savedMovies'],
-    () => fetchUsersSavedMovies(currentUserEmail),
-    {
-      // refetchOnWindowFocus: false,
-      staleTime: Infinity,
+  const handleUsersSavedMovies = async () => {
+    console.log('inside handleUsersSavedMovies');
+
+    const usersSavedMovies: TMovieId[] = await fetchUsersSavedMovies(
+      currentUserEmail
+    );
+
+    if (movies !== undefined) {
+      console.log(
+        'inside handleUsersSavedMovies, inside if statement, there are movies'
+      );
+      const combinedArray = addUsersSavedMoviesToList(movies, usersSavedMovies);
+      console.log(
+        'inside handleUsersSavedMovies, combinedArray: ',
+        combinedArray
+      );
+      console.log(
+        'inside handleUsersSavedMovies, new query cache: ',
+        queryClient.setQueryData('movies', combinedArray)
+      );
+      return queryClient.setQueryData('movies', combinedArray);
     }
-  );
+  };
 
-  let usersSavedMovieIds = savedMovieIds;
+  useEffect(() => {
+    // const usersSavedMovies = fetchUsersSavedMovies(currentUserEmail);
+    handleUsersSavedMovies();
+  }, [currentUserEmail]);
 
   const {
     data: allMovies,
     isLoading,
     isError,
-  } = useQuery(
-    ['movies'],
-    () => usersSavedMovieIds && fetchAllMovies(usersSavedMovieIds),
-    {
-      enabled: !!usersSavedMovieIds,
-      refetchOnWindowFocus: false,
-      staleTime: Infinity,
-    }
-  );
+  } = useQuery(['movies'], () => fetchAllMovies(), {
+    // enabled: !!userssavedMovies,
+    refetchOnWindowFocus: false,
+    // staleTime: Infinity,
+  });
 
   if (isLoading) return <span>Loading</span>;
   if (isError) return <span>Error</span>;
