@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { useQueryClient } from 'react-query';
 import { TCurrentUserEmail } from '../../types/types';
 import List from '../list/List';
 
 const UserPage = () => {
   const { currentUser, logout } = useAuth();
   const [error, setError] = useState('');
-  const queryClient = useQueryClient();
   let currentUserEmail: TCurrentUserEmail = currentUser?.email;
 
   const navigate = useNavigate();

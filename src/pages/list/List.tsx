@@ -19,52 +19,32 @@ const List = ({
 }: {
   currentUserEmail: TCurrentUserEmail;
 }) => {
-  console.log('List, currentUserEmail:', currentUserEmail);
   const [selectedMovieSort, setSelectedMovieSort] =
     useState<TMovieSortOptions>('newest');
   const queryClient = useQueryClient();
-
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
   const movies: TMovie[] | undefined = queryClient.getQueryData('movies');
+  useEffect(() => {
+    handleUsersSavedMovies();
+  }, [currentUserEmail]);
 
   const handleUsersSavedMovies = async () => {
-    console.log('inside handleUsersSavedMovies');
-
     const usersSavedMovies: TMovieId[] = await fetchUsersSavedMovies(
       currentUserEmail
     );
 
     if (movies !== undefined) {
-      console.log(
-        'inside handleUsersSavedMovies, inside if statement, there are movies'
-      );
       const combinedArray = addUsersSavedMoviesToList(movies, usersSavedMovies);
-      console.log(
-        'inside handleUsersSavedMovies, combinedArray: ',
-        combinedArray
-      );
-      console.log(
-        'inside handleUsersSavedMovies, new query cache: ',
-        queryClient.setQueryData('movies', combinedArray)
-      );
       return queryClient.setQueryData('movies', combinedArray);
     }
   };
-
-  useEffect(() => {
-    console.log('use effect ran');
-    // const usersSavedMovies = fetchUsersSavedMovies(currentUserEmail);
-    handleUsersSavedMovies();
-  }, [currentUserEmail]);
 
   const {
     data: allMovies,
     isLoading,
     isError,
   } = useQuery(['movies'], () => fetchAllMovies(), {
-    // enabled: !!userssavedMovies,
     refetchOnWindowFocus: false,
-    // staleTime: Infinity,
   });
 
   if (isLoading) return <span>Loading</span>;
