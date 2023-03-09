@@ -16,10 +16,8 @@ export type TCurrentUserEmail = string | null | undefined;
 
 export type THandleAddMovie = {
   movie: TMovie;
-  // currentUserEmail: TCurrentUserEmail;
 };
 
 export type TMovieList = {
   movies: TMovie[];
-  // currentUserEmail: TCurrentUserEmail;
 };
