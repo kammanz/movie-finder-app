@@ -1,7 +1,11 @@
 import React from 'react';
 import { useQueryClient } from 'react-query';
 import { imgUrl } from '../../api';
-import { addMovie, deleteMovie, updateCachedMovie } from '../../utils/utils';
+import {
+  addToFirestore,
+  removeFromFirestore,
+  updateCachedMovie,
+} from '../../utils/utils';
 import { TMovieList, TMovie, TCurrentUserEmail } from '../../types/types';
 
 import styles from './MovieList.module.css';
@@ -9,41 +13,30 @@ import styles from './MovieList.module.css';
 const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
   const queryClient = useQueryClient();
 
-  const handleAddMovie = ({ movie, currentUserEmail }: any) => {
-    addMovie(movie, currentUserEmail);
+  const handleClick = async (clickType: string) => {
     const cachedMovies = queryClient.getQueryData<TMovie[]>('movies');
+    let isAdding;
 
     if (cachedMovies != null) {
       const movieIndexToUpdate = cachedMovies.findIndex(
         (item: TMovie) => item.id === movie.id
       );
 
+      if (clickType === 'add') {
+        addToFirestore(movie, currentUserEmail);
+        isAdding = true;
+      } else {
+        await removeFromFirestore(movie, currentUserEmail);
+        isAdding = false;
+      }
+
       const updatedCachedMovies = updateCachedMovie(
         cachedMovies,
         movieIndexToUpdate,
-        true
+        isAdding
       );
 
       queryClient.setQueryData('movies', updatedCachedMovies);
-    }
-  };
-
-  const handleDeleteMovie = async ({ movie, currentUserEmail }: any) => {
-    await deleteMovie(movie, currentUserEmail);
-    const currentData = queryClient.getQueryData<TMovie[]>('movies');
-
-    if (currentData != null) {
-      const indexToUpdate = currentData.findIndex(
-        (item: TMovie) => item.id === movie.id
-      );
-
-      const updatedData = [
-        ...currentData.slice(0, indexToUpdate),
-        { ...movie, isAdded: false },
-        ...currentData.slice(indexToUpdate + 1),
-      ];
-
-      queryClient.setQueryData('movies', updatedData);
     }
   };
 
@@ -52,14 +45,10 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
       <img src={imgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
       <h6>{movie.title}</h6>
       <p>Released: {movie.release_date}</p>
-      <button
-        onClick={() => handleAddMovie({ movie, currentUserEmail })}
-        disabled={movie.isAdded}>
+      <button onClick={() => handleClick('add')} disabled={movie.isAdded}>
         Add
       </button>
-      <button
-        disabled={!movie.isAdded}
-        onClick={() => handleDeleteMovie({ movie, currentUserEmail })}>
+      <button disabled={!movie.isAdded} onClick={() => handleClick('delete')}>
         Remove
       </button>
     </li>

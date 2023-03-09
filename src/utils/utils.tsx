@@ -35,7 +35,7 @@ export const newReleases = (movies: Array<TMovie>, numberOfDaysAgo: number) => {
   return filteredMovies;
 };
 
-export const addMovie = async (
+export const addToFirestore = async (
   movie: TMovie,
   currentUserEmail: TCurrentUserEmail
 ) => {
@@ -52,7 +52,7 @@ export const addMovie = async (
   }
 };
 
-export const deleteMovie = async (
+export const removeFromFirestore = async (
   movie: TMovie,
   currentUserEmail: TCurrentUserEmail
 ) => {
@@ -89,7 +89,7 @@ export const updateCachedMovie = (
     throw new Error('Invalid index');
   }
 
-  const updatedArray: TMovie[] = [...array];
-  updatedArray[index].isAdded = isAdded;
-  return updatedArray;
+  const updatedCachedMovies = [...array];
+  updatedCachedMovies[index].isAdded = isAdded;
+  return updatedCachedMovies;
 };
