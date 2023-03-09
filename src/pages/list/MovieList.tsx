@@ -11,17 +11,28 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
 
   const handleAddMovie = ({ movie, currentUserEmail }: any) => {
     addMovie(movie, currentUserEmail);
-    const currentData = queryClient.getQueryData<TMovie[]>('movies');
+    const cachedMovies = queryClient.getQueryData<TMovie[]>('movies');
 
-    if (currentData != null) {
-      const indexToUpdate = currentData.findIndex(
+    // function modifyArrayElement(array, index, newValue) {
+    //   if (index >= array.length || index < 0) {
+    //     throw new Error('Invalid index');
+    //   }
+
+    //   const newArray = [...array]; // create a new array to avoid mutating the original array
+    //   newArray[index] = newValue; // modify the element at the specified index
+    //   return newArray; // return the modified array
+    // }
+
+    if (cachedMovies != null) {
+      // the target
+      const indexToUpdate = cachedMovies.findIndex(
         (item: TMovie) => item.id === movie.id
       );
 
       const updatedData: TMovie[] = [
-        ...currentData.slice(0, indexToUpdate),
+        ...cachedMovies.slice(0, indexToUpdate),
         { ...movie, isAdded: true },
-        ...currentData.slice(indexToUpdate + 1),
+        ...cachedMovies.slice(indexToUpdate + 1),
       ];
 
       queryClient.setQueryData('movies', updatedData);
@@ -48,7 +59,7 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
   };
 
   return (
-    <li className={styles.card}>
+    <li key={movie.id} className={styles.card}>
       <img src={imgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
       <h6>{movie.title}</h6>
       <p>Released: {movie.release_date}</p>
@@ -70,11 +81,9 @@ const MovieList = ({ movies, currentUserEmail }: TMovieList) => {
   return (
     <ul className={styles.container}>
       {movies.length > 0 ? (
-        movies.map((movie) => (
-          <div key={movie.id}>{Movie(movie, currentUserEmail)}</div>
-        ))
+        movies.map((movie) => Movie(movie, currentUserEmail))
       ) : (
-        <li>'Your search returned no results'</li>
+        <p>'Your search returned no results'</p>
       )}
     </ul>
   );
