@@ -22,3 +22,5 @@ export type TMovieList = {
   movies: TMovie[];
   currentUserEmail: TCurrentUserEmail;
 };
+
+export type TClickType = 'add' | 'remove';

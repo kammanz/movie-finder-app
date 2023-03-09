@@ -6,14 +6,19 @@ import {
   removeFromFirestore,
   updateCachedMovie,
 } from '../../utils/utils';
-import { TMovieList, TMovie, TCurrentUserEmail } from '../../types/types';
+import {
+  TClickType,
+  TCurrentUserEmail,
+  TMovie,
+  TMovieList,
+} from '../../types/types';
 
 import styles from './MovieList.module.css';
 
 const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
   const queryClient = useQueryClient();
 
-  const handleClick = async (clickType: string) => {
+  const handleClick = async (clickType: TClickType) => {
     const cachedMovies = queryClient.getQueryData<TMovie[]>('movies');
     let isAdding;
 
@@ -48,7 +53,7 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
       <button onClick={() => handleClick('add')} disabled={movie.isAdded}>
         Add
       </button>
-      <button disabled={!movie.isAdded} onClick={() => handleClick('delete')}>
+      <button disabled={!movie.isAdded} onClick={() => handleClick('remove')}>
         Remove
       </button>
     </li>
