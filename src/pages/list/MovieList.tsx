@@ -13,15 +13,21 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
     addMovie(movie, currentUserEmail);
     const cachedMovies = queryClient.getQueryData<TMovie[]>('movies');
 
-    // function modifyArrayElement(array, index, newValue) {
-    //   if (index >= array.length || index < 0) {
-    //     throw new Error('Invalid index');
-    //   }
+    function modifyArrayElement2(
+      array: TMovie[],
+      index: number,
+      newValue: boolean
+    ) {
+      if (index >= array.length || index < 0) {
+        throw new Error('Invalid index');
+      }
 
-    //   const newArray = [...array]; // create a new array to avoid mutating the original array
-    //   newArray[index] = newValue; // modify the element at the specified index
-    //   return newArray; // return the modified array
-    // }
+      const updatedArray: TMovie[] = [...array]; // create a new array to avoid mutating the original array
+      updatedArray[index].isAdded = newValue; // modify the element at the specified index
+      // return newArray; // return the modified array
+
+      return queryClient.setQueryData('movies', updatedArray);
+    }
 
     if (cachedMovies != null) {
       // the target
@@ -29,13 +35,15 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
         (item: TMovie) => item.id === movie.id
       );
 
-      const updatedData: TMovie[] = [
-        ...cachedMovies.slice(0, indexToUpdate),
-        { ...movie, isAdded: true },
-        ...cachedMovies.slice(indexToUpdate + 1),
-      ];
+      modifyArrayElement2(cachedMovies, indexToUpdate, true);
 
-      queryClient.setQueryData('movies', updatedData);
+      // const updatedData: TMovie[] = [
+      //   ...cachedMovies.slice(0, indexToUpdate),
+      //   { ...movie, isAdded: true },
+      //   ...cachedMovies.slice(indexToUpdate + 1),
+      // ];
+
+      // queryClient.setQueryData('movies', updatedData);
     }
   };
 
