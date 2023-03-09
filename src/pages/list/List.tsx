@@ -25,15 +25,25 @@ const List = ({
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
   const movies: TMovie[] | undefined = queryClient.getQueryData('movies');
   useEffect(() => {
+    console.log('use effect ran');
     handleUsersSavedMovies();
-  }, [currentUserEmail]);
+  }, [currentUserEmail, movies]);
 
   const handleUsersSavedMovies = async () => {
+    console.log('handleUsersSavedMovies  ran');
     const usersSavedMovies: TMovieId[] = await fetchUsersSavedMovies(
       currentUserEmail
     );
 
+    console.log(
+      'handleUsersSavedMovies, BEFORE if statement, movies: ',
+      movies
+    );
     if (movies !== undefined) {
+      console.log(
+        'handleUsersSavedMovies, INSIDE if statement, we have movies: ',
+        movies
+      );
       const combinedArray = addUsersSavedMoviesToList(movies, usersSavedMovies);
       return queryClient.setQueryData('movies', combinedArray);
     }

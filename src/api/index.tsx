@@ -17,32 +17,6 @@ export const moviesAPI = `${baseMoviesApi}?api_key=fc28873a448c0edccf9ab243ad3ae
 
 export const urlPath = `/3/discover/movie?api_key=${apiKey}&with_genres=${thrillerId}`;
 
-// export const addUsersSavedMoviesToList = (
-//   movies: TMovie[] | undefined,
-//   userssavedMovies: Array<TMovieId>
-// ) => {
-//   console.log('addUsersSavedMoviesToList ran');
-//   console.log('addUsersSavedMoviesToList, movies: ', movies);
-//   console.log(
-//     'addUsersSavedMoviesToList, userssavedMovies: ',
-//     userssavedMovies
-//   );
-//   const moviesWithUsersSelections = movies?.map((movie) => {
-//     const match = userssavedMovies.find(
-//       (savedMovieId) => movie.id === savedMovieId.id
-//     );
-//     console.log('matchey: ', match);
-//     if (match) {
-//       console.log('match: ', match);
-//       return { ...movie, isAdded: true };
-//     } else {
-//       return { ...movie, isAdded: false };
-//     }
-//   });
-
-//   return moviesWithUsersSelections;
-// };
-
 export const addUsersSavedMoviesToList = (
   movies: TMovie[] | undefined,
   userssavedMovies: Array<TMovieId>
@@ -53,16 +27,17 @@ export const addUsersSavedMoviesToList = (
     'addUsersSavedMoviesToList, userssavedMovies: ',
     userssavedMovies
   );
-  console.log('userssavedMovies: ', userssavedMovies);
+  console.log('in addUsersSavedMoviesToList: ', userssavedMovies);
   const moviesWithUsersSelections = movies?.map((movie) => {
     const match = userssavedMovies.find(
       (savedMovieId) => movie.id === savedMovieId.id
     );
-    console.log('matchey: ', match);
+    console.log('in addUsersSavedMoviesToList, matched movies array: ', match);
     if (match) {
-      console.log('match: ', match);
+      console.log('in addUsersSavedMoviesToList, match is TRUE: ', match);
       return { ...movie, isAdded: true };
     } else {
+      console.log('in addUsersSavedMoviesToList, match is FALSE: ', match);
       return { ...movie, isAdded: false };
     }
   });
@@ -93,6 +68,7 @@ export const fetchUsersSavedMovies = async (currentUser: TCurrentUserEmail) => {
     });
 
     console.log('fetchUsersSavedMovies, savedMovies: ', savedMovies);
+    if (savedMovies.length > 0) alert('savedMovies array now has data');
     return savedMovies;
   } catch (error) {
     throw error;
