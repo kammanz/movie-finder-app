@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQueryClient } from 'react-query';
 import { imgUrl } from '../../api';
-import { addMovie, deleteMovie } from '../../utils/utils';
+import { addMovie, deleteMovie, updateCachedMovie } from '../../utils/utils';
 import { TMovieList, TMovie, TCurrentUserEmail } from '../../types/types';
 
 import styles from './MovieList.module.css';
@@ -13,37 +13,18 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
     addMovie(movie, currentUserEmail);
     const cachedMovies = queryClient.getQueryData<TMovie[]>('movies');
 
-    function modifyArrayElement2(
-      array: TMovie[],
-      index: number,
-      newValue: boolean
-    ) {
-      if (index >= array.length || index < 0) {
-        throw new Error('Invalid index');
-      }
-
-      const updatedArray: TMovie[] = [...array]; // create a new array to avoid mutating the original array
-      updatedArray[index].isAdded = newValue; // modify the element at the specified index
-      // return newArray; // return the modified array
-
-      return queryClient.setQueryData('movies', updatedArray);
-    }
-
     if (cachedMovies != null) {
-      // the target
-      const indexToUpdate = cachedMovies.findIndex(
+      const movieIndexToUpdate = cachedMovies.findIndex(
         (item: TMovie) => item.id === movie.id
       );
 
-      modifyArrayElement2(cachedMovies, indexToUpdate, true);
+      const updatedCachedMovies = updateCachedMovie(
+        cachedMovies,
+        movieIndexToUpdate,
+        true
+      );
 
-      // const updatedData: TMovie[] = [
-      //   ...cachedMovies.slice(0, indexToUpdate),
-      //   { ...movie, isAdded: true },
-      //   ...cachedMovies.slice(indexToUpdate + 1),
-      // ];
-
-      // queryClient.setQueryData('movies', updatedData);
+      queryClient.setQueryData('movies', updatedCachedMovies);
     }
   };
 

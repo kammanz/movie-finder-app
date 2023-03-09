@@ -79,3 +79,17 @@ export const sortMovies = (sortType: TMovieSortOptions, movies: TMovie[]) => {
 
   return sorted;
 };
+
+export const updateCachedMovie = (
+  array: TMovie[],
+  index: number,
+  isAdded: TMovie['isAdded']
+) => {
+  if (index >= array.length || index < 0) {
+    throw new Error('Invalid index');
+  }
+
+  const updatedArray: TMovie[] = [...array];
+  updatedArray[index].isAdded = isAdded;
+  return updatedArray;
+};
