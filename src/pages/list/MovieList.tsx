@@ -1,8 +1,9 @@
 import React from 'react';
+import { useQueryClient } from 'react-query';
 import { imgUrl } from '../../api';
 import { addMovie, deleteMovie } from '../../utils/utils';
-import { TMovie, TCurrentUserEmail } from '../../types/types';
-import { useQueryClient } from 'react-query';
+import { TMovieList, TMovie, TCurrentUserEmail } from '../../types/types';
+
 import styles from './MovieList.module.css';
 
 const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
@@ -63,11 +64,6 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
       </button>
     </li>
   );
-};
-
-type TMovieList = {
-  movies: TMovie[];
-  currentUserEmail: TCurrentUserEmail;
 };
 
 const MovieList = ({ movies, currentUserEmail }: TMovieList) => {

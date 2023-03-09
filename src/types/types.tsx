@@ -20,4 +20,5 @@ export type THandleAddMovie = {
 
 export type TMovieList = {
   movies: TMovie[];
+  currentUserEmail: TCurrentUserEmail;
 };
