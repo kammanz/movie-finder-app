@@ -19,45 +19,30 @@ export const urlPath = `/3/discover/movie?api_key=${apiKey}&with_genres=${thrill
 
 export const addUsersSavedMoviesToList = (
   movies: TMovie[] | undefined,
-  userssavedMovies: Array<TMovieId>
+  usersSavedMovies: TMovieId[]
 ) => {
-  console.log('addUsersSavedMoviesToList ran');
-  console.log('addUsersSavedMoviesToList, movies: ', movies);
-  console.log(
-    'addUsersSavedMoviesToList, userssavedMovies: ',
-    userssavedMovies
-  );
-  console.log('in addUsersSavedMoviesToList: ', userssavedMovies);
-  const moviesWithUsersSelections = movies?.map((movie) => {
-    const match = userssavedMovies.find(
-      (savedMovieId) => movie.id === savedMovieId.id
-    );
-    console.log('in addUsersSavedMoviesToList, matched movies array: ', match);
-    if (match) {
-      console.log('in addUsersSavedMoviesToList, match is TRUE: ', match);
-      return { ...movie, isAdded: true };
-    } else {
-      console.log('in addUsersSavedMoviesToList, match is FALSE: ', match);
-      return { ...movie, isAdded: false };
-    }
-  });
-
+  const moviesWithUsersSelections =
+    usersSavedMovies.length > 0
+      ? movies?.map((movie) => {
+          let isMatched: boolean = usersSavedMovies.some(
+            (savedMovie) => savedMovie.id === movie.id
+          );
+          return { ...movie, isAdded: isMatched };
+        })
+      : movies;
   return moviesWithUsersSelections;
 };
 
 export const fetchAllMovies = async () => {
-  console.log('fetchAllMovies ran');
   try {
     const { results: movies } = await (await fetch(moviesAPI)).json();
     return movies;
-    // return addUsersSavedMoviesToList(movies, userssavedMovies);
   } catch (error) {
     throw new Error(typeof error);
   }
 };
 
 export const fetchUsersSavedMovies = async (currentUser: TCurrentUserEmail) => {
-  console.log('fetchUsersSavedMovies ran');
   try {
     const usersMoviesRef = await collection(db, `users/${currentUser}/movies`);
     const q = query(usersMoviesRef);
@@ -67,8 +52,6 @@ export const fetchUsersSavedMovies = async (currentUser: TCurrentUserEmail) => {
       doc.id && savedMovies.push({ id: parseInt(doc.id) });
     });
 
-    console.log('fetchUsersSavedMovies, savedMovies: ', savedMovies);
-    if (savedMovies.length > 0) alert('savedMovies array now has data');
     return savedMovies;
   } catch (error) {
     throw error;

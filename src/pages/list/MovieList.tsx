@@ -29,7 +29,6 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
 
   const handleDeleteMovie = async ({ movie, currentUserEmail }: any) => {
     await deleteMovie(movie, currentUserEmail);
-    console.log('in delete movie, movie.id: ', movie.id);
     const currentData = queryClient.getQueryData<TMovie[]>('movies');
 
     if (currentData != null) {

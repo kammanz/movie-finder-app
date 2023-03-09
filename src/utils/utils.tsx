@@ -1,4 +1,4 @@
-import { doc, setDoc, collection, deleteDoc } from 'firebase/firestore';
+import { doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebaseSetup';
 import { subDays, compareAsc } from 'date-fns';
 import { TMovie, TMovieSortOptions, TCurrentUserEmail } from '../types/types';
@@ -56,30 +56,8 @@ export const deleteMovie = async (
   movie: TMovie,
   currentUserEmail: TCurrentUserEmail
 ) => {
-  console.log('delete movie fired');
   try {
-    // Get a reference to the document you want to delete
-    // const documentRef = collection('myCollection').doc('myDocument');
-    // const docRef = doc(db, `users/${currentUserEmail}/movies/${movie.id}`)
-
     await deleteDoc(doc(db, `users/${currentUserEmail}/movies/${movie.id}`));
-    console.log('doc deleted');
-
-    // Delete the document
-    // docRef.deleteDoc()
-    //   .then(() => {
-    //     console.log('Document successfully deleted!');
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error removing document: ', error);
-    //   });
-    // await setDoc(doc(db, `users/${currentUserEmail}/movies/${movie.id}`), {
-    //   id: movie.id,
-    //   poster_path: movie.poster_path,
-    //   release_date: movie.release_date,
-    //   title: movie.title,
-    //   isAdded: true,
-    // });
   } catch (error) {
     throw error;
   }
