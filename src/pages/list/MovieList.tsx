@@ -24,7 +24,7 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
 
     if (cachedMovies != null) {
       const movieIndexToUpdate = cachedMovies.findIndex(
-        (item: TMovie) => item.id === movie.id
+        ({ id }: TMovie) => id === movie.id
       );
 
       if (clickType === 'add') {
