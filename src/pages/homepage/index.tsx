@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import {
   addUsersSavedMoviesToList,
   fetchAllMovies,
@@ -19,8 +20,10 @@ import Header from '../../components/header';
 const Homepage = () => {
   const [selectedMovieSort, setSelectedMovieSort] =
     useState<TMovieSortOptions>('newest');
+  const [error, setError] = useState('');
 
   const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
   let currentUserEmail: TCurrentUserEmail = currentUser?.email;
 
   const queryClient = useQueryClient();
@@ -63,6 +66,16 @@ const Homepage = () => {
     setSortedMovies(sortMovies(sortType, allMovies));
   };
 
+  // const handleClick = async () => {
+  //   setError('');
+  //   try {
+  //     await logout();
+  //     navigate('/login');
+  //   } catch (error) {
+  //     setError('Failed to log out');
+  //   }
+  // };
+
   if (isLoading) return <span>Loading</span>;
   if (isError) return <span>Error</span>;
   if (allMovies === undefined) return <span>Loading</span>;
@@ -70,25 +83,28 @@ const Homepage = () => {
   return (
     <>
       <Header currentUserEmail={currentUserEmail} />
-      <form>
-        <label htmlFor="sort-movies">Sort by:</label>
-        <select
-          id="sort-movies"
-          data-testid="select"
-          value={selectedMovieSort}
-          onChange={(e) => handleSort(e.target.value as TMovieSortOptions)}>
-          <option value="newest">newest</option>
-          <option value="oldest">oldest</option>
-          <option value="thirty-days">last 30 days</option>
-        </select>
-      </form>
-      <button type="button" onClick={() => setSortedMovies(undefined)}>
-        Show all movies
-      </button>
+      <div>
+        <form>
+          <label htmlFor="sort-movies">Sort by:</label>
+          <select
+            id="sort-movies"
+            data-testid="select"
+            value={selectedMovieSort}
+            onChange={(e) => handleSort(e.target.value as TMovieSortOptions)}>
+            <option value="newest">newest</option>
+            <option value="oldest">oldest</option>
+            <option value="thirty-days">last 30 days</option>
+          </select>
+        </form>
+        <button type="button" onClick={() => setSortedMovies(undefined)}>
+          Show all movies
+        </button>
+      </div>
       <MovieList
         movies={sortedMovies || allMovies}
         currentUserEmail={currentUserEmail}
       />
+      {/* <button onClick={handleClick}>Logout</button> */}
     </>
   );
 };
