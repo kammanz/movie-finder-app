@@ -62,13 +62,15 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
 
 const MovieList = ({ movies, currentUserEmail }: TMovieList) => {
   return (
-    <ul className={styles.container}>
-      {movies.length > 0 ? (
-        movies.map((movie) => Movie(movie, currentUserEmail))
-      ) : (
-        <p>'Your search returned no results'</p>
-      )}
-    </ul>
+    <div>
+      <ul className={styles.container}>
+        {movies.length > 0 ? (
+          movies.map((movie) => Movie(movie, currentUserEmail))
+        ) : (
+          <p>'Your search returned no results'</p>
+        )}
+      </ul>
+    </div>
   );
 };
 

@@ -69,7 +69,7 @@ const Homepage = () => {
 
   return (
     <>
-      {<Header currentUserEmail={currentUserEmail} />}
+      <Header currentUserEmail={currentUserEmail} />
       <form>
         <label htmlFor="sort-movies">Sort by:</label>
         <select
@@ -82,13 +82,13 @@ const Homepage = () => {
           <option value="thirty-days">last 30 days</option>
         </select>
       </form>
+      <button type="button" onClick={() => setSortedMovies(undefined)}>
+        Show all movies
+      </button>
       <MovieList
         movies={sortedMovies || allMovies}
         currentUserEmail={currentUserEmail}
       />
-      <button type="button" onClick={() => setSortedMovies(undefined)}>
-        Show all movies
-      </button>
     </>
   );
 };
