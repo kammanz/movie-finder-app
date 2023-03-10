@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TCurrentUserEmail } from '../../types/types';
 import { useAuth } from '../../context/AuthContext';
+import { TCurrentUserEmail } from '../../types/types';
 
 const styles = {
   display: 'flex',
@@ -16,6 +16,7 @@ const Header = ({
 }) => {
   const [error, setError] = useState('');
   const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     setError('');
@@ -27,7 +28,6 @@ const Header = ({
     }
   };
 
-  const navigate = useNavigate();
   return (
     <header style={styles}>
       <h1>Welcome, {currentUserEmail}</h1>

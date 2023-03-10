@@ -3,9 +3,9 @@ import { Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import Form from '../pages/signin/Form';
-import Homepage from '../pages/homepage';
-import PrivateRoute from './PrivateRoute';
+import Form from './pages/signin/Form';
+import Homepage from './pages/homepage';
+import PrivateRoute from './components/PrivateRoute';
 
 const queryClient = new QueryClient();
 
