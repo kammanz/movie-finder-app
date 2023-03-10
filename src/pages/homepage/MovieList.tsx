@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQueryClient } from 'react-query';
-import { imgUrl } from '../../api';
+import { getImgUrl } from '../../api';
 import {
   addToFirestore,
   removeFromFirestore,
@@ -47,7 +47,7 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
 
   return (
     <li key={movie.id} className={styles.card}>
-      <img src={imgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
+      <img src={getImgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
       <h6>{movie.title}</h6>
       <p>Released: {movie.release_date}</p>
       <button onClick={() => handleClick('add')} disabled={movie.isAdded}>

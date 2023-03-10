@@ -93,3 +93,5 @@ export const updateCachedMovie = (
   updatedCachedMovies[index].isAdded = isAdded;
   return updatedCachedMovies;
 };
+
+export const currentDate = new Date().toISOString().slice(0, 10);

@@ -3,8 +3,8 @@ import { useQuery, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import {
   addUsersSavedMoviesToList,
-  fetchAllMovies,
-  fetchUsersSavedMovies,
+  getAllMovies,
+  getUsersSavedMovies,
 } from '../../api';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -39,7 +39,7 @@ const Homepage = () => {
   }, []);
 
   const handleUsersSavedMovies = async () => {
-    const usersSavedMovies: TMovieId[] = await fetchUsersSavedMovies(
+    const usersSavedMovies: TMovieId[] = await getUsersSavedMovies(
       currentUserEmail
     );
 
@@ -53,7 +53,7 @@ const Homepage = () => {
     data: allMovies,
     isLoading,
     isError,
-  } = useQuery(['movies'], () => fetchAllMovies(), {
+  } = useQuery(['movies'], () => getAllMovies(), {
     refetchOnWindowFocus: false,
     enabled: currentUserEmail !== undefined,
   });
