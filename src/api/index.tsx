@@ -1,5 +1,5 @@
 import { collection, query, getDocs } from 'firebase/firestore';
-import { db } from '../firebaseSetup';
+import { db } from '../firebase/firebaseSetup';
 import { TMovie, TMovieId, TCurrentUserEmail } from '../types/types';
 
 const thrillerId = 53;

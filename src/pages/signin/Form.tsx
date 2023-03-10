@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import { useAuth } from '../../context/AuthContext';
-import { db } from '../../firebaseSetup';
+import { db } from '../../firebase/firebaseSetup';
 
 export type Props = {
   formType: string;

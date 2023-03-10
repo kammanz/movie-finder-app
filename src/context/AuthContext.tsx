@@ -7,7 +7,7 @@ import React, {
   useEffect,
 } from 'react';
 import firebase from 'firebase/compat/app';
-import { auth } from '../firebaseSetup';
+import { auth } from '../firebase/firebaseSetup';
 import { signOut } from 'firebase/auth';
 
 type AuthContextType = {
