@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { baseMoviesApi } from '../api';
+import { baseMoviesApi, urlPath } from '../api';
 
 const mockMovies = [
   {
@@ -23,7 +23,7 @@ const mockMovies = [
 ];
 
 export const handlers = [
-  rest.get(baseMoviesApi, (req, res, ctx) => {
+  rest.get(urlPath, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ results: mockMovies }));
   }),
 ];

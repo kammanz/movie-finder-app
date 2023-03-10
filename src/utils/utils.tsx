@@ -1,7 +1,7 @@
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebaseSetup';
 import { subDays, compareAsc } from 'date-fns';
-import { TMovie, addMovieProps } from '../types/types';
+import { TMovie, TMovieSortOptions, TCurrentUserEmail } from '../types/types';
 
 export const sortByProperty = (
   array: any[],
@@ -35,18 +35,61 @@ export const newReleases = (movies: Array<TMovie>, numberOfDaysAgo: number) => {
   return filteredMovies;
 };
 
-export const addMovie = async ({ movie, currentUser }: addMovieProps) => {
+export const addToFirestore = async (
+  movie: TMovie,
+  currentUserEmail: TCurrentUserEmail
+) => {
   try {
-    await setDoc(doc(db, `users/${currentUser}/movies/${movie.id}`), {
+    await setDoc(doc(db, `users/${currentUserEmail}/movies/${movie.id}`), {
       id: movie.id,
       poster_path: movie.poster_path,
       release_date: movie.release_date,
       title: movie.title,
       isAdded: true,
     });
-    // TODO: query the database by movie id, find the movie, update its isAdded property
-    // page should rerender because cache has been updated
   } catch (error) {
     throw error;
   }
+};
+
+export const removeFromFirestore = async (
+  movie: TMovie,
+  currentUserEmail: TCurrentUserEmail
+) => {
+  try {
+    await deleteDoc(doc(db, `users/${currentUserEmail}/movies/${movie.id}`));
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const sortMovies = (sortType: TMovieSortOptions, movies: TMovie[]) => {
+  let sorted;
+  switch (sortType) {
+    case 'oldest':
+      sorted = sortByProperty(movies, 'release_date', false);
+      break;
+    case 'newest':
+      sorted = sortByProperty(movies, 'release_date', true);
+      break;
+    case 'thirty-days':
+      sorted = newReleases(movies, 3);
+      break;
+  }
+
+  return sorted;
+};
+
+export const updateCachedMovie = (
+  array: TMovie[],
+  index: number,
+  isAdded: TMovie['isAdded']
+) => {
+  if (index >= array.length || index < 0) {
+    throw new Error('Invalid index');
+  }
+
+  const updatedCachedMovies = [...array];
+  updatedCachedMovies[index].isAdded = isAdded;
+  return updatedCachedMovies;
 };

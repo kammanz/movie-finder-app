@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { TCurrentUserEmail } from '../../types/types';
 import List from '../list/List';
 
 const UserPage = () => {
   const { currentUser, logout } = useAuth();
   const [error, setError] = useState('');
+  let currentUserEmail: TCurrentUserEmail = currentUser?.email;
 
-  let currentUserEmail = currentUser?.email;
   const navigate = useNavigate();
   const handleClick = async () => {
     setError('');
@@ -18,11 +19,12 @@ const UserPage = () => {
       setError('Failed to log out');
     }
   };
+
   return (
     <div>
       <h1>Welcome to your homepage</h1>
       <p>Your email address is {currentUser?.email}</p>
-      <List currentUser={currentUserEmail} />
+      <List currentUserEmail={currentUserEmail} />
       <button onClick={handleClick}>Logout</button>
       {error}
     </div>

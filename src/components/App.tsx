@@ -6,7 +6,6 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import Form from '../pages/signin/Form';
 import UserPage from '../pages/user/UserPage';
 import PrivateRoute from './PrivateRoute';
-import List from '../pages/list/List';
 
 const queryClient = new QueryClient();
 
@@ -24,9 +23,6 @@ const App = () => {
           <Route element={<PrivateRoute />}>
             <Route path="/userPage" element={<UserPage />} />
           </Route>
-        </Routes>
-        <Routes>
-          <Route path="/list" element={<List />} />
         </Routes>
       </Container>
       <ReactQueryDevtools />

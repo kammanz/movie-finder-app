@@ -17,7 +17,7 @@ describe('List', () => {
   it('renders correctly', () => {});
 
   it('displays a list of movies, defaulting to sorted by newest', async () => {
-    renderWithQueryClient(<List />);
+    renderWithQueryClient(<List currentUserEmail={undefined} />);
 
     const movieImages = (await screen.findAllByRole('img', {
       name: /poster$/i,
@@ -33,7 +33,7 @@ describe('List', () => {
   });
 
   it.only('sorts movies by oldest', async () => {
-    renderWithQueryClient(<List />);
+    renderWithQueryClient(<List currentUserEmail={undefined} />);
     const user = userEvent.setup();
 
     const movieImages = (await screen.findAllByRole('img', {
@@ -81,15 +81,15 @@ describe('List', () => {
   });
 
   it('sorts movies by newest', async () => {
-    renderWithQueryClient(<List />);
+    renderWithQueryClient(<List currentUserEmail={undefined} />);
   });
 
   it('sorts movies by last 30 days', async () => {
-    renderWithQueryClient(<List />);
+    renderWithQueryClient(<List currentUserEmail={undefined} />);
   });
 
   it('displays no results message if there are no results', async () => {
-    renderWithQueryClient(<List />);
+    renderWithQueryClient(<List currentUserEmail={undefined} />);
   });
 });
 

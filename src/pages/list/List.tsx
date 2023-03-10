@@ -1,60 +1,66 @@
-import React, { useState } from 'react';
-import { useQuery } from 'react-query';
-import { sortByProperty, newReleases } from '../../utils/utils';
-import { TMovie, TMovieSortOptions } from '../../types/types';
+import React, { useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
+import {
+  addUsersSavedMoviesToList,
+  fetchAllMovies,
+  fetchUsersSavedMovies,
+} from '../../api';
+import {
+  TCurrentUserEmail,
+  TMovie,
+  TMovieId,
+  TMovieSortOptions,
+} from '../../types/types';
+import { sortMovies } from '../../utils/utils';
 import MovieList from './MovieList';
-import { fetchAllMovies, fetchUsersSavedMovies } from '../../api';
 
-const List = ({ currentUser }: any) => {
+const List = ({
+  currentUserEmail,
+}: {
+  currentUserEmail: TCurrentUserEmail;
+}) => {
   const [selectedMovieSort, setSelectedMovieSort] =
     useState<TMovieSortOptions>('newest');
+  const queryClient = useQueryClient();
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
+  const movies: TMovie[] | undefined = queryClient.getQueryData('movies');
+  useEffect(() => {
+    console.log('use effect ran');
+    handleUsersSavedMovies();
+    return console.log('clean up run');
+  }, [currentUserEmail, movies]);
 
-  const { data: savedMovieIds } = useQuery(
-    ['savedMovies'],
-    () => fetchUsersSavedMovies(currentUser),
-    {
-      refetchOnWindowFocus: false,
+  const handleUsersSavedMovies = async () => {
+    const usersSavedMovies: TMovieId[] = await fetchUsersSavedMovies(
+      currentUserEmail
+    );
+
+    if (movies !== undefined) {
+      const combinedArray = addUsersSavedMoviesToList(movies, usersSavedMovies);
+      return queryClient.setQueryData('movies', combinedArray);
     }
-  );
-
-  let usersSavedMovieIds = savedMovieIds;
+  };
 
   const {
     data: allMovies,
     isLoading,
     isError,
-  } = useQuery(
-    ['movies'],
-    () => usersSavedMovieIds && fetchAllMovies(usersSavedMovieIds),
-    {
-      enabled: !!usersSavedMovieIds,
-      cacheTime: Infinity,
-      refetchOnWindowFocus: false,
-      staleTime: Infinity,
-    }
-  );
+  } = useQuery(['movies'], () => fetchAllMovies(), {
+    refetchOnWindowFocus: false,
+    enabled: currentUserEmail !== undefined,
+  });
+
+  console.log('allMovies', allMovies);
+  console.log('currentUserEmail', currentUserEmail);
+
+  const handleSort = (sortType: TMovieSortOptions) => {
+    setSelectedMovieSort(sortType);
+    setSortedMovies(sortMovies(sortType, allMovies));
+  };
 
   if (isLoading) return <span>Loading</span>;
   if (isError) return <span>Error</span>;
   if (allMovies === undefined) return <span>Loading</span>;
-
-  const handleSort = (sortType: TMovieSortOptions) => {
-    setSelectedMovieSort(sortType);
-    let sorted;
-    switch (sortType) {
-      case 'oldest':
-        sorted = sortByProperty(allMovies, 'release_date', false);
-        break;
-      case 'newest':
-        sorted = sortByProperty(allMovies, 'release_date', true);
-        break;
-      case 'thirty-days':
-        sorted = newReleases(allMovies, 3);
-        break;
-    }
-    setSortedMovies(sorted);
-  };
 
   return (
     <>
@@ -71,7 +77,10 @@ const List = ({ currentUser }: any) => {
           <option value="thirty-days">last 30 days</option>
         </select>
       </form>
-      <MovieList movies={sortedMovies || allMovies} />
+      <MovieList
+        movies={sortedMovies || allMovies}
+        currentUserEmail={currentUserEmail}
+      />
       <button type="button" onClick={() => setSortedMovies(undefined)}>
         Show all movies
       </button>
