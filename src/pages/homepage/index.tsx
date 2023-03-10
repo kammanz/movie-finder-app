@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
 import { useAuth } from '../../context/AuthContext';
 import { queryClient } from '../../react-query/queryClient';
 import {
@@ -9,7 +8,7 @@ import {
   TMovieSortOptions,
 } from '../../types/types';
 import { sortMovies } from '../../utils/utils';
-import { addSavedMoviesToList, getMovies, getSavedMovies } from './hooks';
+import { addSavedMoviesToList, getSavedMovies, useMovies } from './hooks';
 import Header from '../../components/header';
 import MovieList from './MovieList';
 
@@ -37,14 +36,7 @@ const Homepage = () => {
     }
   };
 
-  const {
-    data: allMovies,
-    isLoading,
-    isError,
-  } = useQuery(['movies'], () => getMovies(), {
-    refetchOnWindowFocus: false,
-    enabled: currentUserEmail !== undefined,
-  });
+  const { data: allMovies, isLoading, isError } = useMovies();
 
   console.log('allMovies', allMovies);
   console.log('currentUserEmail', currentUserEmail);

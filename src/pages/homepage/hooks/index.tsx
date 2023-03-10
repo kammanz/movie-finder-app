@@ -2,6 +2,8 @@ import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseSetup';
 import { fullUrl } from '../../../api';
 import { TCurrentUserEmail, TMovie, TMovieId } from '../../../types/types';
+import { useQuery } from 'react-query';
+import { queryKeys } from '../../../react-query/constants';
 
 export const getMovies = async () => {
   try {
@@ -10,6 +12,16 @@ export const getMovies = async () => {
   } catch (error) {
     throw new Error(typeof error);
   }
+};
+
+export const useMovies = () => {
+  const fallback: any = [];
+  const {
+    data = fallback,
+    isLoading,
+    isError,
+  } = useQuery(queryKeys.movies, getMovies);
+  return { data, isLoading, isError };
 };
 
 export const getSavedMovies = async (currentUser: TCurrentUserEmail) => {
