@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 import {
+  addUsersSavedMoviesToList,
   fetchAllMovies,
   fetchUsersSavedMovies,
-  addUsersSavedMoviesToList,
 } from '../../api';
 import {
-  TMovie,
-  TMovieSortOptions,
   TCurrentUserEmail,
+  TMovie,
   TMovieId,
+  TMovieSortOptions,
 } from '../../types/types';
 import { sortMovies } from '../../utils/utils';
 import MovieList from './MovieList';
@@ -25,7 +25,9 @@ const List = ({
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
   const movies: TMovie[] | undefined = queryClient.getQueryData('movies');
   useEffect(() => {
+    console.log('use effect ran');
     handleUsersSavedMovies();
+    return console.log('clean up run');
   }, [currentUserEmail, movies]);
 
   const handleUsersSavedMovies = async () => {
@@ -45,16 +47,20 @@ const List = ({
     isError,
   } = useQuery(['movies'], () => fetchAllMovies(), {
     refetchOnWindowFocus: false,
+    enabled: currentUserEmail !== undefined,
   });
 
-  if (isLoading) return <span>Loading</span>;
-  if (isError) return <span>Error</span>;
-  if (allMovies === undefined) return <span>Loading</span>;
+  console.log('allMovies', allMovies);
+  console.log('currentUserEmail', currentUserEmail);
 
   const handleSort = (sortType: TMovieSortOptions) => {
     setSelectedMovieSort(sortType);
     setSortedMovies(sortMovies(sortType, allMovies));
   };
+
+  if (isLoading) return <span>Loading</span>;
+  if (isError) return <span>Error</span>;
+  if (allMovies === undefined) return <span>Loading</span>;
 
   return (
     <>
