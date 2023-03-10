@@ -5,12 +5,12 @@ import userEvent from '@testing-library/user-event';
 import { expect } from '@jest/globals';
 import { renderWithQueryClient } from '../../../tests/test-utils';
 import Homepage from '..';
-// import { getAllMovies } from '../Homepage';
+// import { getMovies } from '../Homepage';
 
-const mockgetAllMovies = jest.fn();
+const mockgetMovies = jest.fn();
 
 // jest.mock('../Homepage.tsx', () => ({
-//   getAllMovies: (sortType: any) => mockgetAllMovies,
+//   getMovies: (sortType: any) => mockgetMovies,
 // }));
 
 // describe('Homepage', () => {

@@ -1,18 +1,17 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { queryClient } from './react-query/queryClient';
 import Form from './pages/signin/Form';
 import Homepage from './pages/homepage';
 import PrivateRoute from './components/PrivateRoute';
 
-const queryClient = new QueryClient();
-
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Container className="">
+      <Container>
         <Routes>
           <Route path="/" element={<Form formType="signup" />} />
         </Routes>

@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
-import {
-  addUsersSavedMoviesToList,
-  getAllMovies,
-  getUsersSavedMovies,
-} from '../../api';
+import { useQuery } from 'react-query';
 import { useAuth } from '../../context/AuthContext';
+import { queryClient } from '../../react-query/queryClient';
 import {
   TCurrentUserEmail,
   TMovie,
@@ -14,21 +9,16 @@ import {
   TMovieSortOptions,
 } from '../../types/types';
 import { sortMovies } from '../../utils/utils';
-import MovieList from './MovieList';
+import { addSavedMoviesToList, getMovies, getSavedMovies } from './hooks';
 import Header from '../../components/header';
+import MovieList from './MovieList';
 
 const Homepage = () => {
   const [selectedMovieSort, setSelectedMovieSort] =
     useState<TMovieSortOptions>('newest');
-  const [error, setError] = useState('');
-
-  const { currentUser, logout } = useAuth();
-  const navigate = useNavigate();
-  let currentUserEmail: TCurrentUserEmail = currentUser?.email;
-
-  const queryClient = useQueryClient();
-
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
+  const { currentUser } = useAuth();
+  let currentUserEmail: TCurrentUserEmail = currentUser?.email;
 
   const movies: TMovie[] | undefined = queryClient.getQueryData('movies');
 
@@ -39,12 +29,10 @@ const Homepage = () => {
   }, []);
 
   const handleUsersSavedMovies = async () => {
-    const usersSavedMovies: TMovieId[] = await getUsersSavedMovies(
-      currentUserEmail
-    );
+    const usersSavedMovies: TMovieId[] = await getSavedMovies(currentUserEmail);
 
     if (movies !== undefined) {
-      const combinedArray = addUsersSavedMoviesToList(movies, usersSavedMovies);
+      const combinedArray = addSavedMoviesToList(movies, usersSavedMovies);
       return queryClient.setQueryData('movies', combinedArray);
     }
   };
@@ -53,7 +41,7 @@ const Homepage = () => {
     data: allMovies,
     isLoading,
     isError,
-  } = useQuery(['movies'], () => getAllMovies(), {
+  } = useQuery(['movies'], () => getMovies(), {
     refetchOnWindowFocus: false,
     enabled: currentUserEmail !== undefined,
   });
@@ -65,16 +53,6 @@ const Homepage = () => {
     setSelectedMovieSort(sortType);
     setSortedMovies(sortMovies(sortType, allMovies));
   };
-
-  // const handleClick = async () => {
-  //   setError('');
-  //   try {
-  //     await logout();
-  //     navigate('/login');
-  //   } catch (error) {
-  //     setError('Failed to log out');
-  //   }
-  // };
 
   if (isLoading) return <span>Loading</span>;
   if (isError) return <span>Error</span>;
@@ -104,7 +82,6 @@ const Homepage = () => {
         movies={sortedMovies || allMovies}
         currentUserEmail={currentUserEmail}
       />
-      {/* <button onClick={handleClick}>Logout</button> */}
     </>
   );
 };
