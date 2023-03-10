@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { TCurrentUserEmail } from '../../types/types';
-import List from '../list/List';
+import Homepage from '../homepage';
 
 const UserPage = () => {
   const { currentUser, logout } = useAuth();
@@ -23,8 +23,8 @@ const UserPage = () => {
   return (
     <div>
       <h1>Welcome to your homepage</h1>
-      <p>Your email address is {currentUser?.email}</p>
-      <List currentUserEmail={currentUserEmail} />
+      {/* <p>Your email address is {currentUser?.email}</p> */}
+      {/* <Homepage currentUserEmail={currentUserEmail} /> */}
       <button onClick={handleClick}>Logout</button>
       {error}
     </div>

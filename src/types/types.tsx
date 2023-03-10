@@ -12,8 +12,8 @@ export type TMovieId = {
 
 export type TMovieSortOptions = 'oldest' | 'newest' | 'thirty-days';
 
+// export type TCurrentUserEmail = string | null | undefined;
 export type TCurrentUserEmail = string | null | undefined;
-
 export type THandleaddToFirestore = {
   movie: TMovie;
 };

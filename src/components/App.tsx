@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import Form from '../pages/signin/Form';
 import UserPage from '../pages/user/UserPage';
+import Homepage from '../pages/homepage';
 import PrivateRoute from './PrivateRoute';
 
 const queryClient = new QueryClient();
@@ -21,7 +22,7 @@ const App = () => {
         </Routes>
         <Routes>
           <Route element={<PrivateRoute />}>
-            <Route path="/userPage" element={<UserPage />} />
+            <Route path="/userPage" element={<Homepage />} />
           </Route>
         </Routes>
       </Container>

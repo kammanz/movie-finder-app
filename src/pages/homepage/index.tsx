@@ -5,6 +5,7 @@ import {
   fetchAllMovies,
   fetchUsersSavedMovies,
 } from '../../api';
+import { useAuth } from '../../context/AuthContext';
 import {
   TCurrentUserEmail,
   TMovie,
@@ -13,22 +14,26 @@ import {
 } from '../../types/types';
 import { sortMovies } from '../../utils/utils';
 import MovieList from './MovieList';
+import Header from '../../components/header';
 
-const List = ({
-  currentUserEmail,
-}: {
-  currentUserEmail: TCurrentUserEmail;
-}) => {
+const Homepage = () => {
   const [selectedMovieSort, setSelectedMovieSort] =
     useState<TMovieSortOptions>('newest');
+
+  const { currentUser, logout } = useAuth();
+  let currentUserEmail: TCurrentUserEmail = currentUser?.email;
+
   const queryClient = useQueryClient();
+
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
+
   const movies: TMovie[] | undefined = queryClient.getQueryData('movies');
+
   useEffect(() => {
     console.log('use effect ran');
     handleUsersSavedMovies();
     return console.log('clean up run');
-  }, [currentUserEmail, movies]);
+  }, []);
 
   const handleUsersSavedMovies = async () => {
     const usersSavedMovies: TMovieId[] = await fetchUsersSavedMovies(
@@ -64,7 +69,7 @@ const List = ({
 
   return (
     <>
-      <h1>List page</h1>
+      {<Header currentUserEmail={currentUserEmail} />}
       <form>
         <label htmlFor="sort-movies">Sort by:</label>
         <select
@@ -88,4 +93,4 @@ const List = ({
   );
 };
 
-export default List;
+export default Homepage;
