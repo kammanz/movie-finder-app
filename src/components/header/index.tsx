@@ -14,11 +14,10 @@ const Header = ({
 }: {
   currentUserEmail: TCurrentUserEmail;
 }) => {
-  console.log('in Header comp');
-  console.log('joblo.currentUser: ', currentUserEmail);
-  const { currentUser, logout } = useAuth();
   const [error, setError] = useState('');
-  const handleClick = async () => {
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
     setError('');
     try {
       await logout();
@@ -32,7 +31,8 @@ const Header = ({
   return (
     <header style={styles}>
       <h1>Welcome, {currentUserEmail}</h1>
-      <button onClick={handleClick}>Logout</button>
+      <button onClick={handleLogout}>Logout</button>
+      {error && error}
     </header>
   );
 };

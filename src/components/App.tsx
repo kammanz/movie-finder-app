@@ -4,7 +4,6 @@ import { Container } from 'react-bootstrap';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import Form from '../pages/signin/Form';
-// import UserPage from '../pages/user/UserPage';
 import Homepage from '../pages/homepage';
 import PrivateRoute from './PrivateRoute';
 
@@ -22,7 +21,7 @@ const App = () => {
         </Routes>
         <Routes>
           <Route element={<PrivateRoute />}>
-            <Route path="/userPage" element={<Homepage />} />
+            <Route path="/homepage" element={<Homepage />} />
           </Route>
         </Routes>
       </Container>

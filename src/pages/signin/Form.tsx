@@ -44,7 +44,7 @@ const Form: FC<Props> = ({ formType }) => {
             } else if (formType === 'login') {
               await login(email, password);
             }
-            navigate('/userPage');
+            navigate('/homepage');
           } catch (error) {
             if (error instanceof Error) {
               let errorString = error.message.slice(
