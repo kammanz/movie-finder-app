@@ -1,3 +1,7 @@
+import firebase from 'firebase/compat/app';
+
+export type TUser = firebase.User | null;
+
 export type TMovie = {
   isAdded: boolean;
   id: number;

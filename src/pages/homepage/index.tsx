@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../auth/useAuth';
 import { queryClient } from '../../react-query/queryClient';
 import {
   TCurrentUserEmail,
   TMovie,
   TMovieId,
   TMovieSortOptions,
-} from '../../types/types';
+} from '../../types';
 import { sortMovies } from '../../utils/utils';
 import { addSavedMoviesToList, getSavedMovies, useMovies } from './hooks';
 import Header from '../../components/header';
@@ -16,15 +16,15 @@ const Homepage = () => {
   const [selectedMovieSort, setSelectedMovieSort] =
     useState<TMovieSortOptions>('newest');
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
-  const { currentUser } = useAuth();
-  let currentUserEmail: TCurrentUserEmail = currentUser?.email;
+  const { user } = useAuth();
+  let currentUserEmail: TCurrentUserEmail = user?.email;
 
   const movies: TMovie[] | undefined = queryClient.getQueryData('movies');
 
   useEffect(() => {
-    console.log('use effect ran');
-    handleUsersSavedMovies();
-    return console.log('clean up run');
+    // console.log('use effect ran');
+    // handleUsersSavedMovies();
+    // return console.log('clean up run');
   }, []);
 
   const handleUsersSavedMovies = async () => {
@@ -38,8 +38,8 @@ const Homepage = () => {
 
   const { data: allMovies, isLoading, isError } = useMovies();
 
-  console.log('allMovies', allMovies);
-  console.log('currentUserEmail', currentUserEmail);
+  // console.log('allMovies', allMovies);
+  // console.log('currentUserEmail', currentUserEmail);
 
   const handleSort = (sortType: TMovieSortOptions) => {
     setSelectedMovieSort(sortType);
@@ -53,6 +53,7 @@ const Homepage = () => {
   return (
     <>
       <Header currentUserEmail={currentUserEmail} />
+      <div>{user?.uid}</div>
       <div>
         <form>
           <label htmlFor="sort-movies">Sort by:</label>

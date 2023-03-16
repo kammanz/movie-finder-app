@@ -12,9 +12,9 @@ if (process.env.NODE_ENV === 'development') {
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      {/* <AuthProvider> */}
+      <App />
+      {/* </AuthProvider> */}
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

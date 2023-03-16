@@ -2,7 +2,7 @@ import React, { useState, FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../auth/useAuth';
 import { db } from '../../firebase/firebaseSetup';
 
 export type Props = {
@@ -42,6 +42,7 @@ const Form: FC<Props> = ({ formType }) => {
                 movies: [],
               });
             } else if (formType === 'login') {
+              console.log('login pressed');
               await login(email, password);
             }
             navigate('/homepage');

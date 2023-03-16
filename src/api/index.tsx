@@ -1,6 +1,6 @@
 import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firebaseSetup';
-import { TMovie, TMovieId, TCurrentUserEmail } from '../types/types';
+import { TMovie, TMovieId, TCurrentUserEmail } from '../types';
 import { baseUrl, baseImgUrl, genreIds, apiKey } from './constants';
 import { currentDate } from '../utils/utils';
 

@@ -6,12 +6,7 @@ import {
   removeFromFirestore,
   updateCachedMovie,
 } from '../../utils/utils';
-import {
-  TClickType,
-  TCurrentUserEmail,
-  TMovie,
-  TMovieList,
-} from '../../types/types';
+import { TClickType, TCurrentUserEmail, TMovie, TMovieList } from '../../types';
 
 import styles from './MovieList.module.css';
 

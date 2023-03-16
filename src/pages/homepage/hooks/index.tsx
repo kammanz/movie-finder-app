@@ -1,7 +1,7 @@
 import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseSetup';
 import { fullUrl } from '../../../api';
-import { TCurrentUserEmail, TMovie, TMovieId } from '../../../types/types';
+import { TCurrentUserEmail, TMovie, TMovieId } from '../../../types';
 import { useQuery } from 'react-query';
 import { queryKeys } from '../../../react-query/constants';
 

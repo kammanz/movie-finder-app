@@ -1,7 +1,7 @@
 import { doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseSetup';
 import { subDays, compareAsc } from 'date-fns';
-import { TMovie, TMovieSortOptions, TCurrentUserEmail } from '../types/types';
+import { TMovie, TMovieSortOptions, TCurrentUserEmail } from '../types';
 
 export const sortByProperty = (
   array: any[],
