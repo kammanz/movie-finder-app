@@ -1,15 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
-import firebase from 'firebase/compat/app';
+import { useUser } from '../components/user/hooks/useUser';
 
 const PrivateRoute = () => {
-  const [isUserSignedIn, setIsUserSignedIn] = useState<boolean>(true);
-
-  firebase
-    .auth()
-    .onAuthStateChanged((user) => !user && setIsUserSignedIn(false));
-
-  return isUserSignedIn ? <Outlet /> : <Navigate to="/login" />;
+  const { user } = useUser();
+  return user ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

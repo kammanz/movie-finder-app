@@ -20,6 +20,7 @@ interface UseAuth {
 
 export function useAuth(): UseAuth {
   const [user, setUser] = useState<firebase.User | null>(null);
+  const { updateUser, clearUser } = useUser();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -29,21 +30,18 @@ export function useAuth(): UseAuth {
     return unsubscribe;
   }, []);
 
-  const { updateUser } = useUser();
   const signup = (email: string, password: string) => {
     return auth.createUserWithEmailAndPassword(email, password);
   };
 
-  const login = (email: string, password: string) => {
-    console.log('login called');
-    console.log('in log in, user:', user);
-    console.log('in log in, updateUser(user):', updateUser(user));
+  const login = async (email: string, password: string) => {
     updateUser(user);
     return auth.signInWithEmailAndPassword(email, password);
   };
 
   const logout = () => {
     console.log('logout called');
+    clearUser();
     return signOut(auth);
   };
 
