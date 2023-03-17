@@ -6,11 +6,11 @@ import {
   removeFromFirestore,
   updateCachedMovie,
 } from '../../utils/utils';
-import { TClickType, TCurrentUserEmail, TMovie, TMovieList } from '../../types';
+import { TClickType, TuserEmail, TMovie, TMovieList } from '../../types';
 
 import styles from './MovieList.module.css';
 
-const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
+const Movie = (movie: TMovie, userEmail: TuserEmail) => {
   const queryClient = useQueryClient();
 
   const handleClick = async (clickType: TClickType) => {
@@ -23,10 +23,10 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
       );
 
       if (clickType === 'add') {
-        addToFirestore(movie, currentUserEmail);
+        addToFirestore(movie, userEmail);
         isAdding = true;
       } else {
-        await removeFromFirestore(movie, currentUserEmail);
+        await removeFromFirestore(movie, userEmail);
         isAdding = false;
       }
 
@@ -55,12 +55,12 @@ const Movie = (movie: TMovie, currentUserEmail: TCurrentUserEmail) => {
   );
 };
 
-const MovieList = ({ movies, currentUserEmail }: TMovieList) => {
+const MovieList = ({ movies, userEmail }: TMovieList) => {
   return (
     <div>
       <ul className={styles.container}>
         {movies.length > 0 ? (
-          movies.map((movie) => Movie(movie, currentUserEmail))
+          movies.map((movie) => Movie(movie, userEmail))
         ) : (
           <p>'Your search returned no results'</p>
         )}

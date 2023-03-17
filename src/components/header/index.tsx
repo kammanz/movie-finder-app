@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';
-import { TCurrentUserEmail } from '../../types';
+import { TuserEmail } from '../../types';
 
 const styles = {
   display: 'flex',
@@ -9,11 +9,7 @@ const styles = {
   backgroundColor: 'lightsalmon',
 };
 
-const Header = ({
-  currentUserEmail,
-}: {
-  currentUserEmail: TCurrentUserEmail;
-}) => {
+const Header = ({ userEmail }: { userEmail: TuserEmail }) => {
   const [error, setError] = useState('');
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -30,7 +26,7 @@ const Header = ({
 
   return (
     <header style={styles}>
-      <h1>Welcome, {currentUserEmail}</h1>
+      <h1>Welcome, {userEmail}</h1>
       <button onClick={handleLogout}>Logout</button>
       {error && error}
     </header>

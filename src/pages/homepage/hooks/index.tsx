@@ -1,7 +1,7 @@
 import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseSetup';
 import { fullUrl } from '../../../api';
-import { TCurrentUserEmail, TMovie, TMovieId } from '../../../types';
+import { TuserEmail, TMovie, TMovieId } from '../../../types';
 import { useQuery } from 'react-query';
 import { queryKeys } from '../../../react-query/constants';
 
@@ -24,9 +24,9 @@ export const useMovies = () => {
   return { data, isLoading, isError };
 };
 
-export const getSavedMovies = async (currentUser: TCurrentUserEmail) => {
+export const getUsersSavedMovies = async (userEmail: TuserEmail) => {
   try {
-    const usersMoviesRef = await collection(db, `users/${currentUser}/movies`);
+    const usersMoviesRef = await collection(db, `users/${userEmail}/movies`);
     const q = query(usersMoviesRef);
     const querySnapshot = await getDocs(q);
     let savedMovies: Array<TMovieId> = [];
@@ -38,6 +38,18 @@ export const getSavedMovies = async (currentUser: TCurrentUserEmail) => {
   } catch (error) {
     throw error;
   }
+};
+
+export const useUsersSavedMovies = (userEmail: TuserEmail) => {
+  const fallback: any = [];
+  const {
+    data = fallback,
+    isLoading,
+    isError,
+  } = useQuery([queryKeys.user, queryKeys.usersSavedMovies], () =>
+    getUsersSavedMovies(userEmail)
+  );
+  return { data, isLoading, isError };
 };
 
 export const addSavedMoviesToList = (

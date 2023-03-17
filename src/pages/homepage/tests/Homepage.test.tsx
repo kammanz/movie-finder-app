@@ -17,7 +17,7 @@ const mockgetMovies = jest.fn();
 //   it('renders correctly', () => {});
 
 //   it('displays a list of movies, defaulting to sorted by newest', async () => {
-//     renderWithQueryClient(<Homepage currentUserEmail={undefined} />);
+//     renderWithQueryClient(<Homepage userEmail={undefined} />);
 
 //     const movieImages = (await screen.findAllByRole('img', {
 //       name: /poster$/i,
@@ -33,7 +33,7 @@ const mockgetMovies = jest.fn();
 //   });
 
 //   it.only('sorts movies by oldest', async () => {
-//     renderWithQueryClient(<Homepage currentUserEmail={undefined} />);
+//     renderWithQueryClient(<Homepage userEmail={undefined} />);
 //     const user = userEvent.setup();
 
 //     const movieImages = (await screen.findAllByRole('img', {
@@ -81,15 +81,15 @@ const mockgetMovies = jest.fn();
 //   });
 
 //   it('sorts movies by newest', async () => {
-//     renderWithQueryClient(<Homepage currentUserEmail={undefined} />);
+//     renderWithQueryClient(<Homepage userEmail={undefined} />);
 //   });
 
 //   it('sorts movies by last 30 days', async () => {
-//     renderWithQueryClient(<Homepage currentUserEmail={undefined} />);
+//     renderWithQueryClient(<Homepage userEmail={undefined} />);
 //   });
 
 //   it('displays no results message if there are no results', async () => {
-//     renderWithQueryClient(<Homepage currentUserEmail={undefined} />);
+//     renderWithQueryClient(<Homepage userEmail={undefined} />);
 //   });
 // });
 

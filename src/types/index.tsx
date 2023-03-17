@@ -1,7 +1,7 @@
 import firebase from 'firebase/compat/app';
 
 export type TClickType = 'add' | 'remove';
-export type TCurrentUserEmail = string | null | undefined;
+export type TuserEmail = string | null | undefined;
 export type THandleaddToFirestore = {
   movie: TMovie;
 };
@@ -17,7 +17,7 @@ export type TMovieId = {
 };
 export type TMovieList = {
   movies: TMovie[];
-  currentUserEmail: TCurrentUserEmail;
+  userEmail: TuserEmail;
 };
 export type TMovieSortOptions = 'oldest' | 'newest' | 'thirty-days';
 export type TUser = firebase.User | null;

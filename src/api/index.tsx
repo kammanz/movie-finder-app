@@ -1,6 +1,6 @@
 import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firebaseSetup';
-import { TMovie, TMovieId, TCurrentUserEmail } from '../types';
+import { TMovie, TMovieId, TuserEmail } from '../types';
 import { baseUrl, baseImgUrl, genreIds, apiKey } from './constants';
 import { currentDate } from '../utils/utils';
 
@@ -35,7 +35,7 @@ export const fullUrl = `${baseUrl}${urlPath}`;
 //   }
 // };
 
-// export const getSavedMovies = async (currentUser: TCurrentUserEmail) => {
+// export const getUsersSavedMovies = async (currentUser: TuserEmail) => {
 //   try {
 //     const usersMoviesRef = await collection(db, `users/${currentUser}/movies`);
 //     const q = query(usersMoviesRef);

@@ -1,7 +1,7 @@
 import { doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseSetup';
 import { subDays, compareAsc } from 'date-fns';
-import { TMovie, TMovieSortOptions, TCurrentUserEmail } from '../types';
+import { TMovie, TMovieSortOptions, TuserEmail } from '../types';
 
 export const sortByProperty = (
   array: any[],
@@ -35,12 +35,9 @@ export const newReleases = (movies: Array<TMovie>, numberOfDaysAgo: number) => {
   return filteredMovies;
 };
 
-export const addToFirestore = async (
-  movie: TMovie,
-  currentUserEmail: TCurrentUserEmail
-) => {
+export const addToFirestore = async (movie: TMovie, userEmail: TuserEmail) => {
   try {
-    await setDoc(doc(db, `users/${currentUserEmail}/movies/${movie.id}`), {
+    await setDoc(doc(db, `users/${userEmail}/movies/${movie.id}`), {
       id: movie.id,
       poster_path: movie.poster_path,
       release_date: movie.release_date,
@@ -54,10 +51,10 @@ export const addToFirestore = async (
 
 export const removeFromFirestore = async (
   movie: TMovie,
-  currentUserEmail: TCurrentUserEmail
+  userEmail: TuserEmail
 ) => {
   try {
-    await deleteDoc(doc(db, `users/${currentUserEmail}/movies/${movie.id}`));
+    await deleteDoc(doc(db, `users/${userEmail}/movies/${movie.id}`));
   } catch (error) {
     throw error;
   }
