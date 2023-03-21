@@ -1,9 +1,9 @@
 import React from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
-import { useUser } from '../components/user/hooks/useUser';
+import { getStoredUser } from '../user-storage';
 
 const PrivateRoute = () => {
-  const { user } = useUser();
+  const user = getStoredUser();
   return user ? <Outlet /> : <Navigate to="/login" />;
 };
 

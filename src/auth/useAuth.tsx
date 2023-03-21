@@ -4,9 +4,10 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebaseSetup';
 import { useUser } from '../components/user/hooks/useUser';
 
+import { setStoredUser } from '../user-storage';
+
 interface UseAuth {
   user: firebase.User | null;
-
   signup: (
     email: string,
     password: string
@@ -35,12 +36,17 @@ export function useAuth(): UseAuth {
   };
 
   const login = async (email: string, password: string) => {
-    updateUser(user);
-    return auth.signInWithEmailAndPassword(email, password);
+    return auth
+      .signInWithEmailAndPassword(email, password)
+      .then(
+        firebase.auth().onAuthStateChanged((user) => {
+          setStoredUser(email);
+          updateUser(user);
+        })
+      )
+      .catch((err) => console.log('err'));
   };
-
   const logout = () => {
-    console.log('logout called');
     clearUser();
     return signOut(auth);
   };
