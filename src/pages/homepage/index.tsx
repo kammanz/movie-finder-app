@@ -1,14 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../auth/useAuth';
-import { queryClient } from '../../react-query/queryClient';
-import { TuserEmail, TMovie, TMovieId, TMovieSortOptions } from '../../types';
+import { TuserEmail, TMovie, TMovieSortOptions } from '../../types';
 import { sortMovies } from '../../utils/utils';
-import {
-  addSavedMoviesToList,
-  getUsersSavedMovies,
-  useMovies,
-  useUsersSavedMovies,
-} from './hooks';
+import { useMovies, useUsersSavedMovies } from './hooks';
 import Header from '../../components/header';
 import MovieList from './MovieList';
 
@@ -18,38 +12,12 @@ const Homepage = () => {
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
   const { user } = useAuth();
   let userEmail: TuserEmail = user?.email;
-
-  const movies: TMovie[] | undefined = queryClient.getQueryData('movies');
-
-  const savedMovies = () => {
-    getUsersSavedMovies(user?.email);
-  };
-
-  useEffect(() => {
-    getUsersSavedMovies(user?.email);
-    // if (user) {
-    //   savedMovies();
-    // }
-    // console.log('use effect ran');
-    // handleUsersSavedMovies();
-    // return console.log('clean up run');
-  }, []);
-
-  const handleUsersSavedMovies = async () => {
-    const usersSavedMovies: TMovieId[] = await getUsersSavedMovies(userEmail);
-
-    if (movies !== undefined) {
-      const combinedArray = addSavedMoviesToList(movies, usersSavedMovies);
-      return queryClient.setQueryData('movies', combinedArray);
-    }
-  };
-
   const { data: allMovies, isLoading, isError } = useMovies();
   const { data: usersSavedMovies } = useUsersSavedMovies(userEmail);
-  console.log('usersSavedMovies: ', usersSavedMovies);
 
-  // console.log('allMovies', allMovies);
-  // console.log('userEmail', userEmail);
+  console.log('usersSavedMovies', usersSavedMovies);
+
+  console.log('allMovies: ', allMovies);
 
   const handleSort = (sortType: TMovieSortOptions) => {
     setSelectedMovieSort(sortType);
