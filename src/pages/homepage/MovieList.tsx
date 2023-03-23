@@ -39,10 +39,6 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     setTimeout(() => refetch(), 2000);
   }, [refetch]);
 
-  // const handleSort = (sortType: TMovieSortOptions) => {
-  //   setSelectedMovieSort(sortType);
-  // };
-
   const handleClick = async (movie: TMovie, clickType: TClickType) => {
     const cachedMovies = queryClient.getQueryData<TMovie[]>(queryKeys.movies);
     let isAdding;
@@ -70,19 +66,11 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     }
   };
 
-  // const handleSort = (sortType: TMovieSortOptions) => {
-  //   setSelectedMovieSort(sortType);
-  // };
-
-  const handleStateChange = (newState: any) => {
-    console.log('newState, want to see oldest: ', newState);
-
+  const handleStateChange = (newSortType: TMovieSortOptions) => {
     const toSort =
       sortedMovies && sortedMovies.length > 0 ? sortedMovies : movies;
-    setSelectedMovieSort(newState);
-    console.log('in handleStateChange, toSort: ', toSort);
-    const sortedList: TMovie[] | undefined = sortMovies(newState, toSort);
-    console.log('sortedList, want to see oldest first: ', sortedList);
+    setSelectedMovieSort(newSortType);
+    const sortedList: TMovie[] | undefined = sortMovies(newSortType, toSort);
     setSortedMovies(sortedList);
   };
 
