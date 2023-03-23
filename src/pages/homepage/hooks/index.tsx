@@ -4,6 +4,7 @@ import { fullUrl } from '../../../api';
 import { TuserEmail, TMovie, TMovieId } from '../../../types';
 import { useQuery } from 'react-query';
 import { queryKeys } from '../../../react-query/constants';
+import { queryClient } from '../../../react-query/queryClient';
 
 export const getMovies = async () => {
   try {
@@ -25,15 +26,24 @@ export const useMovies = () => {
 };
 
 export const getUsersSavedMovies = async (userEmail: TuserEmail) => {
+  console.log('getUsersSavedMovies ran');
   try {
     const usersMoviesRef = await collection(db, `users/${userEmail}/movies`);
     const q = query(usersMoviesRef);
     const querySnapshot = await getDocs(q);
-    let savedMovies: Array<TMovieId> = [];
+    let savedMovies: Array<TMovie> = [];
     querySnapshot.forEach((doc) => {
-      doc.id && savedMovies.push({ id: parseInt(doc.id) });
+      doc.id &&
+        savedMovies.push({
+          id: doc.data().id,
+          isAdded: doc.data().isAdded,
+          poster_path: doc.data().poster_path,
+          release_date: doc.data().release_date,
+          title: doc.data().title,
+        });
     });
 
+    console.log('savedMovies', savedMovies);
     return savedMovies;
   } catch (error) {
     throw error;
@@ -49,21 +59,59 @@ export const useUsersSavedMovies = (userEmail: TuserEmail) => {
   } = useQuery([queryKeys.user, queryKeys.usersSavedMovies], () =>
     getUsersSavedMovies(userEmail)
   );
+  // wash the movies list
+
+  // get query data
+  // const queryData: TMovie[] | undefined = queryClient.getQueryData('movies');
+  // const moviesWithUsersSelections: TMovie[] | undefined = addSavedMoviesToList(
+  //   queryData,
+  //   data
+  // );
+  // console.log('moviesWithUsersSelections: ', moviesWithUsersSelections);
+  // // queryClient.setQueryData('movies', moviesWithUsersSelections);
+  // console.log('queryData:', queryData);
   return { data, isLoading, isError };
 };
 
 export const addSavedMoviesToList = (
   movies: TMovie[] | undefined,
-  usersSavedMovies: TMovieId[]
+  usersSavedMovies: TMovieId[] | undefined
 ) => {
-  const moviesWithUsersSelections =
-    usersSavedMovies.length > 0
-      ? movies?.map((movie) => {
-          let isMatched: boolean = usersSavedMovies.some(
-            (savedMovie) => savedMovie.id === movie.id
-          );
-          return { ...movie, isAdded: isMatched };
-        })
-      : movies;
-  return moviesWithUsersSelections;
+  console.log('addSavedMoviesToList ran');
+  console.log('usersSavedMovies', usersSavedMovies);
+  // console.log('in addSavedMoviesToList, movies', movies);
+  // console.log('in addSavedMoviesToList, usersSavedMovies', usersSavedMovies);
+
+  if (usersSavedMovies) {
+    const moviesWithUsersSelections =
+      usersSavedMovies.length > 0
+        ? movies?.map((movie) => {
+            let isMatched: boolean = usersSavedMovies.some(
+              (savedMovie) => savedMovie.id === movie.id
+            );
+            return { ...movie, isAdded: isMatched };
+          })
+        : movies;
+    console.log(
+      'addSavedMoviesToList, final, moviesWithUsersSelections',
+      moviesWithUsersSelections
+    );
+    return moviesWithUsersSelections;
+  }
+
+  console.log('addSavedMoviesToList, nothing else ran');
+  // const moviesWithUsersSelections =
+  //   usersSavedMovies.length > 0
+  //     ? movies?.map((movie) => {
+  //         let isMatched: boolean = usersSavedMovies.some(
+  //           (savedMovie) => savedMovie.id === movie.id
+  //         );
+  //         return { ...movie, isAdded: isMatched };
+  //       })
+  //     : movies;
+  // console.log(
+  //   'in addSavedMoviesToList, moviesWithUsersSelections: ',
+  //   moviesWithUsersSelections
+  // );
+  // return moviesWithUsersSelections;
 };

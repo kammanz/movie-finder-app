@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation } from 'react-query';
 import { useAuth } from '../../auth/useAuth';
-import { TuserEmail, TMovie, TMovieSortOptions } from '../../types';
+import { TuserEmail, TMovie, TMovieSortOptions, TMovieId } from '../../types';
 import { sortMovies } from '../../utils/utils';
-import { useMovies, useUsersSavedMovies } from './hooks';
+import {
+  getMovies,
+  useMovies,
+  useUsersSavedMovies,
+  getUsersSavedMovies,
+  addSavedMoviesToList,
+} from './hooks';
 import Header from '../../components/header';
 import MovieList from './MovieList';
+import { queryClient } from '../../react-query/queryClient';
 
 const Homepage = () => {
   const [selectedMovieSort, setSelectedMovieSort] =
@@ -12,16 +20,31 @@ const Homepage = () => {
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
   const { user } = useAuth();
   let userEmail: TuserEmail = user?.email;
-  const { data: allMovies, isLoading, isError } = useMovies();
-  const { data: usersSavedMovies } = useUsersSavedMovies(userEmail);
+  // const { isLoading, isError, data: allMovies } = useQuery('movies', getMovies);
 
-  console.log('usersSavedMovies', usersSavedMovies);
+  const {
+    data: allMovies,
+    isLoading,
+    isError,
+  } = useQuery('usersSavedMovies', () => getUsersSavedMovies(userEmail), {
+    // refetchInterval: 5000,
+  });
+
+  // const handleAdd = () => {
+  //   const finalMovies = addSavedMoviesToList(allMovies, savedMovies);
+  //   queryClient.setQueryData('movies', finalMovies);
+  // };
+
+  // useEffect(() => {
+  //   handleAdd();
+  // }, [savedMovies]);
 
   console.log('allMovies: ', allMovies);
 
   const handleSort = (sortType: TMovieSortOptions) => {
     setSelectedMovieSort(sortType);
-    setSortedMovies(sortMovies(sortType, allMovies));
+    if (allMovies) {
+    }
   };
 
   if (isLoading) return <span>Loading</span>;
