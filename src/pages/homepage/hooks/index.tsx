@@ -21,7 +21,9 @@ export const useMovies = () => {
     data = fallback,
     isLoading,
     isError,
-  } = useQuery(queryKeys.movies, getMovies);
+  } = useQuery(queryKeys.movies, getMovies, {
+    refetchOnWindowFocus: false,
+  });
   return { data, isLoading, isError };
 };
 
@@ -59,17 +61,6 @@ export const useUsersSavedMovies = (userEmail: TuserEmail) => {
   } = useQuery([queryKeys.user, queryKeys.usersSavedMovies], () =>
     getUsersSavedMovies(userEmail)
   );
-  // wash the movies list
-
-  // get query data
-  // const queryData: TMovie[] | undefined = queryClient.getQueryData('movies');
-  // const moviesWithUsersSelections: TMovie[] | undefined = addSavedMoviesToList(
-  //   queryData,
-  //   data
-  // );
-  // console.log('moviesWithUsersSelections: ', moviesWithUsersSelections);
-  // // queryClient.setQueryData('movies', moviesWithUsersSelections);
-  // console.log('queryData:', queryData);
   return { data, isLoading, isError };
 };
 

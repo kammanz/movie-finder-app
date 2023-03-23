@@ -16,7 +16,7 @@ export type TMovieId = {
   id: number;
 };
 export type TMovieList = {
-  movies: TMovie[];
+  // movies: TMovie[];
   userEmail: TuserEmail;
 };
 export type TMovieSortOptions = 'oldest' | 'newest' | 'thirty-days';

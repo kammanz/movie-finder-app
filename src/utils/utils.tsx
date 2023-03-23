@@ -53,9 +53,12 @@ export const removeFromFirestore = async (
   movie: TMovie,
   userEmail: TuserEmail
 ) => {
+  console.log('in remove');
   try {
+    console.log('in remove, try');
     await deleteDoc(doc(db, `users/${userEmail}/movies/${movie.id}`));
   } catch (error) {
+    console.log('error removing form firestore');
     throw error;
   }
 };

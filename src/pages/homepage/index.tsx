@@ -22,13 +22,13 @@ const Homepage = () => {
   let userEmail: TuserEmail = user?.email;
   // const { isLoading, isError, data: allMovies } = useQuery('movies', getMovies);
 
-  const {
-    data: allMovies,
-    isLoading,
-    isError,
-  } = useQuery('usersSavedMovies', () => getUsersSavedMovies(userEmail), {
-    // refetchInterval: 5000,
-  });
+  // const {
+  //   data: allMovies,
+  //   isLoading,
+  //   isError,
+  // } = useQuery('usersSavedMovies', () => getUsersSavedMovies(userEmail), {
+  //   // refetchInterval: 5000,
+  // });
 
   // const handleAdd = () => {
   //   const finalMovies = addSavedMoviesToList(allMovies, savedMovies);
@@ -39,17 +39,15 @@ const Homepage = () => {
   //   handleAdd();
   // }, [savedMovies]);
 
-  console.log('allMovies: ', allMovies);
+  // console.log('allMovies: ', allMovies);
 
   const handleSort = (sortType: TMovieSortOptions) => {
     setSelectedMovieSort(sortType);
-    if (allMovies) {
-    }
   };
 
-  if (isLoading) return <span>Loading</span>;
-  if (isError) return <span>Error</span>;
-  if (allMovies === undefined) return <span>Loading</span>;
+  // if (isLoading) return <span>Loading</span>;
+  // if (isError) return <span>Error</span>;
+  // if (allMovies === undefined) return <span>Loading</span>;
 
   return (
     <>
@@ -72,7 +70,7 @@ const Homepage = () => {
           Show all movies
         </button>
       </div>
-      <MovieList movies={sortedMovies || allMovies} userEmail={userEmail} />
+      <MovieList userEmail={userEmail} />
     </>
   );
 };
