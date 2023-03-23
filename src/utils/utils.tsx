@@ -64,6 +64,7 @@ export const removeFromFirestore = async (
 };
 
 export const sortMovies = (sortType: TMovieSortOptions, movies: TMovie[]) => {
+  console.log('sortMovies called');
   let sorted;
   switch (sortType) {
     case 'oldest':
@@ -77,6 +78,10 @@ export const sortMovies = (sortType: TMovieSortOptions, movies: TMovie[]) => {
       break;
   }
 
+  console.log(
+    'in sortMovies, sorted var, want to see an array, oldest movie first',
+    sorted
+  );
   return sorted;
 };
 

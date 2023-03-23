@@ -1,19 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 import { getImgUrl } from '../../api';
 import {
   addToFirestore,
   removeFromFirestore,
+  sortMovies,
   updateCachedMovie,
 } from '../../utils/utils';
-import { TClickType, TuserEmail, TMovie } from '../../types';
+import { TClickType, TMovieSortOptions, TuserEmail, TMovie } from '../../types';
+import { queryKeys } from '../../react-query/constants';
 import styles from './MovieList.module.css';
 import { getUsersSavedMovies, useMovies, addSavedMoviesToList } from './hooks';
-import { queryKeys } from '../../react-query/constants';
+import DropdownMenu from './DropdownMenu';
 
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const queryClient = useQueryClient();
   const { data: movies, isLoading, isError } = useMovies();
+  const [selectedMovieSort, setSelectedMovieSort] =
+    useState<TMovieSortOptions>('newest');
+  const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
 
   const { refetch } = useQuery(
     queryKeys.usersSavedMovies,
@@ -33,6 +38,10 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   useEffect(() => {
     setTimeout(() => refetch(), 2000);
   }, [refetch]);
+
+  // const handleSort = (sortType: TMovieSortOptions) => {
+  //   setSelectedMovieSort(sortType);
+  // };
 
   const handleClick = async (movie: TMovie, clickType: TClickType) => {
     const cachedMovies = queryClient.getQueryData<TMovie[]>(queryKeys.movies);
@@ -61,14 +70,37 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     }
   };
 
+  // const handleSort = (sortType: TMovieSortOptions) => {
+  //   setSelectedMovieSort(sortType);
+  // };
+
+  const handleStateChange = (newState: any) => {
+    console.log('newState, want to see oldest: ', newState);
+
+    const toSort =
+      sortedMovies && sortedMovies.length > 0 ? sortedMovies : movies;
+    setSelectedMovieSort(newState);
+    console.log('in handleStateChange, toSort: ', toSort);
+    const sortedList: TMovie[] | undefined = sortMovies(newState, toSort);
+    console.log('sortedList, want to see oldest first: ', sortedList);
+    setSortedMovies(sortedList);
+  };
+
   if (isLoading) return <div>Is Loading...</div>;
   if (isError) return <div>Is Error...</div>;
 
+  const allMovies =
+    sortedMovies && sortedMovies.length > 0 ? sortedMovies : movies;
+
   return (
     <div>
+      <DropdownMenu
+        sortType={selectedMovieSort}
+        onStateChange={handleStateChange}
+      />
       <ul className={styles.container}>
-        {movies.length > 0 ? (
-          movies.map((movie: TMovie) => (
+        {allMovies.length > 0 ? (
+          allMovies.map((movie: TMovie) => (
             <li key={movie.id} className={styles.card}>
               <img
                 src={getImgUrl(movie.poster_path)}

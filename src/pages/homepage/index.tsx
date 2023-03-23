@@ -18,8 +18,7 @@ const Homepage = () => {
   return (
     <>
       <Header userEmail={userEmail} />
-      <div>{user?.uid}</div>
-      <div>
+      {/* <div>
         <form>
           <label htmlFor="sort-movies">Sort by:</label>
           <select
@@ -35,7 +34,7 @@ const Homepage = () => {
         <button type="button" onClick={() => setSortedMovies(undefined)}>
           Show all movies
         </button>
-      </div>
+      </div> */}
       <MovieList userEmail={userEmail} />
     </>
   );
