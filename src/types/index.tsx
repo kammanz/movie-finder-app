@@ -12,11 +12,7 @@ export type TMovie = {
   release_date: string;
   title: string;
 };
-export type TMovieId = {
-  id: number;
-};
 export type TMovieList = {
-  // movies: TMovie[];
   userEmail: TuserEmail;
 };
 export type TMovieSortOptions = 'oldest' | 'newest' | 'thirty-days';

@@ -1,10 +1,9 @@
 import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseSetup';
 import { fullUrl } from '../../../api';
-import { TuserEmail, TMovie, TMovieId } from '../../../types';
+import { TuserEmail, TMovie } from '../../../types';
 import { useQuery } from 'react-query';
 import { queryKeys } from '../../../react-query/constants';
-import { queryClient } from '../../../react-query/queryClient';
 
 export const getMovies = async () => {
   try {
@@ -66,13 +65,8 @@ export const useUsersSavedMovies = (userEmail: TuserEmail) => {
 
 export const addSavedMoviesToList = (
   movies: TMovie[] | undefined,
-  usersSavedMovies: TMovieId[] | undefined
+  usersSavedMovies: TMovie[] | undefined
 ) => {
-  console.log('addSavedMoviesToList ran');
-  console.log('usersSavedMovies', usersSavedMovies);
-  // console.log('in addSavedMoviesToList, movies', movies);
-  // console.log('in addSavedMoviesToList, usersSavedMovies', usersSavedMovies);
-
   if (usersSavedMovies) {
     const moviesWithUsersSelections =
       usersSavedMovies.length > 0
@@ -89,20 +83,4 @@ export const addSavedMoviesToList = (
     );
     return moviesWithUsersSelections;
   }
-
-  console.log('addSavedMoviesToList, nothing else ran');
-  // const moviesWithUsersSelections =
-  //   usersSavedMovies.length > 0
-  //     ? movies?.map((movie) => {
-  //         let isMatched: boolean = usersSavedMovies.some(
-  //           (savedMovie) => savedMovie.id === movie.id
-  //         );
-  //         return { ...movie, isAdded: isMatched };
-  //       })
-  //     : movies;
-  // console.log(
-  //   'in addSavedMoviesToList, moviesWithUsersSelections: ',
-  //   moviesWithUsersSelections
-  // );
-  // return moviesWithUsersSelections;
 };
