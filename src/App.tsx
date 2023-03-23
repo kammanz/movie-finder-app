@@ -1,18 +1,17 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import Form from '../pages/signin/Form';
-import UserPage from '../pages/user/UserPage';
-import PrivateRoute from './PrivateRoute';
-
-const queryClient = new QueryClient();
+import { queryClient } from './react-query/queryClient';
+import Form from './pages/signin/Form';
+import Homepage from './pages/homepage';
+import PrivateRoute from './components/PrivateRoute';
 
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Container className="">
+      <Container>
         <Routes>
           <Route path="/" element={<Form formType="signup" />} />
         </Routes>
@@ -21,7 +20,7 @@ const App = () => {
         </Routes>
         <Routes>
           <Route element={<PrivateRoute />}>
-            <Route path="/userPage" element={<UserPage />} />
+            <Route path="/homepage" element={<Homepage />} />
           </Route>
         </Routes>
       </Container>

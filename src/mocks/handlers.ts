@@ -1,5 +1,6 @@
 import { rest } from 'msw';
-import { baseMoviesApi, urlPath } from '../api';
+import { urlPath } from '../api';
+import { baseUrl } from '../api/constants';
 
 const mockMovies = [
   {
