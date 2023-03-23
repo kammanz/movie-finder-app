@@ -16,11 +16,6 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const queryClient = useQueryClient();
   const { data: movies } = useMovies();
 
-  const handleSuccess = (savedMovies: TMovie[]) => {
-    const finalMovies = addSavedMoviesToList(movies, savedMovies);
-    queryClient.setQueryData(queryKeys.movies, finalMovies);
-  };
-
   const { refetch } = useQuery(
     queryKeys.usersSavedMovies,
     () => getUsersSavedMovies(userEmail),
@@ -29,7 +24,8 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
       refetchOnWindowFocus: false,
       onSuccess: (savedMovies) => {
         if (savedMovies.length > 0) {
-          handleSuccess(savedMovies);
+          const updatedMoviesList = addSavedMoviesToList(movies, savedMovies);
+          queryClient.setQueryData(queryKeys.movies, updatedMoviesList);
         }
       },
     }
@@ -40,7 +36,7 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   }, [refetch]);
 
   const handleClick = async (movie: TMovie, clickType: TClickType) => {
-    const cachedMovies = queryClient.getQueryData<TMovie[]>('movies');
+    const cachedMovies = queryClient.getQueryData<TMovie[]>(queryKeys.movies);
     let isAdding;
 
     if (cachedMovies != null) {
@@ -62,7 +58,7 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
         isAdding
       );
 
-      queryClient.setQueryData('movies', updatedCachedMovies);
+      queryClient.setQueryData(queryKeys.movies, updatedCachedMovies);
     }
   };
 
