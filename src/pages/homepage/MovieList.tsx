@@ -7,14 +7,13 @@ import {
   updateCachedMovie,
 } from '../../utils/utils';
 import { TClickType, TuserEmail, TMovie } from '../../types';
-
 import styles from './MovieList.module.css';
 import { getUsersSavedMovies, useMovies, addSavedMoviesToList } from './hooks';
 import { queryKeys } from '../../react-query/constants';
 
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const queryClient = useQueryClient();
-  const { data: movies } = useMovies();
+  const { data: movies, isLoading, isError } = useMovies();
 
   const { refetch } = useQuery(
     queryKeys.usersSavedMovies,
@@ -45,7 +44,7 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
       );
 
       if (clickType === 'add') {
-        addToFirestore(movie, userEmail);
+        await addToFirestore(movie, userEmail);
         isAdding = true;
       } else {
         await removeFromFirestore(movie, userEmail);
@@ -61,6 +60,9 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
       queryClient.setQueryData(queryKeys.movies, updatedCachedMovies);
     }
   };
+
+  if (isLoading) return <div>Is Loading...</div>;
+  if (isError) return <div>Is Error...</div>;
 
   return (
     <div>

@@ -20,10 +20,11 @@ export const useMovies = () => {
     data = fallback,
     isLoading,
     isError,
+    error,
   } = useQuery(queryKeys.movies, getMovies, {
     refetchOnWindowFocus: false,
   });
-  return { data, isLoading, isError };
+  return { data, isLoading, isError, error };
 };
 
 export const getUsersSavedMovies = async (userEmail: TuserEmail) => {
