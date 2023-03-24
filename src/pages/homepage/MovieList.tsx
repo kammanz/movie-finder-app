@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
+import { queryClient } from '../../react-query/queryClient';
+import { queryKeys } from '../../react-query/constants';
 import { getImgUrl } from '../../api';
 import {
   addToFirestore,
@@ -8,15 +10,13 @@ import {
   updateCachedMovie,
 } from '../../utils/utils';
 import { TClickType, TMovieSortOptions, TuserEmail, TMovie } from '../../types';
-import { queryKeys } from '../../react-query/constants';
-import styles from './MovieList.module.css';
 import { getUsersSavedMovies, useMovies, addSavedMoviesToList } from './hooks';
 import DropdownMenu from './DropdownMenu';
+import styles from './MovieList.module.css';
 
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
-  const queryClient = useQueryClient();
   const { data: movies, isLoading, isError } = useMovies();
 
   const { refetch } = useQuery(
@@ -65,19 +65,17 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     }
   };
 
+  const allMovies =
+    sortedMovies && sortedMovies.length > 0 ? sortedMovies : movies;
+
   const handleSortChange = (newSortType: TMovieSortOptions) => {
-    const toSort =
-      sortedMovies && sortedMovies.length > 0 ? sortedMovies : movies;
     setMenuSortType(newSortType);
-    const sortedList: TMovie[] | undefined = sortMovies(newSortType, toSort);
+    const sortedList: TMovie[] | undefined = sortMovies(newSortType, allMovies);
     setSortedMovies(sortedList);
   };
 
   if (isLoading) return <div>Is Loading...</div>;
-  if (isError) return <div>Is Error...</div>;
-
-  const allMovies =
-    sortedMovies && sortedMovies.length > 0 ? sortedMovies : movies;
+  if (isError) return <div>Error occurred</div>;
 
   return (
     <div>
