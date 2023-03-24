@@ -1,6 +1,10 @@
 import firebase from 'firebase/compat/app';
 
 export type TClickType = 'add' | 'remove';
+export type TDropdownMenu = {
+  menuSortType: TMovieSortOptions;
+  onSortChange: (value: TMovieSortOptions) => void;
+};
 export type TuserEmail = string | null | undefined;
 export type THandleaddToFirestore = {
   movie: TMovie;

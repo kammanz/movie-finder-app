@@ -14,11 +14,10 @@ import { getUsersSavedMovies, useMovies, addSavedMoviesToList } from './hooks';
 import DropdownMenu from './DropdownMenu';
 
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
+  const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
+  const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
   const queryClient = useQueryClient();
   const { data: movies, isLoading, isError } = useMovies();
-  const [selectedMovieSort, setSelectedMovieSort] =
-    useState<TMovieSortOptions>('newest');
-  const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
 
   const { refetch } = useQuery(
     queryKeys.usersSavedMovies,
@@ -66,10 +65,10 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     }
   };
 
-  const handleStateChange = (newSortType: TMovieSortOptions) => {
+  const handleSortChange = (newSortType: TMovieSortOptions) => {
     const toSort =
       sortedMovies && sortedMovies.length > 0 ? sortedMovies : movies;
-    setSelectedMovieSort(newSortType);
+    setMenuSortType(newSortType);
     const sortedList: TMovie[] | undefined = sortMovies(newSortType, toSort);
     setSortedMovies(sortedList);
   };
@@ -83,8 +82,8 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   return (
     <div>
       <DropdownMenu
-        sortType={selectedMovieSort}
-        onStateChange={handleStateChange}
+        menuSortType={menuSortType}
+        onSortChange={handleSortChange}
       />
       <ul className={styles.container}>
         {allMovies.length > 0 ? (
