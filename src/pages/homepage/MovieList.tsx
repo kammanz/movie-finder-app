@@ -10,12 +10,15 @@ import {
   updateCachedMovie,
 } from '../../utils/utils';
 import { TClickType, TMovieSortOptions, TuserEmail, TMovie } from '../../types';
+import { SELECT_MENU_OPTIONS } from '../../constants/selectMenuOptions';
 import { getUsersSavedMovies, useMovies, addSavedMoviesToList } from './hooks';
 import DropdownMenu from './DropdownMenu';
 import styles from './MovieList.module.css';
 
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
+  // const newestVal = SELECT_MENU_OPTIONS[0].value;
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
+
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
   const { data: movies, isLoading, isError } = useMovies();
 
@@ -68,14 +71,20 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const allMovies =
     sortedMovies && sortedMovies.length > 0 ? sortedMovies : movies;
 
+  console.log('allMovies.length: ', allMovies.length);
+
   const handleSortChange = (newSortType: TMovieSortOptions) => {
+    console.log('2. handleSortChange called, newSortType: ', newSortType);
     setMenuSortType(newSortType);
-    const sortedList: TMovie[] | undefined = sortMovies(newSortType, allMovies);
+    // const sortedList: TMovie[] | undefined = sortMovies(newSortType, allMovies);
+    const sortedList: TMovie[] | undefined = sortMovies(newSortType, movies);
     setSortedMovies(sortedList);
   };
 
   const handleResetMovies = () => {
+    console.log('handleResetMovies ran');
     setSortedMovies(undefined);
+    setMenuSortType((prev) => 'newest');
   };
 
   if (isLoading) return <div>Is Loading...</div>;

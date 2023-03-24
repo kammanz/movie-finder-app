@@ -7,11 +7,13 @@ const DropdownMenu = ({
   onSortChange,
   onResetMovies,
 }: TDropdownMenu) => {
+  console.log('menuSortType', menuSortType);
   const [sortType, setSortType] = useState(menuSortType);
 
-  const handleChange = (value: TMovieSortOptions) => {
-    setSortType(value);
-    onSortChange(value);
+  const handleChange = (newSortType: TMovieSortOptions) => {
+    console.log('1. handleChange called, newSortType: ', newSortType);
+    setSortType(newSortType);
+    onSortChange(newSortType);
   };
 
   return (
@@ -21,7 +23,7 @@ const DropdownMenu = ({
         <select
           id="sort-movies"
           data-testid="select"
-          value={sortType}
+          value={menuSortType}
           onChange={(event) =>
             handleChange(event.target.value as TMovieSortOptions)
           }>
