@@ -28,7 +28,6 @@ export const useMovies = () => {
 };
 
 export const getUsersSavedMovies = async (userEmail: TuserEmail) => {
-  console.log('getUsersSavedMovies ran');
   try {
     const usersMoviesRef = await collection(db, `users/${userEmail}/movies`);
     const q = query(usersMoviesRef);
@@ -45,7 +44,6 @@ export const getUsersSavedMovies = async (userEmail: TuserEmail) => {
         });
     });
 
-    console.log('savedMovies', savedMovies);
     return savedMovies;
   } catch (error) {
     throw error;
@@ -78,10 +76,6 @@ export const addSavedMoviesToList = (
             return { ...movie, isAdded: isMatched };
           })
         : movies;
-    console.log(
-      'addSavedMoviesToList, final, moviesWithUsersSelections',
-      moviesWithUsersSelections
-    );
     return moviesWithUsersSelections;
   }
 };

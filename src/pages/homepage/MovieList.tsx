@@ -1,18 +1,23 @@
-import React, { useEffect } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import React, { useState, useEffect } from 'react';
+import { useQuery } from 'react-query';
+import { queryClient } from '../../react-query/queryClient';
+import { queryKeys } from '../../react-query/constants';
 import { getImgUrl } from '../../api';
 import {
   addToFirestore,
   removeFromFirestore,
+  sortMovies,
   updateCachedMovie,
 } from '../../utils/utils';
-import { TClickType, TuserEmail, TMovie } from '../../types';
-import styles from './MovieList.module.css';
+import { TClickType, TMovieSortOptions, TuserEmail, TMovie } from '../../types';
 import { getUsersSavedMovies, useMovies, addSavedMoviesToList } from './hooks';
-import { queryKeys } from '../../react-query/constants';
+import DropdownMenu from './DropdownMenu';
+import styles from './MovieList.module.css';
 
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
-  const queryClient = useQueryClient();
+  const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
+
+  const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
   const { data: movies, isLoading, isError } = useMovies();
 
   const { refetch } = useQuery(
@@ -61,14 +66,33 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     }
   };
 
+  const allMovies =
+    sortedMovies && sortedMovies.length > 0 ? sortedMovies : movies;
+
+  const handleSortChange = (newSortType: TMovieSortOptions) => {
+    setMenuSortType(newSortType);
+    const sortedList: TMovie[] | undefined = sortMovies(newSortType, movies);
+    setSortedMovies(sortedList);
+  };
+
+  const handleResetMovies = () => {
+    setSortedMovies(undefined);
+    setMenuSortType('newest');
+  };
+
   if (isLoading) return <div>Is Loading...</div>;
-  if (isError) return <div>Is Error...</div>;
+  if (isError) return <div>Error occurred</div>;
 
   return (
     <div>
+      <DropdownMenu
+        menuSortType={menuSortType}
+        onSortChange={handleSortChange}
+        onResetMovies={handleResetMovies}
+      />
       <ul className={styles.container}>
-        {movies.length > 0 ? (
-          movies.map((movie: TMovie) => (
+        {allMovies.length > 0 ? (
+          allMovies.map((movie: TMovie) => (
             <li key={movie.id} className={styles.card}>
               <img
                 src={getImgUrl(movie.poster_path)}

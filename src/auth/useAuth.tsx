@@ -3,7 +3,6 @@ import firebase from 'firebase/compat/app';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebaseSetup';
 import { useUser } from '../components/user/hooks/useUser';
-
 import { setStoredUser } from '../user-storage';
 
 interface UseAuth {

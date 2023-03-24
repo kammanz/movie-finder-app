@@ -42,7 +42,6 @@ const Form: FC<Props> = ({ formType }) => {
                 movies: [],
               });
             } else if (formType === 'login') {
-              console.log('login pressed');
               await login(email, password);
             }
             navigate('/homepage');
