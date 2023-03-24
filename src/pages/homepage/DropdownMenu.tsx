@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { TMovieSortOptions, TDropdownMenu } from '../../types';
 
-const DropdownMenu = ({ menuSortType, onSortChange }: TDropdownMenu) => {
+const DropdownMenu = ({
+  menuSortType,
+  onSortChange,
+  onResetMovies,
+}: TDropdownMenu) => {
   const [sortType, setSortType] = useState(menuSortType);
+
   const handleChange = (value: TMovieSortOptions) => {
     setSortType(value);
     onSortChange(value);
   };
+
   return (
     <div style={{ backgroundColor: 'lightyellow' }}>
       <form>
@@ -23,10 +29,7 @@ const DropdownMenu = ({ menuSortType, onSortChange }: TDropdownMenu) => {
           <option value="thirty-days">last 30 days</option>
         </select>
       </form>
-      <button
-        type="button"
-        //   onClick={() => setSortedMovies(undefined)}
-      >
+      <button type="button" onClick={onResetMovies}>
         Show all movies
       </button>
     </div>

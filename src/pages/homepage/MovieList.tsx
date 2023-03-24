@@ -74,6 +74,10 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     setSortedMovies(sortedList);
   };
 
+  const handleResetMovies = () => {
+    setSortedMovies(undefined);
+  };
+
   if (isLoading) return <div>Is Loading...</div>;
   if (isError) return <div>Error occurred</div>;
 
@@ -82,6 +86,7 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
       <DropdownMenu
         menuSortType={menuSortType}
         onSortChange={handleSortChange}
+        onResetMovies={handleResetMovies}
       />
       <ul className={styles.container}>
         {allMovies.length > 0 ? (
