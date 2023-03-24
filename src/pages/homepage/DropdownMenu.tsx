@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TMovieSortOptions, TDropdownMenu } from '../../types';
+import { SELECT_MENU_OPTIONS } from '../../constants/selectMenuOptions';
 
 const DropdownMenu = ({
   menuSortType,
@@ -24,9 +25,13 @@ const DropdownMenu = ({
           onChange={(event) =>
             handleChange(event.target.value as TMovieSortOptions)
           }>
-          <option value="newest">newest</option>
-          <option value="oldest">oldest</option>
-          <option value="thirty-days">last 30 days</option>
+          {SELECT_MENU_OPTIONS.map((option) => {
+            return (
+              <option key={option.label} value={option.value}>
+                {option.label}
+              </option>
+            );
+          })}
         </select>
       </form>
       <button type="button" onClick={onResetMovies}>

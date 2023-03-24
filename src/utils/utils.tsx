@@ -2,6 +2,7 @@ import { doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseSetup';
 import { subDays, compareAsc } from 'date-fns';
 import { TMovie, TMovieSortOptions, TuserEmail } from '../types';
+import { SELECT_MENU_OPTIONS } from '../constants/selectMenuOptions';
 
 export const sortByProperty = (
   array: any[],
@@ -53,35 +54,27 @@ export const removeFromFirestore = async (
   movie: TMovie,
   userEmail: TuserEmail
 ) => {
-  console.log('in remove');
   try {
-    console.log('in remove, try');
     await deleteDoc(doc(db, `users/${userEmail}/movies/${movie.id}`));
   } catch (error) {
-    console.log('error removing form firestore');
     throw error;
   }
 };
 
 export const sortMovies = (sortType: TMovieSortOptions, movies: TMovie[]) => {
-  console.log('sortMovies called');
   let sorted;
   switch (sortType) {
-    case 'oldest':
+    case SELECT_MENU_OPTIONS[0].value:
       sorted = sortByProperty(movies, 'release_date', false);
       break;
-    case 'newest':
+    case SELECT_MENU_OPTIONS[1].value:
       sorted = sortByProperty(movies, 'release_date', true);
       break;
-    case 'thirty-days':
-      sorted = newReleases(movies, 3);
+    case SELECT_MENU_OPTIONS[2].value.toString():
+      sorted = newReleases(movies, Number(SELECT_MENU_OPTIONS[2].value));
       break;
   }
 
-  console.log(
-    'in sortMovies, sorted var, want to see an array, oldest movie first',
-    sorted
-  );
   return sorted;
 };
 
