@@ -9,7 +9,6 @@ export const sortByProperty = (
   property: string,
   isDesc: boolean
 ) => {
-  console.log('4. sortByProperty ran, isDesc, want to see false');
   return [...array].sort((a: any, b: any) => {
     if (a[property] < b[property]) {
       let isItDesc = isDesc ? 1 : -1;
@@ -63,15 +62,12 @@ export const removeFromFirestore = async (
 };
 
 export const sortMovies = (sortType: TMovieSortOptions, movies: TMovie[]) => {
-  console.log('3. sortMovies ran, sortType: ', sortType);
   let sorted;
   switch (sortType) {
     case SELECT_MENU_OPTIONS[0].value:
-      console.log('3. sortMovies ran, sortType, newest (BAD)');
       sorted = sortByProperty(movies, 'release_date', true);
       break;
     case SELECT_MENU_OPTIONS[1].value:
-      console.log('3. sortMovies ran, sortType, oldest (GOOD)');
       sorted = sortByProperty(movies, 'release_date', false);
       break;
     case SELECT_MENU_OPTIONS[2].value.toString():

@@ -7,12 +7,7 @@ const DropdownMenu = ({
   onSortChange,
   onResetMovies,
 }: TDropdownMenu) => {
-  console.log('menuSortType', menuSortType);
-  const [sortType, setSortType] = useState(menuSortType);
-
   const handleChange = (newSortType: TMovieSortOptions) => {
-    console.log('1. handleChange called, newSortType: ', newSortType);
-    setSortType(newSortType);
     onSortChange(newSortType);
   };
 
