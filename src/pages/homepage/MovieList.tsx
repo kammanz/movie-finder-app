@@ -10,68 +10,60 @@ import {
   updateCachedMovie,
 } from '../../utils/utils';
 import { TClickType, TMovieSortOptions, TuserEmail, TMovie } from '../../types';
-import { getUsersSavedMovies, useMovies, addSavedMoviesToList } from './hooks';
+import {
+  // getUsersSavedMovies,
+  useFullMovies,
+  addSavedMoviesToList,
+} from './hooks';
 import DropdownMenu from './DropdownMenu';
 import styles from './MovieList.module.css';
 
+/** TODO:
+ * How do I make 2 API calls (3rd party + firebase) and merge the results?
+ * custom hook?
+ * How married to React Query are you? If not, maybe rip it out
+ * Create a new git branch just for a custom hook
+ * Guides onlien around building a custom hook
+ *
+ * How have you structured in Firebase?
+ * database structure chat
+ * look into NoSQL database structure
+ */
+
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
-
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
-  const { data: movies, isLoading, isError } = useMovies();
+  const [movies, setMovies] = useState<TMovie[]>();
 
-  const { refetch } = useQuery(
-    queryKeys.usersSavedMovies,
-    () => getUsersSavedMovies(userEmail),
-    {
-      enabled: !!movies,
-      refetchOnWindowFocus: false,
-      onSuccess: (savedMovies) => {
-        if (savedMovies.length > 0) {
-          const updatedMoviesList = addSavedMoviesToList(movies, savedMovies);
-          queryClient.setQueryData(queryKeys.movies, updatedMoviesList);
-        }
-      },
-    }
-  );
+  const { fullMovies, error } = useFullMovies(); // 3rd party movies // 1st
 
-  useEffect(() => {
-    setTimeout(() => refetch(), 2000);
-  }, [refetch]);
+  // const handleClick = async (movie: TMovie, clickType: TClickType) => {
+  //   const movieIndexToUpdate = cachedMovies.find(
+  //     ({ id }: TMovie) => id === movie.id
+  //   );
 
-  const handleClick = async (movie: TMovie, clickType: TClickType) => {
-    const cachedMovies = queryClient.getQueryData<TMovie[]>(queryKeys.movies);
-    let isAdding;
+  //   await addToFirestore(movie, userEmail);
 
-    if (cachedMovies != null) {
-      const movieIndexToUpdate = cachedMovies.findIndex(
-        ({ id }: TMovie) => id === movie.id
-      );
+  //   await removeFromFirestore(movie, userEmail);
 
-      if (clickType === 'add') {
-        await addToFirestore(movie, userEmail);
-        isAdding = true;
-      } else {
-        await removeFromFirestore(movie, userEmail);
-        isAdding = false;
-      }
+  //   const updatedCachedMovies = updateCachedMovie(
+  //     cachedMovies,
+  //     movieIndexToUpdate,
+  //     isAdding
+  //   );
 
-      const updatedCachedMovies = updateCachedMovie(
-        cachedMovies,
-        movieIndexToUpdate,
-        isAdding
-      );
-
-      queryClient.setQueryData(queryKeys.movies, updatedCachedMovies);
-    }
-  };
+  //   queryClient.setQueryData(queryKeys.movies, updatedCachedMovies);
+  // };
 
   const allMovies =
     sortedMovies && sortedMovies.length > 0 ? sortedMovies : movies;
 
   const handleSortChange = (newSortType: TMovieSortOptions) => {
     setMenuSortType(newSortType);
-    const sortedList: TMovie[] | undefined = sortMovies(newSortType, movies);
+    const sortedList: TMovie[] | undefined = sortMovies(
+      newSortType,
+      fullMovies
+    );
     setSortedMovies(sortedList);
   };
 
@@ -80,8 +72,8 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     setMenuSortType('newest');
   };
 
-  if (isLoading) return <div>Is Loading...</div>;
-  if (isError) return <div>Error occurred</div>;
+  // if (isLoading) return <div>Is Loading...</div>;
+  // if (isError) return <div>Error occurred</div>;
 
   return (
     <div>
@@ -91,8 +83,8 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
         onResetMovies={handleResetMovies}
       />
       <ul className={styles.container}>
-        {allMovies.length > 0 ? (
-          allMovies.map((movie: TMovie) => (
+        {fullMovies.length > 0 ? (
+          fullMovies.map((movie: TMovie) => (
             <li key={movie.id} className={styles.card}>
               <img
                 src={getImgUrl(movie.poster_path)}
@@ -101,13 +93,14 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
               <h6>{movie.title}</h6>
               <p>Released: {movie.release_date}</p>
               <button
-                onClick={() => handleClick(movie, 'add')}
+                // onClick={() => handleClick(movie, 'add')}
                 disabled={movie.isAdded}>
                 Add
               </button>
               <button
                 disabled={!movie.isAdded}
-                onClick={() => handleClick(movie, 'remove')}>
+                // onClick={() => handleClick(movie, 'remove')}
+              >
                 Remove
               </button>
             </li>
