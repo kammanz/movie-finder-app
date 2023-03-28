@@ -7,6 +7,7 @@ import { queryClient } from './react-query/queryClient';
 import Form from './pages/signin/Form';
 import Homepage from './pages/homepage';
 import PrivateRoute from './components/PrivateRoute';
+import SavedMovies from './pages/savedMovies/SavedMovies';
 
 const App = () => {
   return (
@@ -21,6 +22,11 @@ const App = () => {
         <Routes>
           <Route element={<PrivateRoute />}>
             <Route path="/homepage" element={<Homepage />} />
+          </Route>
+        </Routes>
+        <Routes>
+          <Route element={<PrivateRoute />}>
+            <Route path="/savedMovies" element={<SavedMovies />} />
           </Route>
         </Routes>
       </Container>

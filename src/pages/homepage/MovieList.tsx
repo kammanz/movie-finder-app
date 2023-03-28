@@ -1,78 +1,63 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery } from 'react-query';
-import { queryClient } from '../../react-query/queryClient';
-import { queryKeys } from '../../react-query/constants';
 import { getImgUrl } from '../../api';
-import {
-  addToFirestore,
-  removeFromFirestore,
-  sortMovies,
-  updateCachedMovie,
-} from '../../utils/utils';
-import { TClickType, TMovieSortOptions, TuserEmail, TMovie } from '../../types';
-import { getUsersSavedMovies, useMovies, addSavedMoviesToList } from './hooks';
+import { addToFirestore, removeFromFirestore } from '../../utils/utils';
+import { TMovieSortOptions, TuserEmail, TMovie } from '../../types';
+import { useFullMovies } from './hooks';
 import DropdownMenu from './DropdownMenu';
 import styles from './MovieList.module.css';
 
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
-
-  const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
-  const { data: movies, isLoading, isError } = useMovies();
-
-  const { refetch } = useQuery(
-    queryKeys.usersSavedMovies,
-    () => getUsersSavedMovies(userEmail),
-    {
-      enabled: !!movies,
-      refetchOnWindowFocus: false,
-      onSuccess: (savedMovies) => {
-        if (savedMovies.length > 0) {
-          const updatedMoviesList = addSavedMoviesToList(movies, savedMovies);
-          queryClient.setQueryData(queryKeys.movies, updatedMoviesList);
-        }
-      },
-    }
-  );
+  const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>([]);
+  const [fullMovies, setFullMovies] = useState<TMovie[] | undefined>([]);
+  const [rawMoviesError, setRawMoviesError] = useState('');
+  const [savedMoviesError, setSavedMoviesError] = useState('');
+  const [firebaseError, setFirebaseError] = useState('');
+  const {
+    fullMovies: initialFullMovies,
+    rawMoviesError: initialRawMoviesError,
+    savedMoviesError: initialSavedMoviesError,
+  } = useFullMovies();
 
   useEffect(() => {
-    setTimeout(() => refetch(), 2000);
-  }, [refetch]);
+    setFullMovies(initialFullMovies);
+    setRawMoviesError(initialRawMoviesError);
+    setSavedMoviesError(initialSavedMoviesError);
+  }, [initialFullMovies, initialRawMoviesError, initialSavedMoviesError]);
 
-  const handleClick = async (movie: TMovie, clickType: TClickType) => {
-    const cachedMovies = queryClient.getQueryData<TMovie[]>(queryKeys.movies);
-    let isAdding;
+  const handleAddMovie = async (selectedMovie: TMovie) => {
+    const updatedArray =
+      fullMovies &&
+      fullMovies.map((movie) => {
+        if (movie.id === selectedMovie.id) {
+          return { ...movie, isAdded: true };
+        } else {
+          return movie;
+        }
+      });
 
-    if (cachedMovies != null) {
-      const movieIndexToUpdate = cachedMovies.findIndex(
-        ({ id }: TMovie) => id === movie.id
-      );
-
-      if (clickType === 'add') {
-        await addToFirestore(movie, userEmail);
-        isAdding = true;
-      } else {
-        await removeFromFirestore(movie, userEmail);
-        isAdding = false;
-      }
-
-      const updatedCachedMovies = updateCachedMovie(
-        cachedMovies,
-        movieIndexToUpdate,
-        isAdding
-      );
-
-      queryClient.setQueryData(queryKeys.movies, updatedCachedMovies);
+    try {
+      await addToFirestore(selectedMovie, userEmail);
+      setFullMovies(updatedArray);
+    } catch (firebaseError) {
+      setFirebaseError(firebaseError as string);
     }
   };
 
-  const allMovies =
-    sortedMovies && sortedMovies.length > 0 ? sortedMovies : movies;
-
-  const handleSortChange = (newSortType: TMovieSortOptions) => {
-    setMenuSortType(newSortType);
-    const sortedList: TMovie[] | undefined = sortMovies(newSortType, movies);
-    setSortedMovies(sortedList);
+  const handleRemoveMovie = async (selectedMovie: TMovie) => {
+    const updatedArray = fullMovies?.map((movie) => {
+      if (movie.id === selectedMovie.id) {
+        return { ...movie, isAdded: false };
+      } else {
+        return movie;
+      }
+    });
+    try {
+      await removeFromFirestore(selectedMovie, userEmail);
+      setFullMovies(updatedArray);
+    } catch (error) {
+      setFirebaseError(error as string);
+    }
   };
 
   const handleResetMovies = () => {
@@ -80,19 +65,16 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     setMenuSortType('newest');
   };
 
-  if (isLoading) return <div>Is Loading...</div>;
-  if (isError) return <div>Error occurred</div>;
-
   return (
     <div>
-      <DropdownMenu
+      {/* <DropdownMenu
         menuSortType={menuSortType}
-        onSortChange={handleSortChange}
+        // onSortChange={handleSortChange}
         onResetMovies={handleResetMovies}
-      />
+      /> */}
       <ul className={styles.container}>
-        {allMovies.length > 0 ? (
-          allMovies.map((movie: TMovie) => (
+        {fullMovies && fullMovies.length > 0 ? (
+          fullMovies.map((movie: TMovie) => (
             <li key={movie.id} className={styles.card}>
               <img
                 src={getImgUrl(movie.poster_path)}
@@ -101,13 +83,13 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
               <h6>{movie.title}</h6>
               <p>Released: {movie.release_date}</p>
               <button
-                onClick={() => handleClick(movie, 'add')}
+                onClick={() => handleAddMovie(movie)}
                 disabled={movie.isAdded}>
                 Add
               </button>
               <button
                 disabled={!movie.isAdded}
-                onClick={() => handleClick(movie, 'remove')}>
+                onClick={() => handleRemoveMovie(movie)}>
                 Remove
               </button>
             </li>
@@ -116,6 +98,9 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
           <p>'Your search returned no results'</p>
         )}
       </ul>
+      {rawMoviesError && rawMoviesError}
+      {savedMoviesError && savedMoviesError}
+      {firebaseError && firebaseError}
     </div>
   );
 };

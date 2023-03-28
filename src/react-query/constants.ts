@@ -1,5 +1,5 @@
 export const queryKeys = {
   user: 'user',
   movies: 'movies',
-  usersSavedMovies: 'usersSavedMovies',
+  savedMovies: 'savedMovies',
 };
