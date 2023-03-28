@@ -5,7 +5,7 @@ import { TuserEmail, TMovie } from '../../../types';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../auth/useAuth';
 
-export const getRawMovies = async () => {
+export const getRawMovies = async (): Promise<TMovie[]> => {
   const { results: movies } = await (await fetch(fullUrl)).json();
   return movies;
 };
@@ -33,17 +33,20 @@ export const useFullMovies = () => {
   const [fullMovies, setFullMovies] = useState<TMovie[]>([]);
   const [rawMovies, setRawMovies] = useState<TMovie[]>([]);
   const [savedMovies, setSavedMovies] = useState<TMovie[]>([]);
-  const [error, setError] = useState<string>('');
+  const [rawMoviesError, setRawMoviesError] = useState<string>('');
+  const [savedMoviesError, setSavedMoviesError] = useState<string>('');
   const { user } = useAuth();
   const userEmail = user?.email;
 
   useEffect(() => {
-    getRawMovies()
+    Promise.resolve(getRawMovies())
       .then((rawMovies) => setRawMovies(rawMovies))
-      .catch((error: string) => setError(error));
-    getSavedMovies(userEmail)
+      .catch((rawMoviesError: string) => setRawMoviesError(rawMoviesError));
+    Promise.resolve(getSavedMovies(userEmail))
       .then((savedMovies) => setSavedMovies(savedMovies))
-      .catch((error: string) => setError(error));
+      .catch((savedMoviesError: string) =>
+        setSavedMoviesError(savedMoviesError)
+      );
   }, [userEmail]);
 
   useEffect(() => {
@@ -53,7 +56,7 @@ export const useFullMovies = () => {
     }
   }, [rawMovies, savedMovies]);
 
-  return { fullMovies, error };
+  return { fullMovies, rawMoviesError, savedMoviesError };
 };
 
 export const addSavedMoviesToList = (

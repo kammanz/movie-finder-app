@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { queryClient } from '../../react-query/queryClient';
 import { queryKeys } from '../../react-query/constants';
-import { getImgUrl } from '../../api';
+// import { fullUrl } from '../../../api';
+import { getImgUrl, fullUrl } from '../../api';
 import {
   addToFirestore,
   removeFromFirestore,
@@ -10,61 +11,86 @@ import {
   updateCachedMovie,
 } from '../../utils/utils';
 import { TClickType, TMovieSortOptions, TuserEmail, TMovie } from '../../types';
+import { db } from '../../firebase/firebaseSetup';
+
 import {
   // getUsersSavedMovies,
   useFullMovies,
   addSavedMoviesToList,
+  getRawMovies,
+  getSavedMovies,
 } from './hooks';
+import { collection, query, getDocs } from 'firebase/firestore';
+// import { db } from '../../../firebase/firebaseSetup';
+// import { fullUrl } from '../../../api';
+// import { TuserEmail, TMovie } from '../../../types';
 import DropdownMenu from './DropdownMenu';
 import styles from './MovieList.module.css';
 
-/** TODO:
- * How do I make 2 API calls (3rd party + firebase) and merge the results?
- * custom hook?
- * How married to React Query are you? If not, maybe rip it out
- * Create a new git branch just for a custom hook
- * Guides onlien around building a custom hook
- *
- * How have you structured in Firebase?
- * database structure chat
- * look into NoSQL database structure
- */
-
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
-  const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>();
-  const [movies, setMovies] = useState<TMovie[]>();
+  const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>([]);
+  const [rawMovies, setRawMovies] = useState<TMovie[] | undefined>([]);
+  const [savedMovies, setSavedMovies] = useState<TMovie[] | undefined>([]);
+  const [fullMovies, setFullMovies] = useState<TMovie[] | undefined>([]);
+  const [error, setError] = useState('');
 
-  const { fullMovies, error } = useFullMovies(); // 3rd party movies // 1st
+  const handleGetRawMovies = async () => {
+    const initialRawMovies = await getRawMovies();
+    setRawMovies(initialRawMovies);
+  };
 
-  // const handleClick = async (movie: TMovie, clickType: TClickType) => {
-  //   const movieIndexToUpdate = cachedMovies.find(
-  //     ({ id }: TMovie) => id === movie.id
-  //   );
+  const handleGetSavedMovies = async () => {
+    const initialSavedMovies = await getSavedMovies(userEmail);
+    setSavedMovies(initialSavedMovies);
+  };
 
-  //   await addToFirestore(movie, userEmail);
+  useEffect(() => {
+    handleGetRawMovies();
+    handleGetSavedMovies();
+  }, []);
 
-  //   await removeFromFirestore(movie, userEmail);
+  useEffect(() => {
+    if (rawMovies && savedMovies) {
+      const fullishMovies = addSavedMoviesToList(rawMovies, savedMovies);
 
-  //   const updatedCachedMovies = updateCachedMovie(
-  //     cachedMovies,
-  //     movieIndexToUpdate,
-  //     isAdding
-  //   );
+      setFullMovies(fullishMovies);
+    }
+  }, [rawMovies, savedMovies]);
 
-  //   queryClient.setQueryData(queryKeys.movies, updatedCachedMovies);
-  // };
+  const handleAddMovie = async (selectedMovie: TMovie) => {
+    const updatedArray =
+      fullMovies &&
+      fullMovies.map((movie) => {
+        if (movie.id === selectedMovie.id) {
+          return { ...movie, isAdded: true };
+        } else {
+          return movie;
+        }
+      });
 
-  const allMovies =
-    sortedMovies && sortedMovies.length > 0 ? sortedMovies : movies;
+    try {
+      await addToFirestore(selectedMovie, userEmail);
+      setFullMovies(updatedArray);
+    } catch (error) {
+      setError(error as string);
+    }
+  };
 
-  const handleSortChange = (newSortType: TMovieSortOptions) => {
-    setMenuSortType(newSortType);
-    const sortedList: TMovie[] | undefined = sortMovies(
-      newSortType,
-      fullMovies
-    );
-    setSortedMovies(sortedList);
+  const handleRemoveMovie = async (selectedMovie: TMovie) => {
+    const updatedArray = fullMovies?.map((movie) => {
+      if (movie.id === selectedMovie.id) {
+        return { ...movie, isAdded: false };
+      } else {
+        return movie;
+      }
+    });
+    try {
+      await removeFromFirestore(selectedMovie, userEmail);
+      setFullMovies(updatedArray);
+    } catch (error) {
+      setError(error as string);
+    }
   };
 
   const handleResetMovies = () => {
@@ -72,18 +98,15 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     setMenuSortType('newest');
   };
 
-  // if (isLoading) return <div>Is Loading...</div>;
-  // if (isError) return <div>Error occurred</div>;
-
   return (
     <div>
-      <DropdownMenu
+      {/* <DropdownMenu
         menuSortType={menuSortType}
-        onSortChange={handleSortChange}
+        // onSortChange={handleSortChange}
         onResetMovies={handleResetMovies}
-      />
+      /> */}
       <ul className={styles.container}>
-        {fullMovies.length > 0 ? (
+        {fullMovies && fullMovies.length > 0 ? (
           fullMovies.map((movie: TMovie) => (
             <li key={movie.id} className={styles.card}>
               <img
@@ -93,14 +116,13 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
               <h6>{movie.title}</h6>
               <p>Released: {movie.release_date}</p>
               <button
-                // onClick={() => handleClick(movie, 'add')}
+                onClick={() => handleAddMovie(movie)}
                 disabled={movie.isAdded}>
                 Add
               </button>
               <button
                 disabled={!movie.isAdded}
-                // onClick={() => handleClick(movie, 'remove')}
-              >
+                onClick={() => handleRemoveMovie(movie)}>
                 Remove
               </button>
             </li>
