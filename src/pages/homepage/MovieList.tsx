@@ -11,7 +11,7 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>([]);
   const [fullMovies, setFullMovies] = useState<TMovie[] | undefined>([]);
   console.log(
-    '3.b) Only sending fullMovies, hence deleted rawMovies and savedMovies state'
+    '3.b) Since only sending fullMovies, deleted rawMovies and savedMovies state'
   );
   const [rawMoviesError, setRawMoviesError] = useState('');
   const [savedMoviesError, setSavedMoviesError] = useState('');
