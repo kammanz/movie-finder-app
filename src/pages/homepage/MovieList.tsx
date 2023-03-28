@@ -1,41 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery } from 'react-query';
-import { queryClient } from '../../react-query/queryClient';
-import { queryKeys } from '../../react-query/constants';
-// import { fullUrl } from '../../../api';
-import { getImgUrl, fullUrl } from '../../api';
-import {
-  addToFirestore,
-  removeFromFirestore,
-  sortMovies,
-  updateCachedMovie,
-} from '../../utils/utils';
-import { TClickType, TMovieSortOptions, TuserEmail, TMovie } from '../../types';
-import { db } from '../../firebase/firebaseSetup';
-
-import {
-  // getUsersSavedMovies,
-  useFullMovies,
-  addSavedMoviesToList,
-  getRawMovies,
-  getSavedMovies,
-} from './hooks';
-import { collection, query, getDocs } from 'firebase/firestore';
-// import { db } from '../../../firebase/firebaseSetup';
-// import { fullUrl } from '../../../api';
-// import { TuserEmail, TMovie } from '../../../types';
+import { getImgUrl } from '../../api';
+import { addToFirestore, removeFromFirestore } from '../../utils/utils';
+import { TMovieSortOptions, TuserEmail, TMovie } from '../../types';
+import { useFullMovies } from './hooks';
 import DropdownMenu from './DropdownMenu';
 import styles from './MovieList.module.css';
 
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>([]);
-  const [rawMovies, setRawMovies] = useState<TMovie[] | undefined>([]);
-  const [savedMovies, setSavedMovies] = useState<TMovie[] | undefined>([]);
   const [fullMovies, setFullMovies] = useState<TMovie[] | undefined>([]);
   const [rawMoviesError, setRawMoviesError] = useState('');
   const [savedMoviesError, setSavedMoviesError] = useState('');
-  const [error, setError] = useState('');
+  const [firebaseError, setFirebaseError] = useState('');
   const {
     fullMovies: initialFullMovies,
     rawMoviesError: initialRawMoviesError,
@@ -43,14 +20,7 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   } = useFullMovies();
 
   useEffect(() => {
-    console.log('movielist, useeffect');
-    // handleGetRawMovies();
-    // handleGetSavedMovies();
     if (initialFullMovies) {
-      console.log(
-        'movielist, useeffect, initialFullMovies: ',
-        initialFullMovies
-      );
       setFullMovies(initialFullMovies);
     }
     if (initialRawMoviesError) {
@@ -60,14 +30,6 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
       setSavedMoviesError(initialSavedMoviesError);
     }
   }, [initialFullMovies, initialRawMoviesError, initialSavedMoviesError]);
-
-  // useEffect(() => {
-  //   if (rawMovies && savedMovies) {
-  //     const fullishMovies = addSavedMoviesToList(rawMovies, savedMovies);
-
-  //     setFullMovies(fullishMovies);
-  //   }
-  // }, [rawMovies, savedMovies]);
 
   const handleAddMovie = async (selectedMovie: TMovie) => {
     const updatedArray =
@@ -83,8 +45,8 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     try {
       await addToFirestore(selectedMovie, userEmail);
       setFullMovies(updatedArray);
-    } catch (error) {
-      setError(error as string);
+    } catch (firebaseError) {
+      setFirebaseError(firebaseError as string);
     }
   };
 
@@ -100,7 +62,7 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
       await removeFromFirestore(selectedMovie, userEmail);
       setFullMovies(updatedArray);
     } catch (error) {
-      setError(error as string);
+      setFirebaseError(error as string);
     }
   };
 
@@ -144,6 +106,7 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
       </ul>
       {rawMoviesError && rawMoviesError}
       {savedMoviesError && savedMoviesError}
+      {firebaseError && firebaseError}
     </div>
   );
 };

@@ -15,7 +15,6 @@ const Header = ({ userEmail }: { userEmail: TuserEmail }) => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    console.log('handleLogout ran');
     setError('');
     try {
       await logout();

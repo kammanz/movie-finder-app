@@ -1,8 +1,8 @@
+import { useState, useEffect } from 'react';
 import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseSetup';
 import { fullUrl } from '../../../api';
 import { TuserEmail, TMovie } from '../../../types';
-import { useState, useEffect } from 'react';
 import { useAuth } from '../../../auth/useAuth';
 
 export const getRawMovies = async (): Promise<TMovie[]> => {
@@ -52,19 +52,19 @@ export const useFullMovies = () => {
 };
 
 export const addSavedMoviesToList = (
-  movies: TMovie[] | undefined,
+  rawMovies: TMovie[] | undefined,
   usersSavedMovies: TMovie[] | undefined
 ) => {
   if (usersSavedMovies) {
     const moviesWithUsersSelections =
       usersSavedMovies.length > 0
-        ? movies?.map((movie) => {
+        ? rawMovies?.map((rawMovie) => {
             let isMatched: boolean = usersSavedMovies.some(
-              (savedMovie) => savedMovie.id === movie.id
+              (savedMovie) => savedMovie.id === rawMovie.id
             );
-            return { ...movie, isAdded: isMatched };
+            return { ...rawMovie, isAdded: isMatched };
           })
-        : movies;
+        : rawMovies;
     return moviesWithUsersSelections;
   }
 };
