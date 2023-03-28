@@ -31,30 +31,22 @@ export const getSavedMovies = async (userEmail: TuserEmail) => {
 
 export const useFullMovies = () => {
   const [fullMovies, setFullMovies] = useState<TMovie[]>([]);
-  const [rawMovies, setRawMovies] = useState<TMovie[]>([]);
-  const [savedMovies, setSavedMovies] = useState<TMovie[]>([]);
   const [rawMoviesError, setRawMoviesError] = useState<string>('');
   const [savedMoviesError, setSavedMoviesError] = useState<string>('');
   const { user } = useAuth();
   const userEmail = user?.email;
 
   useEffect(() => {
-    Promise.resolve(getRawMovies())
-      .then((rawMovies) => setRawMovies(rawMovies))
-      .catch((rawMoviesError: string) => setRawMoviesError(rawMoviesError));
-    Promise.resolve(getSavedMovies(userEmail))
-      .then((savedMovies) => setSavedMovies(savedMovies))
-      .catch((savedMoviesError: string) =>
-        setSavedMoviesError(savedMoviesError)
-      );
+    Promise.all([getRawMovies(), getSavedMovies(userEmail)])
+      .then(([rawMovies, savedMovies]) => {
+        const updatedMoviesList = addSavedMoviesToList(rawMovies, savedMovies);
+        updatedMoviesList && setFullMovies(updatedMoviesList);
+      })
+      .catch(([rawMoviesError, savedMoviesError]) => {
+        setRawMoviesError(rawMoviesError);
+        setSavedMoviesError(savedMoviesError);
+      });
   }, [userEmail]);
-
-  useEffect(() => {
-    if (rawMovies && savedMovies) {
-      const updatedMoviesList = addSavedMoviesToList(rawMovies, savedMovies);
-      updatedMoviesList && setFullMovies(updatedMoviesList);
-    }
-  }, [rawMovies, savedMovies]);
 
   return { fullMovies, rawMoviesError, savedMoviesError };
 };

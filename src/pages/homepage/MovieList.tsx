@@ -42,16 +42,6 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     savedMoviesError: initialSavedMoviesError,
   } = useFullMovies();
 
-  const handleGetRawMovies = async () => {
-    const initialRawMovies = await getRawMovies();
-    setRawMovies(initialRawMovies);
-  };
-
-  const handleGetSavedMovies = async () => {
-    const initialSavedMovies = await getSavedMovies(userEmail);
-    setSavedMovies(initialSavedMovies);
-  };
-
   useEffect(() => {
     console.log('movielist, useeffect');
     // handleGetRawMovies();
