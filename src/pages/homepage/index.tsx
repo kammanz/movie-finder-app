@@ -5,7 +5,6 @@ import { TuserEmail } from '../../types';
 import Header from '../../components/header';
 import MovieList from './MovieList';
 import Navbar from './Navbar';
-import { useFullMovies } from './hooks';
 
 const Homepage = () => {
   const { user } = useAuth();

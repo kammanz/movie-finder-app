@@ -20,15 +20,9 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   } = useFullMovies();
 
   useEffect(() => {
-    if (initialFullMovies) {
-      setFullMovies(initialFullMovies);
-    }
-    if (initialRawMoviesError) {
-      setRawMoviesError(initialRawMoviesError);
-    }
-    if (initialSavedMoviesError) {
-      setSavedMoviesError(initialSavedMoviesError);
-    }
+    setFullMovies(initialFullMovies);
+    setRawMoviesError(initialRawMoviesError);
+    setSavedMoviesError(initialSavedMoviesError);
   }, [initialFullMovies, initialRawMoviesError, initialSavedMoviesError]);
 
   const handleAddMovie = async (selectedMovie: TMovie) => {
