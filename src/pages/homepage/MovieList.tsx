@@ -33,7 +33,14 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const [rawMovies, setRawMovies] = useState<TMovie[] | undefined>([]);
   const [savedMovies, setSavedMovies] = useState<TMovie[] | undefined>([]);
   const [fullMovies, setFullMovies] = useState<TMovie[] | undefined>([]);
+  const [rawMoviesError, setRawMoviesError] = useState('');
+  const [savedMoviesError, setSavedMoviesError] = useState('');
   const [error, setError] = useState('');
+  const {
+    fullMovies: initialFullMovies,
+    rawMoviesError: initialRawMoviesError,
+    savedMoviesError: initialSavedMoviesError,
+  } = useFullMovies();
 
   const handleGetRawMovies = async () => {
     const initialRawMovies = await getRawMovies();
@@ -46,17 +53,31 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   };
 
   useEffect(() => {
-    handleGetRawMovies();
-    handleGetSavedMovies();
-  }, []);
-
-  useEffect(() => {
-    if (rawMovies && savedMovies) {
-      const fullishMovies = addSavedMoviesToList(rawMovies, savedMovies);
-
-      setFullMovies(fullishMovies);
+    console.log('movielist, useeffect');
+    // handleGetRawMovies();
+    // handleGetSavedMovies();
+    if (initialFullMovies) {
+      console.log(
+        'movielist, useeffect, initialFullMovies: ',
+        initialFullMovies
+      );
+      setFullMovies(initialFullMovies);
     }
-  }, [rawMovies, savedMovies]);
+    if (initialRawMoviesError) {
+      setRawMoviesError(initialRawMoviesError);
+    }
+    if (initialSavedMoviesError) {
+      setSavedMoviesError(initialSavedMoviesError);
+    }
+  }, [initialFullMovies, initialRawMoviesError, initialSavedMoviesError]);
+
+  // useEffect(() => {
+  //   if (rawMovies && savedMovies) {
+  //     const fullishMovies = addSavedMoviesToList(rawMovies, savedMovies);
+
+  //     setFullMovies(fullishMovies);
+  //   }
+  // }, [rawMovies, savedMovies]);
 
   const handleAddMovie = async (selectedMovie: TMovie) => {
     const updatedArray =
@@ -131,6 +152,8 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
           <p>'Your search returned no results'</p>
         )}
       </ul>
+      {rawMoviesError && rawMoviesError}
+      {savedMoviesError && savedMoviesError}
     </div>
   );
 };
