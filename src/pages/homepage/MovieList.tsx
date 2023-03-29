@@ -19,22 +19,16 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     savedMoviesError: initialSavedMoviesError,
   } = useFullMovies();
 
-  // useEffect(() => {
-  //   setFullMovies(initialFullMovies);
-  //   setRawMoviesError(initialRawMoviesError);
-  //   setSavedMoviesError(initialSavedMoviesError);
-  // }, [initialFullMovies, initialRawMoviesError, initialSavedMoviesError]);
+  let movies = fullMovies?.length ? fullMovies : initialFullMovies;
 
   const handleAddMovie = async (selectedMovie: TMovie) => {
-    const updatedArray =
-      fullMovies &&
-      fullMovies.map((movie) => {
-        if (movie.id === selectedMovie.id) {
-          return { ...movie, isAdded: true };
-        } else {
-          return movie;
-        }
-      });
+    const updatedArray = movies?.map((movie) => {
+      if (movie.id === selectedMovie.id) {
+        return { ...movie, isAdded: true };
+      } else {
+        return movie;
+      }
+    });
 
     try {
       await addToFirestore(selectedMovie, userEmail);
@@ -45,7 +39,7 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   };
 
   const handleRemoveMovie = async (selectedMovie: TMovie) => {
-    const updatedArray = fullMovies?.map((movie) => {
+    const updatedArray = movies?.map((movie) => {
       if (movie.id === selectedMovie.id) {
         return { ...movie, isAdded: false };
       } else {
@@ -64,8 +58,6 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     setSortedMovies(undefined);
     setMenuSortType('newest');
   };
-
-  let movies = fullMovies?.length ? fullMovies : initialFullMovies;
 
   return (
     <div>
