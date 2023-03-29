@@ -19,11 +19,11 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     savedMoviesError: initialSavedMoviesError,
   } = useFullMovies();
 
-  useEffect(() => {
-    setFullMovies(initialFullMovies);
-    setRawMoviesError(initialRawMoviesError);
-    setSavedMoviesError(initialSavedMoviesError);
-  }, [initialFullMovies, initialRawMoviesError, initialSavedMoviesError]);
+  // useEffect(() => {
+  //   setFullMovies(initialFullMovies);
+  //   setRawMoviesError(initialRawMoviesError);
+  //   setSavedMoviesError(initialSavedMoviesError);
+  // }, [initialFullMovies, initialRawMoviesError, initialSavedMoviesError]);
 
   const handleAddMovie = async (selectedMovie: TMovie) => {
     const updatedArray =
@@ -65,6 +65,8 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     setMenuSortType('newest');
   };
 
+  let movies = fullMovies?.length ? fullMovies : initialFullMovies;
+
   return (
     <div>
       {/* <DropdownMenu
@@ -73,8 +75,8 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
         onResetMovies={handleResetMovies}
       /> */}
       <ul className={styles.container}>
-        {fullMovies && fullMovies.length > 0 ? (
-          fullMovies.map((movie: TMovie) => (
+        {movies?.length ? (
+          movies.map((movie: TMovie) => (
             <li key={movie.id} className={styles.card}>
               <img
                 src={getImgUrl(movie.poster_path)}
