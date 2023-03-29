@@ -37,14 +37,8 @@ export const useFullMovies = () => {
   const userEmail = user?.email;
 
   useEffect(() => {
-    console.log(
-      '1. Using Promise.all on get requests, ensuring they are returned as promises'
-    );
     Promise.all([getRawMovies(), getSavedMovies(userEmail)])
       .then(([rawMovies, savedMovies]) => {
-        console.log(
-          '2. Migrating addSavedMoviesToList into first useEffect, deleted second useEffect'
-        );
         const updatedMoviesList = addSavedMoviesToList(rawMovies, savedMovies);
         updatedMoviesList && setFullMovies(updatedMoviesList);
       })
@@ -54,7 +48,6 @@ export const useFullMovies = () => {
       });
   }, [userEmail]);
 
-  console.log('3. a) Only sending "fullMovies" to MovieList component');
   return { fullMovies, rawMoviesError, savedMoviesError };
 };
 

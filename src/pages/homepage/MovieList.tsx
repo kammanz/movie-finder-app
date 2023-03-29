@@ -10,9 +10,6 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>([]);
   const [fullMovies, setFullMovies] = useState<TMovie[] | undefined>([]);
-  console.log(
-    '3.b) Since only sending fullMovies, deleted rawMovies and savedMovies state'
-  );
   const [rawMoviesError, setRawMoviesError] = useState('');
   const [savedMoviesError, setSavedMoviesError] = useState('');
   const [firebaseError, setFirebaseError] = useState('');
