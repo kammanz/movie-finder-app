@@ -22,26 +22,26 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   let movies = fullMovies?.length ? fullMovies : initialFullMovies;
 
   const handleAddMovie = async (selectedMovie: TMovie) => {
-    const updatedArray = movies?.map((movie) =>
+    const updatedMovies = movies?.map((movie) =>
       movie.id === selectedMovie.id ? { ...movie, isAdded: true } : movie
     );
 
     try {
       await addToFirestore(selectedMovie, userEmail);
-      setFullMovies(updatedArray);
+      setFullMovies(updatedMovies);
     } catch (firebaseError) {
       setFirebaseError(firebaseError as string);
     }
   };
 
   const handleRemoveMovie = async (selectedMovie: TMovie) => {
-    const updatedArray = movies?.map((movie) =>
+    const updatedMovies = movies?.map((movie) =>
       movie.id === selectedMovie.id ? { ...movie, isAdded: false } : movie
     );
 
     try {
       await removeFromFirestore(selectedMovie, userEmail);
-      setFullMovies(updatedArray);
+      setFullMovies(updatedMovies);
     } catch (error) {
       setFirebaseError(error as string);
     }
