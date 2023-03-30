@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getImgUrl } from '../../api';
-import { addToFirestore, removeFromFirestore } from '../../utils/utils';
+import {
+  addToFirestore,
+  removeFromFirestore,
+  sortMovies,
+} from '../../utils/utils';
 import { TMovieSortOptions, TuserEmail, TMovie } from '../../types';
 import { useFullMovies } from './hooks';
 import DropdownMenu from './DropdownMenu';
@@ -8,7 +12,6 @@ import styles from './MovieList.module.css';
 
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
-  const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>([]);
   const [moviesToRender, setMoviesToRender] = useState<TMovie[] | undefined>(
     []
   );
@@ -42,23 +45,30 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
     try {
       await removeFromFirestore(selectedMovie, userEmail);
       setMoviesToRender(updatedMovies);
-    } catch (error) {
-      setFirebaseError(error as string);
+    } catch (firebaseError) {
+      setFirebaseError(firebaseError as string);
     }
   };
 
   const handleResetMovies = () => {
-    setSortedMovies(undefined);
     setMenuSortType('newest');
+    initialMoviesToRender &&
+      setMoviesToRender(sortMovies('newest', initialMoviesToRender));
+  };
+
+  const handleSortChange = (sortType: string) => {
+    setMenuSortType(sortType);
+    initialMoviesToRender &&
+      setMoviesToRender(sortMovies(sortType, initialMoviesToRender));
   };
 
   return (
     <div>
-      {/* <DropdownMenu
+      <DropdownMenu
         menuSortType={menuSortType}
-        // onSortChange={handleSortChange}
+        onSortChange={handleSortChange}
         onResetMovies={handleResetMovies}
-      /> */}
+      />
       <ul className={styles.container}>
         {movies?.length ? (
           movies.map((movie: TMovie) => (
