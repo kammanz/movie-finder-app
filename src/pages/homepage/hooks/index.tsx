@@ -39,19 +39,19 @@ export const useFullMovies = () => {
 
   useEffect(() => {
     Promise.resolve(getRawMovies())
-      .then((data) => {
-        setRawMovies(data);
+      .then((rawMovies) => {
+        setRawMovies(rawMovies);
       })
-      .catch((error) => {
-        setRawMoviesError(error);
+      .catch((rawMoviesError: string) => {
+        setRawMoviesError(rawMoviesError);
       });
 
     Promise.resolve(getSavedMovies(userEmail))
-      .then((data) => {
-        setSavedMovies(data);
+      .then((savedMovies) => {
+        setSavedMovies(savedMovies);
       })
-      .catch((error) => {
-        setSavedMoviesError(error);
+      .catch((savedMoviesError) => {
+        setSavedMoviesError(savedMoviesError);
       });
   }, [userEmail]);
 
