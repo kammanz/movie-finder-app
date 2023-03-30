@@ -1,57 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getImgUrl } from '../../api';
-import {
-  addToFirestore,
-  removeFromFirestore,
-  sortMovies,
-} from '../../utils/utils';
+import { sortMovies } from '../../utils/utils';
 import { TMovieSortOptions, TuserEmail, TMovie } from '../../types';
 import { useFullMovies } from './hooks';
 import DropdownMenu from './DropdownMenu';
 import styles from './MovieList.module.css';
 
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
-  // const [isRefetching, setIsRefetching] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<TMovie | null>(null);
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
-  const [moviesToRender, setMoviesToRender] = useState<TMovie[] | undefined>(
-    []
-  );
-  // const [firebaseError, setFirebaseError] = useState('');
   const {
     moviesToRender: initialMoviesToRender,
     rawMoviesError,
     savedMoviesError,
   } = useFullMovies(selectedMovie);
 
-  let movies = moviesToRender?.length ? moviesToRender : initialMoviesToRender;
-
-  const handleAddMovie = async (selectedMovie: TMovie) => {
-    // try {
-    //   // await addToFirestore(selectedMovie, userEmail);
-    //   // useFullMovies()
+  const handleAddMovie = (selectedMovie: TMovie) => {
     setSelectedMovie(selectedMovie);
-    // setIsRefetching(!isRefetching);
-    // } catch (firebaseError) {
-    //   setFirebaseError(firebaseError as string);
-    // }
   };
 
-  const handleRemoveMovie = async (selectedMovie: TMovie) => {
+  const handleRemoveMovie = (selectedMovie: TMovie) => {
     setSelectedMovie(selectedMovie);
-    // try {
-    //   await removeFromFirestore(selectedMovie, userEmail);
-    //   // setIsRefetching(!isRefetching);
-    // } catch (firebaseError) {
-    //   setFirebaseError(firebaseError as string);
-    // }
   };
 
   const handleSortChange = (sortType: string) => {
     setMenuSortType(sortType);
-    initialMoviesToRender &&
-      setMoviesToRender(sortMovies(sortType, initialMoviesToRender));
   };
+
+  let movies =
+    initialMoviesToRender && sortMovies(menuSortType, initialMoviesToRender);
 
   return (
     <div>
@@ -88,7 +65,6 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
       </ul>
       {rawMoviesError && rawMoviesError}
       {savedMoviesError && savedMoviesError}
-      {/* {firebaseError && firebaseError} */}
     </div>
   );
 };
