@@ -10,13 +10,14 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>([]);
   const [fullMovies, setFullMovies] = useState<TMovie[] | undefined>([]);
-  const [rawMoviesError, setRawMoviesError] = useState('');
-  const [savedMoviesError, setSavedMoviesError] = useState('');
+  // const [rawMoviesError, setRawMoviesError] = useState('');
+  // const [savedMoviesError, setSavedMoviesError] = useState('');
   const [firebaseError, setFirebaseError] = useState('');
   const {
-    fullMovies: initialFullMovies,
-    rawMoviesError: initialRawMoviesError,
-    savedMoviesError: initialSavedMoviesError,
+    moviesToRender: initialFullMovies,
+    // rawMovies: initialRawMovies,
+    rawMoviesError,
+    savedMoviesError,
   } = useFullMovies();
 
   let movies = fullMovies?.length ? fullMovies : initialFullMovies;
