@@ -4,9 +4,15 @@ import { db } from '../../../firebase/firebaseSetup';
 import { fullUrl } from '../../../api';
 import { TuserEmail, TMovie } from '../../../types';
 import { useAuth } from '../../../auth/useAuth';
+import { addToFirestore, removeFromFirestore } from '../../../utils/utils';
 
 export const getRawMovies = async (): Promise<TMovie[]> => {
-  const { results: movies } = await (await fetch(fullUrl)).json();
+  const { results } = await (await fetch(fullUrl)).json();
+
+  const movies = results.map((movie: any) => {
+    return { ...movie, isAdded: false };
+  });
+
   return movies;
 };
 
@@ -29,7 +35,7 @@ export const getSavedMovies = async (userEmail: TuserEmail) => {
   return savedMovies;
 };
 
-export const useFullMovies = (isRefetching: boolean) => {
+export const useFullMovies = (selectedMovie: TMovie | null) => {
   const [rawMovies, setRawMovies] = useState<TMovie[]>([]);
   const [savedMovies, setSavedMovies] = useState<TMovie[]>([]);
   const [rawMoviesError, setRawMoviesError] = useState<string>('');
@@ -55,15 +61,41 @@ export const useFullMovies = (isRefetching: boolean) => {
       });
   }, [userEmail]);
 
+  // useEffect(() => {
+  //   Promise.resolve(getSavedMovies(userEmail))
+  //     .then((savedMovies) => {
+  //       setSavedMovies(savedMovies);
+  //     })
+  //     .catch((savedMoviesError) => {
+  //       setSavedMoviesError(savedMoviesError);
+  //     });
+  // }, [userEmail, isRefetching]);
+
   useEffect(() => {
-    Promise.resolve(getSavedMovies(userEmail))
-      .then((savedMovies) => {
+    const updatingFireStore = async () => {
+      if (selectedMovie) {
+        let savedMovies;
+        if (selectedMovie.isAdded === false) {
+          await addToFirestore(selectedMovie, userEmail);
+          savedMovies = await getSavedMovies(userEmail);
+          // setSavedMovies(savedMovies);
+        } else {
+          await removeFromFirestore(selectedMovie, userEmail);
+          savedMovies = await getSavedMovies(userEmail);
+          // setSavedMovies(savedMovies);
+        }
         setSavedMovies(savedMovies);
-      })
-      .catch((savedMoviesError) => {
-        setSavedMoviesError(savedMoviesError);
-      });
-  }, [userEmail, isRefetching]);
+        // await addToFirestore(selectedMovie, userEmail);
+        // const savedMovies = await getSavedMovies(userEmail);
+        // setSavedMovies(savedMovies);
+      }
+      // (await selectedMovie) && addToFirestore(selectedMovie, userEmail);
+      // const savedMovies = await getSavedMovies(userEmail);
+      // setSavedMovies(savedMovies);
+    };
+
+    updatingFireStore();
+  }, [userEmail, selectedMovie]);
 
   let moviesToRender =
     rawMovies?.length && savedMovies?.length

@@ -11,60 +11,43 @@ import DropdownMenu from './DropdownMenu';
 import styles from './MovieList.module.css';
 
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
-  const [isRefetching, setIsRefetching] = useState(false);
+  // const [isRefetching, setIsRefetching] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState<TMovie | null>(null);
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
   const [moviesToRender, setMoviesToRender] = useState<TMovie[] | undefined>(
     []
   );
-  const [firebaseError, setFirebaseError] = useState('');
+  // const [firebaseError, setFirebaseError] = useState('');
   const {
     moviesToRender: initialMoviesToRender,
     rawMoviesError,
     savedMoviesError,
-  } = useFullMovies(isRefetching);
+  } = useFullMovies(selectedMovie);
 
   let movies = moviesToRender?.length ? moviesToRender : initialMoviesToRender;
 
   const handleAddMovie = async (selectedMovie: TMovie) => {
-    const updatedMovies = movies?.map((movie) =>
-      movie.id === selectedMovie.id ? { ...movie, isAdded: true } : movie
-    );
-
-    try {
-      await addToFirestore(selectedMovie, userEmail);
-      setIsRefetching(!isRefetching);
-      setMoviesToRender(updatedMovies);
-    } catch (firebaseError) {
-      setFirebaseError(firebaseError as string);
-    }
+    // try {
+    //   // await addToFirestore(selectedMovie, userEmail);
+    //   // useFullMovies()
+    setSelectedMovie(selectedMovie);
+    // setIsRefetching(!isRefetching);
+    // } catch (firebaseError) {
+    //   setFirebaseError(firebaseError as string);
+    // }
   };
 
   const handleRemoveMovie = async (selectedMovie: TMovie) => {
-    const updatedMovies = movies?.map((movie) =>
-      movie.id === selectedMovie.id ? { ...movie, isAdded: false } : movie
-    );
-
-    try {
-      await removeFromFirestore(selectedMovie, userEmail);
-      setIsRefetching(!isRefetching);
-      setMoviesToRender(updatedMovies);
-    } catch (firebaseError) {
-      setFirebaseError(firebaseError as string);
-    }
-  };
-
-  const handleResetMovies = () => {
-    setMenuSortType('newest');
-    initialMoviesToRender &&
-      setMoviesToRender(sortMovies('newest', initialMoviesToRender));
+    setSelectedMovie(selectedMovie);
+    // try {
+    //   await removeFromFirestore(selectedMovie, userEmail);
+    //   // setIsRefetching(!isRefetching);
+    // } catch (firebaseError) {
+    //   setFirebaseError(firebaseError as string);
+    // }
   };
 
   const handleSortChange = (sortType: string) => {
-    console.log('handleSortChange, sortType:', sortType);
-    console.log(
-      'handleSortChange, initialMoviesToRender:',
-      initialMoviesToRender
-    );
     setMenuSortType(sortType);
     initialMoviesToRender &&
       setMoviesToRender(sortMovies(sortType, initialMoviesToRender));
@@ -75,7 +58,7 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
       <DropdownMenu
         menuSortType={menuSortType}
         onSortChange={handleSortChange}
-        onResetMovies={handleResetMovies}
+        onResetMovies={() => handleSortChange('newest')}
       />
       <ul className={styles.container}>
         {movies?.length ? (
@@ -105,7 +88,7 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
       </ul>
       {rawMoviesError && rawMoviesError}
       {savedMoviesError && savedMoviesError}
-      {firebaseError && firebaseError}
+      {/* {firebaseError && firebaseError} */}
     </div>
   );
 };
