@@ -9,17 +9,17 @@ import styles from './MovieList.module.css';
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
   const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>([]);
-  const [fullMovies, setFullMovies] = useState<TMovie[] | undefined>([]);
-  const [rawMoviesError, setRawMoviesError] = useState('');
-  const [savedMoviesError, setSavedMoviesError] = useState('');
+  const [moviesToRender, setMoviesToRender] = useState<TMovie[] | undefined>(
+    []
+  );
   const [firebaseError, setFirebaseError] = useState('');
   const {
-    fullMovies: initialFullMovies,
-    rawMoviesError: initialRawMoviesError,
-    savedMoviesError: initialSavedMoviesError,
+    moviesToRender: initialMoviesToRender,
+    rawMoviesError,
+    savedMoviesError,
   } = useFullMovies();
 
-  let movies = fullMovies?.length ? fullMovies : initialFullMovies;
+  let movies = moviesToRender?.length ? moviesToRender : initialMoviesToRender;
 
   const handleAddMovie = async (selectedMovie: TMovie) => {
     const updatedMovies = movies?.map((movie) =>
@@ -28,7 +28,7 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
 
     try {
       await addToFirestore(selectedMovie, userEmail);
-      setFullMovies(updatedMovies);
+      setMoviesToRender(updatedMovies);
     } catch (firebaseError) {
       setFirebaseError(firebaseError as string);
     }
@@ -41,7 +41,7 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
 
     try {
       await removeFromFirestore(selectedMovie, userEmail);
-      setFullMovies(updatedMovies);
+      setMoviesToRender(updatedMovies);
     } catch (error) {
       setFirebaseError(error as string);
     }
