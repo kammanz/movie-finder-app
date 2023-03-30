@@ -9,26 +9,14 @@ import styles from './MovieList.module.css';
 const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
   const [selectedMovie, setSelectedMovie] = useState<TMovie | null>(null);
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
-  const {
-    moviesToRender: initialMoviesToRender,
-    rawMoviesError,
-    savedMoviesError,
-  } = useFullMovies(selectedMovie);
+  const { moviesToRender, rawMoviesError, savedMoviesError } =
+    useFullMovies(selectedMovie);
 
-  const handleAddMovie = (selectedMovie: TMovie) => {
-    setSelectedMovie(selectedMovie);
-  };
-
-  const handleRemoveMovie = (selectedMovie: TMovie) => {
-    setSelectedMovie(selectedMovie);
-  };
-
-  const handleSortChange = (sortType: string) => {
+  const handleSortChange = (sortType: TMovieSortOptions) => {
     setMenuSortType(sortType);
   };
 
-  let movies =
-    initialMoviesToRender && sortMovies(menuSortType, initialMoviesToRender);
+  let movies = moviesToRender && sortMovies(menuSortType, moviesToRender);
 
   return (
     <div>
@@ -48,13 +36,13 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
               <h6>{movie.title}</h6>
               <p>Released: {movie.release_date}</p>
               <button
-                onClick={() => handleAddMovie(movie)}
+                onClick={() => setSelectedMovie(movie)}
                 disabled={movie.isAdded}>
                 Add
               </button>
               <button
                 disabled={!movie.isAdded}
-                onClick={() => handleRemoveMovie(movie)}>
+                onClick={() => setSelectedMovie(movie)}>
                 Remove
               </button>
             </li>
