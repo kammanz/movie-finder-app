@@ -29,7 +29,7 @@ export const getSavedMovies = async (userEmail: TuserEmail) => {
   return savedMovies;
 };
 
-export const useFullMovies = () => {
+export const useFullMovies = (isRefetching: boolean) => {
   const [rawMovies, setRawMovies] = useState<TMovie[]>([]);
   const [savedMovies, setSavedMovies] = useState<TMovie[]>([]);
   const [rawMoviesError, setRawMoviesError] = useState<string>('');
@@ -54,6 +54,16 @@ export const useFullMovies = () => {
         setSavedMoviesError(savedMoviesError);
       });
   }, [userEmail]);
+
+  useEffect(() => {
+    Promise.resolve(getSavedMovies(userEmail))
+      .then((savedMovies) => {
+        setSavedMovies(savedMovies);
+      })
+      .catch((savedMoviesError) => {
+        setSavedMoviesError(savedMoviesError);
+      });
+  }, [userEmail, isRefetching]);
 
   let moviesToRender =
     rawMovies?.length && savedMovies?.length
