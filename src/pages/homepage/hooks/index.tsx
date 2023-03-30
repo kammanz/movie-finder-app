@@ -9,7 +9,7 @@ import { addToFirestore, removeFromFirestore } from '../../../utils/utils';
 export const getRawMovies = async (): Promise<TMovie[]> => {
   const { results } = await (await fetch(fullUrl)).json();
 
-  const movies = results.map((movie: any) => {
+  const movies: TMovie[] = results.map((movie: TMovie) => {
     return { ...movie, isAdded: false };
   });
 
