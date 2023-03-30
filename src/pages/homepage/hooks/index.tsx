@@ -62,31 +62,28 @@ export const useFullMovies = (selectedMovie: TMovie | null) => {
   }, [userEmail]);
 
   useEffect(() => {
-    if (selectedMovie === null) return;
-    const updatingFireStore = async () => {
-      if (selectedMovie) {
-        let savedMovies;
-        if (selectedMovie.isAdded === false) {
-          await addToFirestore(selectedMovie, userEmail);
-          savedMovies = await getSavedMovies(userEmail);
-          setSavedMovies(savedMovies);
-        } else {
-          await removeFromFirestore(selectedMovie, userEmail);
-          savedMovies = await getSavedMovies(userEmail);
-          setSavedMovies(savedMovies);
-        }
+    const updateFirestore = async () => {
+      try {
+        if (!selectedMovie) return;
+
+        const isAdded = selectedMovie.isAdded;
+        const action = isAdded ? removeFromFirestore : addToFirestore;
+
+        await action(selectedMovie, userEmail);
+        const savedMovies = await getSavedMovies(userEmail);
+        setSavedMovies(savedMovies);
+      } catch (error) {
+        setSavedMoviesError(error as string);
       }
     };
 
-    updatingFireStore();
+    updateFirestore();
   }, [selectedMovie]);
 
   let moviesToRender =
     rawMovies?.length && savedMovies?.length
       ? addSavedMoviesToList(rawMovies, savedMovies)
       : rawMovies;
-
-  console.log('moviesToRender', moviesToRender);
 
   return { moviesToRender, rawMovies, rawMoviesError, savedMoviesError };
 };
