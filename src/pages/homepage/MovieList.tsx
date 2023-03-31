@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { getImgUrl } from '../../api';
 import { sortMovies } from '../../utils/utils';
-import { TMovieSortOptions, TuserEmail, TMovie } from '../../types';
+import { TMovieSortOptions, TMovie } from '../../types';
 import { useFullMovies } from './hooks';
 import DropdownMenu from './DropdownMenu';
 import styles from './MovieList.module.css';
