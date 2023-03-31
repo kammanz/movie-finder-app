@@ -6,7 +6,7 @@ import { useFullMovies } from './hooks';
 import DropdownMenu from './DropdownMenu';
 import styles from './MovieList.module.css';
 
-const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
+const MovieList = () => {
   const [selectedMovie, setSelectedMovie] = useState<TMovie | null>(null);
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
   const { moviesToRender, rawMoviesError, savedMoviesError } =
