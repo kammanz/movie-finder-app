@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
 import { getImgUrl } from '../../api';
 import { sortMovies } from '../../utils/utils';
+import { addToFirestore, removeFromFirestore } from '../../utils/utils';
+import { useAuth } from '../../auth/useAuth';
+
 import { TMovieSortOptions, TMovie } from '../../types';
 import { useFullMovies } from './hooks';
 import DropdownMenu from './DropdownMenu';
 import styles from './MovieList.module.css';
 
 const MovieList = () => {
-  const [selectedMovie, setSelectedMovie] = useState<TMovie | null>(null);
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
-  const { moviesToRender, rawMoviesError, savedMoviesError } =
-    useFullMovies(selectedMovie);
+  const { moviesToRender, rawMoviesError, savedMoviesError, getFBMovies } =
+    useFullMovies();
+  const { user } = useAuth();
 
   const handleSortChange = (sortType: TMovieSortOptions) => {
     setMenuSortType(sortType);
+  };
+
+  const handleRemove = async (movie: TMovie) => {
+    await removeFromFirestore(movie, user?.email);
+    await getFBMovies();
+  };
+
+  const handleAdd = async (movie: TMovie) => {
+    await addToFirestore(movie, user?.email);
+    await getFBMovies();
   };
 
   let movies = moviesToRender && sortMovies(menuSortType, moviesToRender);
@@ -35,14 +48,12 @@ const MovieList = () => {
               />
               <h6>{movie.title}</h6>
               <p>Released: {movie.release_date}</p>
-              <button
-                onClick={() => setSelectedMovie(movie)}
-                disabled={movie.isAdded}>
+              <button onClick={() => handleAdd(movie)} disabled={movie.isAdded}>
                 Add
               </button>
               <button
                 disabled={!movie.isAdded}
-                onClick={() => setSelectedMovie(movie)}>
+                onClick={() => handleRemove(movie)}>
                 Remove
               </button>
             </li>
@@ -51,8 +62,8 @@ const MovieList = () => {
           <p>'Your search returned no results'</p>
         )}
       </ul>
-      {rawMoviesError && rawMoviesError}
-      {savedMoviesError && savedMoviesError}
+      {rawMoviesError && <p style={{ color: 'red' }}>{rawMoviesError}</p>}
+      {savedMoviesError}
     </div>
   );
 };

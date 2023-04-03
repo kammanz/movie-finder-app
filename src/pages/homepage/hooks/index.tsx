@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseSetup';
 import { fullUrl } from '../../../api';
 import { TuserEmail, TMovie } from '../../../types';
 import { useAuth } from '../../../auth/useAuth';
-import { addToFirestore, removeFromFirestore } from '../../../utils/utils';
 
 export const getRawMovies = async (): Promise<TMovie[]> => {
   const { results } = await (await fetch(fullUrl)).json();
@@ -35,24 +34,16 @@ export const getSavedMovies = async (userEmail: TuserEmail) => {
   return savedMovies;
 };
 
-export const useFullMovies = (selectedMovie: TMovie | null) => {
+export const useFullMovies = () => {
   const [rawMovies, setRawMovies] = useState<TMovie[]>([]);
   const [savedMovies, setSavedMovies] = useState<TMovie[]>([]);
-  const [rawMoviesError, setRawMoviesError] = useState<string>('');
-  const [savedMoviesError, setSavedMoviesError] = useState<string>('');
+  const [rawMoviesError, setRawMoviesError] = useState<string>();
+  const [savedMoviesError, setSavedMoviesError] = useState<string>();
   const { user } = useAuth();
   const userEmail = user?.email;
 
-  useEffect(() => {
-    Promise.resolve(getRawMovies())
-      .then((rawMovies) => {
-        setRawMovies(rawMovies);
-      })
-      .catch((rawMoviesError: string) => {
-        setRawMoviesError(rawMoviesError);
-      });
-
-    Promise.resolve(getSavedMovies(userEmail))
+  const getFBMovies = useCallback(async () => {
+    getSavedMovies(userEmail) // 'dan.page@gmail.com'
       .then((savedMovies) => {
         setSavedMovies(savedMovies);
       })
@@ -61,31 +52,33 @@ export const useFullMovies = (selectedMovie: TMovie | null) => {
       });
   }, [userEmail]);
 
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled
   useEffect(() => {
-    const updateFirestore = async () => {
-      try {
-        if (!selectedMovie) return;
+    getRawMovies()
+      .then((rawMovies) => {
+        setRawMovies(rawMovies);
+      })
+      .catch((rawMoviesError: string) => {
+        setRawMoviesError(rawMoviesError);
+      });
+  }, []);
 
-        const isAdded = selectedMovie.isAdded;
-        const action = isAdded ? removeFromFirestore : addToFirestore;
-
-        await action(selectedMovie, userEmail);
-        const savedMovies = await getSavedMovies(userEmail);
-        setSavedMovies(savedMovies);
-      } catch (error) {
-        setSavedMoviesError(error as string);
-      }
-    };
-
-    updateFirestore();
-  }, [selectedMovie]);
+  useEffect(() => {
+    getFBMovies();
+  }, [getFBMovies]);
 
   let moviesToRender =
     rawMovies?.length && savedMovies?.length
       ? addSavedMoviesToList(rawMovies, savedMovies)
       : rawMovies;
 
-  return { moviesToRender, rawMovies, rawMoviesError, savedMoviesError };
+  return {
+    moviesToRender,
+    rawMovies,
+    rawMoviesError,
+    savedMoviesError,
+    getFBMovies,
+  };
 };
 
 export const addSavedMoviesToList = (

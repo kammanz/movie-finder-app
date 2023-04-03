@@ -10,6 +10,10 @@ const Homepage = () => {
   const { user } = useAuth();
   let userEmail: TuserEmail = user?.email;
 
+  // 1. import hook here, movies or saved movies prop
+  // 2. movieList needs props: movieArray, listType
+  // 3. url will need to be updated: homepage-movies, or homepage-savedMovies
+
   return (
     <>
       <Header userEmail={userEmail} />
