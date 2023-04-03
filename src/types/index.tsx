@@ -13,6 +13,7 @@ export type THandleaddToFirestore = {
 };
 export type TMovie = {
   isAdded: boolean;
+  isWatched: boolean;
   id: number;
   poster_path: string;
   release_date: string;

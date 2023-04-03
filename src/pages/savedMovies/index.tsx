@@ -50,7 +50,9 @@ const SavedMovies = () => {
               />
               <h6>{movie.title}</h6>
               <p>Released: {movie.release_date}</p>
-              <button onClick={() => handleAdd(movie)} disabled={movie.isAdded}>
+              <button
+                onClick={() => handleAdd(movie)}
+                disabled={movie.isWatched}>
                 watched
               </button>
               <button

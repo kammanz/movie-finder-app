@@ -1,4 +1,4 @@
-import { doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseSetup';
 import { subDays, compareAsc } from 'date-fns';
 import { TMovie, TMovieSortOptions, TuserEmail } from '../types';
@@ -59,6 +59,17 @@ export const removeFromFirestore = async (
     await deleteDoc(doc(db, `users/${userEmail}/movies/${movie.id}`));
   } catch (error) {
     throw error;
+  }
+};
+
+export const updateFireStore = async (movie: TMovie, userEmail: TuserEmail) => {
+  try {
+    const docRef = await doc(db, `users/${userEmail}/movies/${movie.id}`);
+    updateDoc(docRef, {
+      isWatched: true,
+    });
+  } catch (error) {
+    console.log('', error);
   }
 };
 

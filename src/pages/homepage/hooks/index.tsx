@@ -21,10 +21,12 @@ export const getSavedMovies = async (userEmail: TuserEmail) => {
   const querySnapshot = await getDocs(q);
   let savedMovies: Array<TMovie> = [];
   querySnapshot.forEach((doc) => {
-    const { id, isAdded, poster_path, release_date, title } = doc.data();
+    const { id, isAdded, poster_path, release_date, title, isWatched } =
+      doc.data();
     savedMovies.push({
       id,
       isAdded,
+      isWatched,
       poster_path,
       release_date,
       title,
