@@ -9,7 +9,7 @@ export const getRawMovies = async (): Promise<TMovie[]> => {
   const { results } = await (await fetch(fullUrl)).json();
 
   const movies: TMovie[] = results.map((movie: TMovie) => {
-    return { ...movie, isAdded: false };
+    return { ...movie, isAdded: false, isWatched: false };
   });
 
   return movies;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../../components/header';
 import { useFullMovies } from '../homepage/hooks';
 import { addToFirestore, removeFromFirestore } from '../../utils/utils';
@@ -10,6 +10,7 @@ import styles from '../homepage/MovieList.module.css';
 
 const SavedMovies = () => {
   // import the hook with saved movies
+  const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
 
   const { savedMovies, getFirestoreMovies } = useFullMovies();
   const { user } = useAuth();
@@ -24,10 +25,19 @@ const SavedMovies = () => {
     await getFirestoreMovies();
   };
 
+  const handleSortChange = (sortType: TMovieSortOptions) => {
+    setMenuSortType(sortType);
+  };
+
   return (
     <div>
       <Header />
       SavedMovies
+      <DropdownMenu
+        menuSortType={menuSortType}
+        onSortChange={handleSortChange}
+        onResetMovies={() => handleSortChange('newest')}
+      />
       <ul className={styles.container}>
         {savedMovies?.length ? (
           savedMovies.map((movie: TMovie) => (
@@ -39,7 +49,7 @@ const SavedMovies = () => {
               <h6>{movie.title}</h6>
               <p>Released: {movie.release_date}</p>
               <button onClick={() => handleAdd(movie)} disabled={movie.isAdded}>
-                Add
+                watched
               </button>
               <button
                 disabled={!movie.isAdded}
