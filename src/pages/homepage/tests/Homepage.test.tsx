@@ -2,7 +2,7 @@ import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
-import { expect } from '@jest/globals';
+// import { expect } from '@jest/globals';
 import { renderWithQueryClient } from '../../../tests/test-utils';
 import Homepage from '..';
 // import { getMovies } from '../Homepage';

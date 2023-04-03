@@ -1,80 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getImgUrl } from '../../api';
+import { sortMovies } from '../../utils/utils';
 import { addToFirestore, removeFromFirestore } from '../../utils/utils';
-import { TMovieSortOptions, TuserEmail, TMovie } from '../../types';
+import { useAuth } from '../../auth/useAuth';
+
+import { TMovieSortOptions, TMovie } from '../../types';
 import { useFullMovies } from './hooks';
 import DropdownMenu from './DropdownMenu';
 import styles from './MovieList.module.css';
 
-const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
+const MovieList = () => {
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
-  const [sortedMovies, setSortedMovies] = useState<TMovie[] | undefined>([]);
-  const [fullMovies, setFullMovies] = useState<TMovie[] | undefined>([]);
-  const [rawMoviesError, setRawMoviesError] = useState('');
-  const [savedMoviesError, setSavedMoviesError] = useState('');
-  const [firebaseError, setFirebaseError] = useState('');
   const {
-    fullMovies: initialFullMovies,
-    rawMoviesError: initialRawMoviesError,
-    savedMoviesError: initialSavedMoviesError,
+    moviesToRender,
+    rawMoviesError,
+    savedMoviesError,
+    getFirestoreMovies,
   } = useFullMovies();
+  const { user } = useAuth();
 
-  useEffect(() => {
-    setFullMovies(initialFullMovies);
-    setRawMoviesError(initialRawMoviesError);
-    setSavedMoviesError(initialSavedMoviesError);
-  }, [initialFullMovies, initialRawMoviesError, initialSavedMoviesError]);
-
-  const handleAddMovie = async (selectedMovie: TMovie) => {
-    const updatedArray =
-      fullMovies &&
-      fullMovies.map((movie) => {
-        if (movie.id === selectedMovie.id) {
-          return { ...movie, isAdded: true };
-        } else {
-          return movie;
-        }
-      });
-
-    try {
-      await addToFirestore(selectedMovie, userEmail);
-      setFullMovies(updatedArray);
-    } catch (firebaseError) {
-      setFirebaseError(firebaseError as string);
-    }
+  const handleSortChange = (sortType: TMovieSortOptions) => {
+    setMenuSortType(sortType);
   };
 
-  const handleRemoveMovie = async (selectedMovie: TMovie) => {
-    const updatedArray = fullMovies?.map((movie) => {
-      if (movie.id === selectedMovie.id) {
-        return { ...movie, isAdded: false };
-      } else {
-        return movie;
-      }
-    });
-    try {
-      await removeFromFirestore(selectedMovie, userEmail);
-      setFullMovies(updatedArray);
-    } catch (error) {
-      setFirebaseError(error as string);
-    }
+  const handleRemove = async (movie: TMovie) => {
+    await removeFromFirestore(movie, user?.email);
+    await getFirestoreMovies();
   };
 
-  const handleResetMovies = () => {
-    setSortedMovies(undefined);
-    setMenuSortType('newest');
+  const handleAdd = async (movie: TMovie) => {
+    await addToFirestore(movie, user?.email);
+    await getFirestoreMovies();
   };
+
+  let movies = moviesToRender && sortMovies(menuSortType, moviesToRender);
 
   return (
     <div>
-      {/* <DropdownMenu
+      <DropdownMenu
         menuSortType={menuSortType}
-        // onSortChange={handleSortChange}
-        onResetMovies={handleResetMovies}
-      /> */}
+        onSortChange={handleSortChange}
+        onResetMovies={() => handleSortChange('newest')}
+      />
       <ul className={styles.container}>
-        {fullMovies && fullMovies.length > 0 ? (
-          fullMovies.map((movie: TMovie) => (
+        {movies?.length ? (
+          movies.map((movie: TMovie) => (
             <li key={movie.id} className={styles.card}>
               <img
                 src={getImgUrl(movie.poster_path)}
@@ -82,14 +52,12 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
               />
               <h6>{movie.title}</h6>
               <p>Released: {movie.release_date}</p>
-              <button
-                onClick={() => handleAddMovie(movie)}
-                disabled={movie.isAdded}>
+              <button onClick={() => handleAdd(movie)} disabled={movie.isAdded}>
                 Add
               </button>
               <button
                 disabled={!movie.isAdded}
-                onClick={() => handleRemoveMovie(movie)}>
+                onClick={() => handleRemove(movie)}>
                 Remove
               </button>
             </li>
@@ -98,9 +66,8 @@ const MovieList = ({ userEmail }: { userEmail: TuserEmail }) => {
           <p>'Your search returned no results'</p>
         )}
       </ul>
-      {rawMoviesError && rawMoviesError}
-      {savedMoviesError && savedMoviesError}
-      {firebaseError && firebaseError}
+      {rawMoviesError && <p style={{ color: 'red' }}>{rawMoviesError}</p>}
+      {savedMoviesError}
     </div>
   );
 };
