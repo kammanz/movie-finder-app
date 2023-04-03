@@ -46,26 +46,28 @@ const SavedMovies = () => {
       />
       <ul className={styles.container}>
         {savedMovies?.length ? (
-          savedMovies.map((movie: TMovie) => (
-            <li key={movie.id} className={styles.card}>
-              <img
-                src={getImgUrl(movie.poster_path)}
-                alt={`${movie.title} poster`}
-              />
-              <h6>{movie.title}</h6>
-              <p>Released: {movie.release_date}</p>
-              <button
-                onClick={() => handleUpdate(movie)}
-                disabled={movie.isWatched}>
-                watched
-              </button>
-              <button
-                disabled={!movie.isAdded}
-                onClick={() => handleRemove(movie)}>
-                Remove
-              </button>
-            </li>
-          ))
+          savedMovies
+            .filter((movie) => !movie.isWatched)
+            .map((movie: TMovie) => (
+              <li key={movie.id} className={styles.card}>
+                <img
+                  src={getImgUrl(movie.poster_path)}
+                  alt={`${movie.title} poster`}
+                />
+                <h6>{movie.title}</h6>
+                <p>Released: {movie.release_date}</p>
+                <button
+                  onClick={() => handleUpdate(movie)}
+                  disabled={movie.isWatched}>
+                  watched
+                </button>
+                <button
+                  disabled={!movie.isAdded}
+                  onClick={() => handleRemove(movie)}>
+                  Remove
+                </button>
+              </li>
+            ))
         ) : (
           <p>'Your list is empty'</p>
         )}
