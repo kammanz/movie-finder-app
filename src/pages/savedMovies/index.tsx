@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import Header from '../../components/header';
 import { useFullMovies } from '../homepage/hooks';
-import { addToFirestore, removeFromFirestore } from '../../utils/utils';
+import {
+  addToFirestore,
+  removeFromFirestore,
+  updateFireStore,
+} from '../../utils/utils';
 import { TMovieSortOptions, TMovie } from '../../types';
 import { useAuth } from '../../auth/useAuth';
 import { getImgUrl } from '../../api';
@@ -20,8 +24,8 @@ const SavedMovies = () => {
     await getFirestoreMovies();
   };
 
-  const handleAdd = async (movie: TMovie) => {
-    await addToFirestore(movie, user?.email);
+  const handleUpdate = async (movie: TMovie) => {
+    await updateFireStore(movie, user?.email);
     await getFirestoreMovies();
   };
 
@@ -51,7 +55,7 @@ const SavedMovies = () => {
               <h6>{movie.title}</h6>
               <p>Released: {movie.release_date}</p>
               <button
-                onClick={() => handleAdd(movie)}
+                onClick={() => handleUpdate(movie)}
                 disabled={movie.isWatched}>
                 watched
               </button>
