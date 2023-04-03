@@ -42,7 +42,7 @@ export const useFullMovies = () => {
   const { user } = useAuth();
   const userEmail = user?.email;
 
-  const getFBMovies = useCallback(async () => {
+  const getFirestoreMovies = useCallback(async () => {
     getSavedMovies(userEmail) // 'dan.page@gmail.com'
       .then((savedMovies) => {
         setSavedMovies(savedMovies);
@@ -64,8 +64,8 @@ export const useFullMovies = () => {
   }, []);
 
   useEffect(() => {
-    getFBMovies();
-  }, [getFBMovies]);
+    getFirestoreMovies();
+  }, [getFirestoreMovies]);
 
   let moviesToRender =
     rawMovies?.length && savedMovies?.length
@@ -77,7 +77,7 @@ export const useFullMovies = () => {
     rawMovies,
     rawMoviesError,
     savedMoviesError,
-    getFBMovies,
+    getFirestoreMovies,
   };
 };
 

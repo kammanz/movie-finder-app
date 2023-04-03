@@ -11,8 +11,12 @@ import styles from './MovieList.module.css';
 
 const MovieList = () => {
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
-  const { moviesToRender, rawMoviesError, savedMoviesError, getFBMovies } =
-    useFullMovies();
+  const {
+    moviesToRender,
+    rawMoviesError,
+    savedMoviesError,
+    getFirestoreMovies,
+  } = useFullMovies();
   const { user } = useAuth();
 
   const handleSortChange = (sortType: TMovieSortOptions) => {
@@ -21,12 +25,12 @@ const MovieList = () => {
 
   const handleRemove = async (movie: TMovie) => {
     await removeFromFirestore(movie, user?.email);
-    await getFBMovies();
+    await getFirestoreMovies();
   };
 
   const handleAdd = async (movie: TMovie) => {
     await addToFirestore(movie, user?.email);
-    await getFBMovies();
+    await getFirestoreMovies();
   };
 
   let movies = moviesToRender && sortMovies(menuSortType, moviesToRender);
