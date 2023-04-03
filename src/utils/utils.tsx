@@ -44,6 +44,7 @@ export const addToFirestore = async (movie: TMovie, userEmail: TuserEmail) => {
       release_date: movie.release_date,
       title: movie.title,
       isAdded: true,
+      isWatched: false,
     });
   } catch (error) {
     throw error;

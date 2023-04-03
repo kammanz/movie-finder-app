@@ -29,6 +29,8 @@ const SavedMovies = () => {
     setMenuSortType(sortType);
   };
 
+  console.log('savedMovies', savedMovies);
+
   return (
     <div>
       <Header />
