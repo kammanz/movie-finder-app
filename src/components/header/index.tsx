@@ -9,9 +9,9 @@ const styles = {
   backgroundColor: 'lightsalmon',
 };
 
-const Header = ({ userEmail }: { userEmail: TuserEmail }) => {
+const Header = () => {
   const [error, setError] = useState('');
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -26,7 +26,7 @@ const Header = ({ userEmail }: { userEmail: TuserEmail }) => {
 
   return (
     <header style={styles}>
-      <h1>Welcome, {userEmail}</h1>
+      <h1>Welcome, {user?.email}</h1>
       <button onClick={handleLogout}>Logout</button>
       {error && error}
     </header>

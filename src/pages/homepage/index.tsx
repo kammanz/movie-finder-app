@@ -16,7 +16,7 @@ const Homepage = () => {
 
   return (
     <>
-      <Header userEmail={userEmail} />
+      <Header />
       <Navbar />
       <Link to="/savedMovies">My Saved Movies</Link>
       <MovieList />
