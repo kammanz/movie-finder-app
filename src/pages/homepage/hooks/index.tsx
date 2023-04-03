@@ -76,6 +76,7 @@ export const useFullMovies = () => {
     moviesToRender,
     rawMovies,
     rawMoviesError,
+    savedMovies,
     savedMoviesError,
     getFirestoreMovies,
   };
