@@ -5,6 +5,7 @@ import { addToFirestore, removeFromFirestore } from '../../utils/utils';
 import { TMovieSortOptions, TMovie } from '../../types';
 import { useAuth } from '../../auth/useAuth';
 import { getImgUrl } from '../../api';
+import DropdownMenu from '../homepage/DropdownMenu';
 import styles from '../homepage/MovieList.module.css';
 
 const SavedMovies = () => {
@@ -48,7 +49,7 @@ const SavedMovies = () => {
             </li>
           ))
         ) : (
-          <p>'Your search returned no results'</p>
+          <p>'Your list is empty'</p>
         )}
       </ul>
     </div>
