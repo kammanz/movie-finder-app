@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import Header from '../../components/header';
-import { useFullMovies } from '../homepage/hooks';
 import { removeFromFirestore, updateFireStore } from '../../utils/utils';
 import { MovieSortOptions, Movie } from '../../types';
 import { useAuth } from '../../auth/useAuth';
 import { getImgUrl } from '../../api';
+import { useFullMovies } from '../homepage/hooks';
 import DropdownMenu from '../homepage/DropdownMenu';
 import styles from '../homepage/MovieList.module.css';
 
 const SavedMovies = () => {
   const [menuSortType, setMenuSortType] = useState<MovieSortOptions>('newest');
   const [savedMoviesError, setSavedMoviesError] = useState('');
-  const { savedMovies, getFirestoreMovies /*savedMoviesError*/ } =
-    useFullMovies();
+  const { savedMovies, getFirestoreMovies } = useFullMovies();
   const { user } = useAuth();
 
   const handleRemove = async (movie: Movie) => {
@@ -46,7 +45,7 @@ const SavedMovies = () => {
       <DropdownMenu
         menuSortType={menuSortType}
         onSortChange={handleSortChange}
-        onReseMovies={() => handleSortChange('newest')}
+        onResetMovies={() => handleSortChange('newest')}
       />
       <ul className={styles.container}>
         {movies?.length ? (
