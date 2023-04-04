@@ -5,7 +5,7 @@ export type ClickType = 'add' | 'remove';
 export type DropdownMenu = {
   menuSortType: MovieSortOptions;
   onSortChange: (value: MovieSortOptions) => void;
-  onReseMovies: () => void;
+  onResetMovies: () => void;
 };
 export type UserEmail = string | null | undefined;
 export type Movie = {

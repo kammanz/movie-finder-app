@@ -8,7 +8,7 @@ import { SELECT_MENU_OPTIONS } from '../../constants/selectMenuOptions';
 const DropdownMenu = ({
   menuSortType,
   onSortChange,
-  onReseMovies,
+  onResetMovies,
 }: DropDownMenuType) => {
   const handleChange = (newSortType: MovieSortOptions) => {
     onSortChange(newSortType);
@@ -34,7 +34,7 @@ const DropdownMenu = ({
           })}
         </select>
       </form>
-      <button type="button" onClick={onReseMovies}>
+      <button type="button" onClick={onResetMovies}>
         Show all movies
       </button>
     </div>
