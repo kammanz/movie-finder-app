@@ -10,17 +10,27 @@ import styles from '../homepage/MovieList.module.css';
 
 const SavedMovies = () => {
   const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
-  const { savedMovies, getFirestoreMovies } = useFullMovies();
+  const [savedMoviesError, setSavedMoviesError] = useState('');
+  const { savedMovies, getFirestoreMovies /*savedMoviesError*/ } =
+    useFullMovies();
   const { user } = useAuth();
 
   const handleRemove = async (movie: TMovie) => {
-    await removeFromFirestore(movie, user?.email);
-    await getFirestoreMovies();
+    try {
+      await removeFromFirestore(movie, user?.email);
+      await getFirestoreMovies();
+    } catch (error) {
+      setSavedMoviesError(error as string);
+    }
   };
 
   const handleUpdate = async (movie: TMovie) => {
-    await updateFireStore(movie, user?.email);
-    await getFirestoreMovies();
+    try {
+      await updateFireStore(movie, user?.email);
+      await getFirestoreMovies();
+    } catch (error) {
+      setSavedMoviesError(error as string);
+    }
   };
 
   const handleSortChange = (sortType: TMovieSortOptions) => {
@@ -64,6 +74,7 @@ const SavedMovies = () => {
           <p>'Your list is empty'</p>
         )}
       </ul>
+      {savedMoviesError && <p style={{ color: 'red' }}>{savedMoviesError}</p>}
     </div>
   );
 };
