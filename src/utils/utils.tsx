@@ -1,7 +1,7 @@
 import { doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseSetup';
 import { subDays, compareAsc } from 'date-fns';
-import { TMovie, TMovieSortOptions, TuserEmail } from '../types';
+import { Movie, MovieSortOptions, TuserEmail } from '../types';
 import { SELECT_MENU_OPTIONS } from '../constants/selectMenuOptions';
 
 export const sortByProperty = (
@@ -22,7 +22,7 @@ export const sortByProperty = (
   });
 };
 
-export const newReleases = (movies: Array<TMovie>, numberOfDaysAgo: number) => {
+export const newReleases = (movies: Array<Movie>, numberOfDaysAgo: number) => {
   const todaysDate = new Date();
   const filterDate = subDays(todaysDate, numberOfDaysAgo);
 
@@ -36,7 +36,7 @@ export const newReleases = (movies: Array<TMovie>, numberOfDaysAgo: number) => {
   return filteredMovies;
 };
 
-export const addToFirestore = async (movie: TMovie, userEmail: TuserEmail) => {
+export const addToFirestore = async (movie: Movie, userEmail: TuserEmail) => {
   try {
     await setDoc(doc(db, `users/${userEmail}/movies/${movie.id}`), {
       id: movie.id,
@@ -52,7 +52,7 @@ export const addToFirestore = async (movie: TMovie, userEmail: TuserEmail) => {
 };
 
 export const removeFromFirestore = async (
-  movie: TMovie,
+  movie: Movie,
   userEmail: TuserEmail
 ) => {
   try {
@@ -62,7 +62,7 @@ export const removeFromFirestore = async (
   }
 };
 
-export const updateFireStore = async (movie: TMovie, userEmail: TuserEmail) => {
+export const updateFireStore = async (movie: Movie, userEmail: TuserEmail) => {
   try {
     const docRef = await doc(db, `users/${userEmail}/movies/${movie.id}`);
     updateDoc(docRef, {
@@ -73,7 +73,7 @@ export const updateFireStore = async (movie: TMovie, userEmail: TuserEmail) => {
   }
 };
 
-export const sortMovies = (sortType: TMovieSortOptions, movies: TMovie[]) => {
+export const sorMovies = (sortType: MovieSortOptions, movies: Movie[]) => {
   let sorted;
   switch (sortType) {
     case SELECT_MENU_OPTIONS[0].value:
@@ -91,9 +91,9 @@ export const sortMovies = (sortType: TMovieSortOptions, movies: TMovie[]) => {
 };
 
 export const updateCachedMovie = (
-  array: TMovie[],
+  array: Movie[],
   index: number,
-  isAdded: TMovie['isAdded']
+  isAdded: Movie['isAdded']
 ) => {
   if (index >= array.length || index < 0) {
     throw new Error('Invalid index');

@@ -3,15 +3,15 @@ import { SELECT_MENU_OPTIONS } from '../constants/selectMenuOptions';
 
 export type TClickType = 'add' | 'remove';
 export type TDropdownMenu = {
-  menuSortType: TMovieSortOptions;
-  onSortChange: (value: TMovieSortOptions) => void;
-  onResetMovies: () => void;
+  menuSortType: MovieSortOptions;
+  onSortChange: (value: MovieSortOptions) => void;
+  onReseMovies: () => void;
 };
 export type TuserEmail = string | null | undefined;
 export type THandleaddToFirestore = {
-  movie: TMovie;
+  movie: Movie;
 };
-export type TMovie = {
+export type Movie = {
   isAdded: boolean;
   isWatched: boolean;
   id: number;
@@ -19,10 +19,10 @@ export type TMovie = {
   release_date: string;
   title: string;
 };
-export type TMovieList = {
+export type MovieList = {
   userEmail: TuserEmail;
 };
-export type TMovieSortOptions =
+export type MovieSortOptions =
   | typeof SELECT_MENU_OPTIONS[0]['label']
   | typeof SELECT_MENU_OPTIONS[1]['label']
   | typeof SELECT_MENU_OPTIONS[2]['label'];

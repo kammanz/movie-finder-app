@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { TMovieSortOptions, TDropdownMenu } from '../../types';
+import { MovieSortOptions, TDropdownMenu } from '../../types';
 import { SELECT_MENU_OPTIONS } from '../../constants/selectMenuOptions';
 
 const DropdownMenu = ({
   menuSortType,
   onSortChange,
-  onResetMovies,
+  onReseMovies,
 }: TDropdownMenu) => {
-  const handleChange = (newSortType: TMovieSortOptions) => {
+  const handleChange = (newSortType: MovieSortOptions) => {
     onSortChange(newSortType);
   };
 
@@ -20,7 +20,7 @@ const DropdownMenu = ({
           data-testid="select"
           value={menuSortType}
           onChange={(event) =>
-            handleChange(event.target.value as TMovieSortOptions)
+            handleChange(event.target.value as MovieSortOptions)
           }>
           {SELECT_MENU_OPTIONS.map((option) => {
             return (
@@ -31,7 +31,7 @@ const DropdownMenu = ({
           })}
         </select>
       </form>
-      <button type="button" onClick={onResetMovies}>
+      <button type="button" onClick={onReseMovies}>
         Show all movies
       </button>
     </div>

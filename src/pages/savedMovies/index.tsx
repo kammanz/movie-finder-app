@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import Header from '../../components/header';
 import { useFullMovies } from '../homepage/hooks';
 import { removeFromFirestore, updateFireStore } from '../../utils/utils';
-import { TMovieSortOptions, TMovie } from '../../types';
+import { MovieSortOptions, Movie } from '../../types';
 import { useAuth } from '../../auth/useAuth';
 import { getImgUrl } from '../../api';
 import DropdownMenu from '../homepage/DropdownMenu';
 import styles from '../homepage/MovieList.module.css';
 
 const SavedMovies = () => {
-  const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
+  const [menuSortType, setMenuSortType] = useState<MovieSortOptions>('newest');
   const [savedMoviesError, setSavedMoviesError] = useState('');
   const { savedMovies, getFirestoreMovies /*savedMoviesError*/ } =
     useFullMovies();
   const { user } = useAuth();
 
-  const handleRemove = async (movie: TMovie) => {
+  const handleRemove = async (movie: Movie) => {
     try {
       await removeFromFirestore(movie, user?.email);
       await getFirestoreMovies();
@@ -24,7 +24,7 @@ const SavedMovies = () => {
     }
   };
 
-  const handleUpdate = async (movie: TMovie) => {
+  const handleUpdate = async (movie: Movie) => {
     try {
       await updateFireStore(movie, user?.email);
       await getFirestoreMovies();
@@ -33,7 +33,7 @@ const SavedMovies = () => {
     }
   };
 
-  const handleSortChange = (sortType: TMovieSortOptions) => {
+  const handleSortChange = (sortType: MovieSortOptions) => {
     setMenuSortType(sortType);
   };
 
@@ -46,11 +46,11 @@ const SavedMovies = () => {
       <DropdownMenu
         menuSortType={menuSortType}
         onSortChange={handleSortChange}
-        onResetMovies={() => handleSortChange('newest')}
+        onReseMovies={() => handleSortChange('newest')}
       />
       <ul className={styles.container}>
         {movies?.length ? (
-          movies.map((movie: TMovie) => (
+          movies.map((movie: Movie) => (
             <li key={movie.id} className={styles.card}>
               <img
                 src={getImgUrl(movie.poster_path)}

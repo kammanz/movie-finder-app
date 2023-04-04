@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { getImgUrl } from '../../api';
-import { sortMovies } from '../../utils/utils';
+import { sorMovies } from '../../utils/utils';
 import { addToFirestore, removeFromFirestore } from '../../utils/utils';
 import { useAuth } from '../../auth/useAuth';
 
-import { TMovieSortOptions, TMovie } from '../../types';
+import { MovieSortOptions, Movie } from '../../types';
 import { useFullMovies } from './hooks';
 import DropdownMenu from './DropdownMenu';
 import styles from './MovieList.module.css';
 
 const MovieList = () => {
-  const [menuSortType, setMenuSortType] = useState<TMovieSortOptions>('newest');
+  const [menuSortType, setMenuSortType] = useState<MovieSortOptions>('newest');
   const {
     moviesToRender,
     rawMoviesError,
@@ -19,32 +19,32 @@ const MovieList = () => {
   } = useFullMovies();
   const { user } = useAuth();
 
-  const handleSortChange = (sortType: TMovieSortOptions) => {
+  const handleSortChange = (sortType: MovieSortOptions) => {
     setMenuSortType(sortType);
   };
 
-  const handleRemove = async (movie: TMovie) => {
+  const handleRemove = async (movie: Movie) => {
     await removeFromFirestore(movie, user?.email);
     await getFirestoreMovies();
   };
 
-  const handleAdd = async (movie: TMovie) => {
+  const handleAdd = async (movie: Movie) => {
     await addToFirestore(movie, user?.email);
     await getFirestoreMovies();
   };
 
-  let movies = moviesToRender && sortMovies(menuSortType, moviesToRender);
+  let movies = moviesToRender && sorMovies(menuSortType, moviesToRender);
 
   return (
     <div>
       <DropdownMenu
         menuSortType={menuSortType}
         onSortChange={handleSortChange}
-        onResetMovies={() => handleSortChange('newest')}
+        onReseMovies={() => handleSortChange('newest')}
       />
       <ul className={styles.container}>
         {movies?.length ? (
-          movies.map((movie: TMovie) => (
+          movies.map((movie: Movie) => (
             <li key={movie.id} className={styles.card}>
               <img
                 src={getImgUrl(movie.poster_path)}
