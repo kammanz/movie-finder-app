@@ -19,12 +19,12 @@ interface UseAuth {
 }
 
 export function useAuth(): UseAuth {
-  const [user, setUser] = useState<firebase.User | null>(null);
+  const [user, seUser] = useState<firebase.User | null>(null);
   const { updateUser, clearUser } = useUser();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
+      seUser(user);
     });
 
     return unsubscribe;

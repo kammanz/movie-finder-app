@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';
-import { TuserEmail } from '../../types';
+import { UserEmail } from '../../types';
 
 const styles = {
   display: 'flex',

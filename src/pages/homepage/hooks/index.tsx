@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseSetup';
 import { fullUrl } from '../../../api';
-import { TuserEmail, Movie } from '../../../types';
+import { UserEmail, Movie } from '../../../types';
 import { useAuth } from '../../../auth/useAuth';
 
 export const getRawMovies = async (): Promise<Movie[]> => {
@@ -15,7 +15,7 @@ export const getRawMovies = async (): Promise<Movie[]> => {
   return movies;
 };
 
-export const getSavedMovies = async (userEmail: TuserEmail) => {
+export const getSavedMovies = async (userEmail: UserEmail) => {
   const usersMoviesRef = await collection(db, `users/${userEmail}/movies`);
   const q = query(usersMoviesRef);
   const querySnapshot = await getDocs(q);

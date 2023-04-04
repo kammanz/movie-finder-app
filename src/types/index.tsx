@@ -1,14 +1,14 @@
 import firebase from 'firebase/compat/app';
 import { SELECT_MENU_OPTIONS } from '../constants/selectMenuOptions';
 
-export type TClickType = 'add' | 'remove';
-export type TDropdownMenu = {
+export type ClickType = 'add' | 'remove';
+export type DropdownMenu = {
   menuSortType: MovieSortOptions;
   onSortChange: (value: MovieSortOptions) => void;
   onReseMovies: () => void;
 };
-export type TuserEmail = string | null | undefined;
-export type THandleaddToFirestore = {
+export type UserEmail = string | null | undefined;
+export type HandleAddToFirestore = {
   movie: Movie;
 };
 export type Movie = {
@@ -20,15 +20,15 @@ export type Movie = {
   title: string;
 };
 export type MovieList = {
-  userEmail: TuserEmail;
+  userEmail: UserEmail;
 };
 export type MovieSortOptions =
   | typeof SELECT_MENU_OPTIONS[0]['label']
   | typeof SELECT_MENU_OPTIONS[1]['label']
   | typeof SELECT_MENU_OPTIONS[2]['label'];
-export type TUser = firebase.User | null;
-export type TUseUser = {
-  user: TUser;
-  updateUser: (user: TUser) => void;
+export type User = firebase.User | null;
+export type UseUser = {
+  user: User;
+  updateUser: (user: User) => void;
   clearUser: () => void;
 };

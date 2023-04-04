@@ -1,7 +1,7 @@
 import { doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseSetup';
 import { subDays, compareAsc } from 'date-fns';
-import { Movie, MovieSortOptions, TuserEmail } from '../types';
+import { Movie, MovieSortOptions, UserEmail } from '../types';
 import { SELECT_MENU_OPTIONS } from '../constants/selectMenuOptions';
 
 export const sortByProperty = (
@@ -36,7 +36,7 @@ export const newReleases = (movies: Array<Movie>, numberOfDaysAgo: number) => {
   return filteredMovies;
 };
 
-export const addToFirestore = async (movie: Movie, userEmail: TuserEmail) => {
+export const addToFirestore = async (movie: Movie, userEmail: UserEmail) => {
   try {
     await setDoc(doc(db, `users/${userEmail}/movies/${movie.id}`), {
       id: movie.id,
@@ -53,7 +53,7 @@ export const addToFirestore = async (movie: Movie, userEmail: TuserEmail) => {
 
 export const removeFromFirestore = async (
   movie: Movie,
-  userEmail: TuserEmail
+  userEmail: UserEmail
 ) => {
   try {
     await deleteDoc(doc(db, `users/${userEmail}/movies/${movie.id}`));
@@ -62,7 +62,7 @@ export const removeFromFirestore = async (
   }
 };
 
-export const updateFireStore = async (movie: Movie, userEmail: TuserEmail) => {
+export const updateFireStore = async (movie: Movie, userEmail: UserEmail) => {
   try {
     const docRef = await doc(db, `users/${userEmail}/movies/${movie.id}`);
     updateDoc(docRef, {
