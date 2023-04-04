@@ -8,9 +8,6 @@ export type DropdownMenu = {
   onReseMovies: () => void;
 };
 export type UserEmail = string | null | undefined;
-export type HandleAddToFirestore = {
-  movie: Movie;
-};
 export type Movie = {
   isAdded: boolean;
   isWatched: boolean;
@@ -18,9 +15,6 @@ export type Movie = {
   poster_path: string;
   release_date: string;
   title: string;
-};
-export type MovieList = {
-  userEmail: UserEmail;
 };
 export type MovieSortOptions =
   | typeof SELECT_MENU_OPTIONS[0]['label']
