@@ -2,29 +2,31 @@ import { useState, useEffect, useCallback } from 'react';
 import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseSetup';
 import { fullUrl } from '../../../api';
-import { TuserEmail, TMovie } from '../../../types';
+import { UserEmail, Movie } from '../../../types';
 import { useAuth } from '../../../auth/useAuth';
 
-export const getRawMovies = async (): Promise<TMovie[]> => {
+export const getRawMovies = async (): Promise<Movie[]> => {
   const { results } = await (await fetch(fullUrl)).json();
 
-  const movies: TMovie[] = results.map((movie: TMovie) => {
-    return { ...movie, isAdded: false };
+  const movies: Movie[] = results.map((movie: Movie) => {
+    return { ...movie, isAdded: false, isWatched: false };
   });
 
   return movies;
 };
 
-export const getSavedMovies = async (userEmail: TuserEmail) => {
+export const getSavedMovies = async (userEmail: UserEmail) => {
   const usersMoviesRef = await collection(db, `users/${userEmail}/movies`);
   const q = query(usersMoviesRef);
   const querySnapshot = await getDocs(q);
-  let savedMovies: Array<TMovie> = [];
+  let savedMovies: Array<Movie> = [];
   querySnapshot.forEach((doc) => {
-    const { id, isAdded, poster_path, release_date, title } = doc.data();
+    const { id, isAdded, poster_path, release_date, title, isWatched } =
+      doc.data();
     savedMovies.push({
       id,
       isAdded,
+      isWatched,
       poster_path,
       release_date,
       title,
@@ -35,8 +37,8 @@ export const getSavedMovies = async (userEmail: TuserEmail) => {
 };
 
 export const useFullMovies = () => {
-  const [rawMovies, setRawMovies] = useState<TMovie[]>([]);
-  const [savedMovies, setSavedMovies] = useState<TMovie[]>([]);
+  const [rawMovies, setRawMovies] = useState<Movie[]>([]);
+  const [savedMovies, setSavedMovies] = useState<Movie[]>([]);
   const [rawMoviesError, setRawMoviesError] = useState<string>();
   const [savedMoviesError, setSavedMoviesError] = useState<string>();
   const { user } = useAuth();
@@ -76,14 +78,15 @@ export const useFullMovies = () => {
     moviesToRender,
     rawMovies,
     rawMoviesError,
+    savedMovies,
     savedMoviesError,
     getFirestoreMovies,
   };
 };
 
 export const addSavedMoviesToList = (
-  rawMovies: TMovie[] | undefined,
-  usersSavedMovies: TMovie[] | undefined
+  rawMovies: Movie[] | undefined,
+  usersSavedMovies: Movie[] | undefined
 ) => {
   if (usersSavedMovies) {
     const moviesWithUsersSelections =

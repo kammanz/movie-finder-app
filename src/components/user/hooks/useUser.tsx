@@ -1,13 +1,13 @@
 import { useQueryClient } from 'react-query';
-import { TUser } from '../../../types';
+import { User } from '../../../types';
 import { queryKeys } from '../../../react-query/constants';
 import { clearStoredUser } from '../../../user-storage';
 
 export function useUser() {
   const queryClient = useQueryClient();
-  const user = queryClient.getQueryData(queryKeys.user) as TUser;
+  const user = queryClient.getQueryData(queryKeys.user) as User;
 
-  const updateUser = (newUser: TUser) => {
+  const updateUser = (newUser: User) => {
     queryClient.setQueryData(queryKeys.user, [newUser?.email]);
   };
 

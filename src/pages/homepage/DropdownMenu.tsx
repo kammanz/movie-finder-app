@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { TMovieSortOptions, TDropdownMenu } from '../../types';
+import React from 'react';
+import {
+  MovieSortOptions,
+  DropdownMenu as DropDownMenuType,
+} from '../../types';
 import { SELECT_MENU_OPTIONS } from '../../constants/selectMenuOptions';
 
 const DropdownMenu = ({
   menuSortType,
   onSortChange,
   onResetMovies,
-}: TDropdownMenu) => {
-  const handleChange = (newSortType: TMovieSortOptions) => {
+}: DropDownMenuType) => {
+  const handleChange = (newSortType: MovieSortOptions) => {
     onSortChange(newSortType);
   };
 
@@ -20,7 +23,7 @@ const DropdownMenu = ({
           data-testid="select"
           value={menuSortType}
           onChange={(event) =>
-            handleChange(event.target.value as TMovieSortOptions)
+            handleChange(event.target.value as MovieSortOptions)
           }>
           {SELECT_MENU_OPTIONS.map((option) => {
             return (
