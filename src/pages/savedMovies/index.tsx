@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Header from '../../components/header';
-import { removeFromFirestore, updateFireStore } from '../../utils/utils';
+import {
+  removeFromFirestore,
+  updateFireStore,
+  sortMovies,
+} from '../../utils/utils';
 import { MovieSortOptions, Movie } from '../../types';
 import { useAuth } from '../../auth/useAuth';
 import { getImgUrl } from '../../api';
@@ -36,7 +40,11 @@ const SavedMovies = () => {
     setMenuSortType(sortType);
   };
 
-  const movies = savedMovies.filter((movie) => !movie.isWatched);
+  const initialSavedMovies = useCallback(
+    () => savedMovies.filter((movie) => !movie.isWatched),
+    [savedMovies]
+  );
+  const movies = sortMovies(menuSortType, initialSavedMovies());
 
   return (
     <div>
