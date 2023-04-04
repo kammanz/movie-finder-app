@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { getImgUrl } from '../../api';
-import { sorMovies } from '../../utils/utils';
+import { sortMovies } from '../../utils/utils';
 import { addToFirestore, removeFromFirestore } from '../../utils/utils';
 import { useAuth } from '../../auth/useAuth';
 
@@ -33,14 +33,14 @@ const MovieList = () => {
     await getFirestoreMovies();
   };
 
-  let movies = moviesToRender && sorMovies(menuSortType, moviesToRender);
+  let movies = moviesToRender && sortMovies(menuSortType, moviesToRender);
 
   return (
     <div>
       <DropdownMenu
         menuSortType={menuSortType}
         onSortChange={handleSortChange}
-        onReseMovies={() => handleSortChange('newest')}
+        onResetMovies={() => handleSortChange('newest')}
       />
       <ul className={styles.container}>
         {movies?.length ? (

@@ -73,7 +73,7 @@ export const updateFireStore = async (movie: Movie, userEmail: UserEmail) => {
   }
 };
 
-export const sorMovies = (sortType: MovieSortOptions, movies: Movie[]) => {
+export const sortMovies = (sortType: MovieSortOptions, movies: Movie[]) => {
   let sorted;
   switch (sortType) {
     case SELECT_MENU_OPTIONS[0].value:
