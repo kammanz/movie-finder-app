@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { MovieSortOptions, DropdownMenu } from '../../types';
+import {
+  MovieSortOptions,
+  DropdownMenu as DropDownMenuType,
+} from '../../types';
 import { SELECT_MENU_OPTIONS } from '../../constants/selectMenuOptions';
 
 const DropdownMenu = ({
   menuSortType,
   onSortChange,
   onReseMovies,
-}: DropdownMenu) => {
+}: DropDownMenuType) => {
   const handleChange = (newSortType: MovieSortOptions) => {
     onSortChange(newSortType);
   };
