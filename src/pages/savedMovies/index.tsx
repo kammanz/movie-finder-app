@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import Header from '../../components/header';
 import {
   removeFromFirestore,
@@ -15,31 +15,24 @@ import styles from '../homepage/MovieList.module.css';
 const SavedMovies = () => {
   const [menuSortType, setMenuSortType] = useState<MovieSortOptions>('newest');
   const [savedMoviesError, setSavedMoviesError] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
   const { savedMovies, getFirestoreMovies } = useFullMovies();
   const { user } = useAuth();
 
   const handleRemove = async (movie: Movie) => {
     try {
-      setIsLoading(true);
       await removeFromFirestore(movie, user?.email);
       await getFirestoreMovies();
     } catch (error) {
       setSavedMoviesError(error as string);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleUpdate = async (movie: Movie) => {
     try {
-      setIsLoading(true);
       await updateFireStore(movie, user?.email);
       await getFirestoreMovies();
     } catch (error) {
       setSavedMoviesError(error as string);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -51,23 +44,7 @@ const SavedMovies = () => {
     () => savedMovies.filter((movie) => !movie.isWatched),
     [savedMovies]
   );
-  const movies: Movie[] | undefined = sortMovies(
-    menuSortType,
-    initialSavedMovies()
-  );
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        await getFirestoreMovies();
-      } catch (error) {
-        setSavedMoviesError(error as string);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getData();
-  }, []);
+  const movies = sortMovies(menuSortType, initialSavedMovies());
 
   return (
     <div>
@@ -78,36 +55,32 @@ const SavedMovies = () => {
         onSortChange={handleSortChange}
         onResetMovies={() => handleSortChange('newest')}
       />
-      {isLoading && <p>Loading...</p>}
-      {movies?.length === 0 && <p>You have no movies</p>}
-      {
-        <ul className={styles.container}>
-          {movies?.length ? (
-            movies.map((movie: Movie) => (
-              <li key={movie.id} className={styles.card}>
-                <img
-                  src={getImgUrl(movie.poster_path)}
-                  alt={`${movie.title} poster`}
-                />
-                <h6>{movie.title}</h6>
-                <p>Released: {movie.release_date}</p>
-                <button
-                  onClick={() => handleUpdate(movie)}
-                  disabled={movie.isWatched}>
-                  watched
-                </button>
-                <button
-                  disabled={!movie.isAdded}
-                  onClick={() => handleRemove(movie)}>
-                  Remove
-                </button>
-              </li>
-            ))
-          ) : (
-            <p></p>
-          )}
-        </ul>
-      }
+      <ul className={styles.container}>
+        {movies?.length ? (
+          movies.map((movie: Movie) => (
+            <li key={movie.id} className={styles.card}>
+              <img
+                src={getImgUrl(movie.poster_path)}
+                alt={`${movie.title} poster`}
+              />
+              <h6>{movie.title}</h6>
+              <p>Released: {movie.release_date}</p>
+              <button
+                onClick={() => handleUpdate(movie)}
+                disabled={movie.isWatched}>
+                watched
+              </button>
+              <button
+                disabled={!movie.isAdded}
+                onClick={() => handleRemove(movie)}>
+                Remove
+              </button>
+            </li>
+          ))
+        ) : (
+          <p>'Your list is empty'</p>
+        )}
+      </ul>
       {savedMoviesError && <p style={{ color: 'red' }}>{savedMoviesError}</p>}
     </div>
   );
