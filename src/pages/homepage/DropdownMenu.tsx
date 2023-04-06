@@ -15,8 +15,6 @@ const DropdownMenu = ({
     onSortChange(newSortType);
   };
 
-  console.log('isDisabled', isDisabled);
-
   return (
     <div style={{ backgroundColor: 'lightyellow' }}>
       <form>

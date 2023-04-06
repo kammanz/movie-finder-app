@@ -60,8 +60,6 @@ const SavedMovies = () => {
     initialSavedMovies()
   );
 
-  console.log('savedMovies.length', movies?.length);
-
   return (
     <div>
       <Header />
