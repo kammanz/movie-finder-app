@@ -4,7 +4,7 @@ import { useAuth } from '../../auth/useAuth';
 import { UserEmail } from '../../types';
 import Header from '../../components/header';
 import MovieList from './MovieList';
-import Navbar from './Navbar';
+import Navbar from '../../components/Navbar';
 
 const Homepage = () => {
   const { user } = useAuth();
@@ -18,7 +18,7 @@ const Homepage = () => {
     <>
       <Header />
       <Navbar />
-      <Link to="/savedMovies">My Saved Movies</Link>
+      {/* <Link to="/savedMovies">My Saved Movies</Link> */}
       <MovieList />
     </>
   );
