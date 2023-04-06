@@ -60,6 +60,8 @@ const SavedMovies = () => {
     initialSavedMovies()
   );
 
+  console.log('savedMovies.length', movies?.length);
+
   return (
     <div>
       <Header />
@@ -68,6 +70,7 @@ const SavedMovies = () => {
         menuSortType={menuSortType}
         onSortChange={handleSortChange}
         onResetMovies={() => handleSortChange('newest')}
+        isDisabled={movies?.length === 0}
       />
       {isLoading && <p>Loading...</p>}
       <ul className={styles.container}>

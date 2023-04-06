@@ -41,6 +41,7 @@ const MovieList = () => {
         menuSortType={menuSortType}
         onSortChange={handleSortChange}
         onResetMovies={() => handleSortChange('newest')}
+        isDisabled={movies?.length === 0}
       />
       <ul className={styles.container}>
         {movies?.length ? (
