@@ -56,7 +56,7 @@ const SavedMovies = () => {
         onResetMovies={() => handleSortChange('newest')}
       />
       <ul className={styles.container}>
-        {movies?.length ? (
+        {movies?.length &&
           movies.map((movie: Movie) => (
             <li key={movie.id} className={styles.card}>
               <img
@@ -76,10 +76,7 @@ const SavedMovies = () => {
                 Remove
               </button>
             </li>
-          ))
-        ) : (
-          <p>'Your list is empty'</p>
-        )}
+          ))}
       </ul>
       {savedMoviesError && <p style={{ color: 'red' }}>{savedMoviesError}</p>}
     </div>
