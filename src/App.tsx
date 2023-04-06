@@ -22,16 +22,16 @@ const App = () => {
           <Route path="/login" element={<Form formType="login" />} />
         </Routes>
         <Routes>
-          <React.Fragment>
+          {/* <React.Fragment> */}
+          {/* <Navbar /> */}
+          <Route element={<PrivateRoute />}>
             {/* <Navbar /> */}
-            <Route element={<PrivateRoute />}>
-              {/* <Navbar /> */}
-              <Route path="/homepage" element={<Homepage />} />
-              <Route path="/saved-movies" element={<SavedMovies />} />
+            <Route path="/homepage" element={<Homepage />} />
+            <Route path="/saved-movies" element={<SavedMovies />} />
 
-              {/* <Route path="/homepage" element={<Homepage />} /> */}
-            </Route>
-          </React.Fragment>
+            {/* <Route path="/homepage" element={<Homepage />} /> */}
+          </Route>
+          {/* </React.Fragment> */}
         </Routes>
         {/* <Routes>
           <Route element={<PrivateRoute />}>

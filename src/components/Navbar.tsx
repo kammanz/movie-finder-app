@@ -1,18 +1,35 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import styles from './Navbar.module.css';
 
 function Navbar() {
   return (
     <nav>
       <ul>
         <li>
-          <Link to="/homepage">Homepage</Link>
+          <NavLink
+            to="/homepage"
+            className={({ isActive }) =>
+              isActive ? styles.active : 'inactive'
+            }>
+            Homepage
+          </NavLink>
         </li>
         <li>
-          <Link to="/saved-movies">Saved Movies</Link>
+          <NavLink
+            to="/saved-movies"
+            className={({ isActive }) =>
+              isActive ? styles.active : 'inactive'
+            }>
+            Saved Movies
+          </NavLink>
         </li>
         <li>
-          <Link to="/watched-movies">Watched Movies</Link>
+          <NavLink
+            to="/watched-movies"
+            className={({ isActive }) => (isActive ? 'active' : 'inactive')}>
+            Watched Movies
+          </NavLink>
         </li>
       </ul>
     </nav>
