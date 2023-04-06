@@ -27,7 +27,7 @@ const App = () => {
             <Route element={<PrivateRoute />}>
               {/* <Navbar /> */}
               <Route path="/homepage" element={<Homepage />} />
-              <Route path="/savedMovies" element={<SavedMovies />} />
+              <Route path="/saved-movies" element={<SavedMovies />} />
 
               {/* <Route path="/homepage" element={<Homepage />} /> */}
             </Route>
