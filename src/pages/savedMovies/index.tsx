@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Header from '../../components/header';
 import {
   removeFromFirestore,
@@ -15,24 +15,35 @@ import styles from '../homepage/MovieList.module.css';
 const SavedMovies = () => {
   const [menuSortType, setMenuSortType] = useState<MovieSortOptions>('newest');
   const [savedMoviesError, setSavedMoviesError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const { savedMovies, getFirestoreMovies } = useFullMovies();
   const { user } = useAuth();
 
+  useEffect(() => {
+    setIsLoading(false);
+  }, [savedMovies]);
+
   const handleRemove = async (movie: Movie) => {
     try {
+      setIsLoading(true);
       await removeFromFirestore(movie, user?.email);
       await getFirestoreMovies();
     } catch (error) {
       setSavedMoviesError(error as string);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleUpdate = async (movie: Movie) => {
     try {
+      setIsLoading(true);
       await updateFireStore(movie, user?.email);
       await getFirestoreMovies();
     } catch (error) {
       setSavedMoviesError(error as string);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -44,7 +55,10 @@ const SavedMovies = () => {
     () => savedMovies.filter((movie) => !movie.isWatched),
     [savedMovies]
   );
-  const movies = sortMovies(menuSortType, initialSavedMovies());
+  const movies: Movie[] | undefined = sortMovies(
+    menuSortType,
+    initialSavedMovies()
+  );
 
   return (
     <div>
@@ -55,8 +69,9 @@ const SavedMovies = () => {
         onSortChange={handleSortChange}
         onResetMovies={() => handleSortChange('newest')}
       />
+      {isLoading && <p>Loading...</p>}
       <ul className={styles.container}>
-        {movies?.length &&
+        {movies &&
           movies.map((movie: Movie) => (
             <li key={movie.id} className={styles.card}>
               <img
