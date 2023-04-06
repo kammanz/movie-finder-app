@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Header from '../../components/header';
-import { removeFromFirestore, updateFireStore } from '../../utils/utils';
+import {
+  removeFromFirestore,
+  updateFireStore,
+  sortMovies,
+} from '../../utils/utils';
 import { MovieSortOptions, Movie } from '../../types';
 import { useAuth } from '../../auth/useAuth';
 import { getImgUrl } from '../../api';
@@ -11,24 +15,35 @@ import styles from '../homepage/MovieList.module.css';
 const SavedMovies = () => {
   const [menuSortType, setMenuSortType] = useState<MovieSortOptions>('newest');
   const [savedMoviesError, setSavedMoviesError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const { savedMovies, getFirestoreMovies } = useFullMovies();
   const { user } = useAuth();
 
+  useEffect(() => {
+    setIsLoading(false);
+  }, [savedMovies]);
+
   const handleRemove = async (movie: Movie) => {
     try {
+      setIsLoading(true);
       await removeFromFirestore(movie, user?.email);
       await getFirestoreMovies();
     } catch (error) {
       setSavedMoviesError(error as string);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleUpdate = async (movie: Movie) => {
     try {
+      setIsLoading(true);
       await updateFireStore(movie, user?.email);
       await getFirestoreMovies();
     } catch (error) {
       setSavedMoviesError(error as string);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -36,7 +51,14 @@ const SavedMovies = () => {
     setMenuSortType(sortType);
   };
 
-  const movies = savedMovies.filter((movie) => !movie.isWatched);
+  const initialSavedMovies = useCallback(
+    () => savedMovies.filter((movie) => !movie.isWatched),
+    [savedMovies]
+  );
+  const movies: Movie[] | undefined = sortMovies(
+    menuSortType,
+    initialSavedMovies()
+  );
 
   return (
     <div>
@@ -46,9 +68,11 @@ const SavedMovies = () => {
         menuSortType={menuSortType}
         onSortChange={handleSortChange}
         onResetMovies={() => handleSortChange('newest')}
+        isDisabled={movies?.length === 0}
       />
+      {isLoading && <p>Loading...</p>}
       <ul className={styles.container}>
-        {movies?.length ? (
+        {movies &&
           movies.map((movie: Movie) => (
             <li key={movie.id} className={styles.card}>
               <img
@@ -68,10 +92,7 @@ const SavedMovies = () => {
                 Remove
               </button>
             </li>
-          ))
-        ) : (
-          <p>'Your list is empty'</p>
-        )}
+          ))}
       </ul>
       {savedMoviesError && <p style={{ color: 'red' }}>{savedMoviesError}</p>}
     </div>

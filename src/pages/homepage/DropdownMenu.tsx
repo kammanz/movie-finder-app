@@ -9,6 +9,7 @@ const DropdownMenu = ({
   menuSortType,
   onSortChange,
   onResetMovies,
+  isDisabled,
 }: DropDownMenuType) => {
   const handleChange = (newSortType: MovieSortOptions) => {
     onSortChange(newSortType);
@@ -22,6 +23,7 @@ const DropdownMenu = ({
           id="sort-movies"
           data-testid="select"
           value={menuSortType}
+          disabled={isDisabled}
           onChange={(event) =>
             handleChange(event.target.value as MovieSortOptions)
           }>
@@ -34,7 +36,7 @@ const DropdownMenu = ({
           })}
         </select>
       </form>
-      <button type="button" onClick={onResetMovies}>
+      <button type="button" disabled={isDisabled} onClick={onResetMovies}>
         Show all movies
       </button>
     </div>

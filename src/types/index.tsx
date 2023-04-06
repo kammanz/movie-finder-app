@@ -6,6 +6,7 @@ export type DropdownMenu = {
   menuSortType: MovieSortOptions;
   onSortChange: (value: MovieSortOptions) => void;
   onResetMovies: () => void;
+  isDisabled: boolean;
 };
 export type UserEmail = string | null | undefined;
 export type Movie = {
