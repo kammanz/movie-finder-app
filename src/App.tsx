@@ -8,13 +8,11 @@ import Form from './pages/signin/Form';
 import Homepage from './pages/homepage';
 import PrivateRoute from './components/PrivateRoute';
 import SavedMovies from './pages/savedMovies';
-import Navbar from './components/navbar/Navbar';
 
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Container>
-        {/* <Navbar /> */}
         <Routes>
           <Route path="/" element={<Form formType="signup" />} />
         </Routes>
@@ -22,22 +20,11 @@ const App = () => {
           <Route path="/login" element={<Form formType="login" />} />
         </Routes>
         <Routes>
-          {/* <React.Fragment> */}
-          {/* <Navbar /> */}
           <Route element={<PrivateRoute />}>
-            {/* <Navbar /> */}
             <Route path="/homepage" element={<Homepage />} />
             <Route path="/saved-movies" element={<SavedMovies />} />
-
-            {/* <Route path="/homepage" element={<Homepage />} /> */}
           </Route>
-          {/* </React.Fragment> */}
         </Routes>
-        {/* <Routes>
-          <Route element={<PrivateRoute />}>
-            <Route path="/savedMovies" element={<SavedMovies />} />
-          </Route>
-        </Routes> */}
       </Container>
       <ReactQueryDevtools />
     </QueryClientProvider>
