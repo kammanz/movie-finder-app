@@ -8,7 +8,7 @@ import Form from './pages/signin/Form';
 import Homepage from './pages/homepage';
 import PrivateRoute from './components/PrivateRoute';
 import SavedMovies from './pages/savedMovies';
-import Navbar from './components/Navbar';
+import Navbar from './components/navbar/Navbar';
 
 const App = () => {
   return (
