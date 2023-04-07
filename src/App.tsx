@@ -22,11 +22,7 @@ const App = () => {
         <Routes>
           <Route element={<PrivateRoute />}>
             <Route path="/homepage" element={<Homepage />} />
-          </Route>
-        </Routes>
-        <Routes>
-          <Route element={<PrivateRoute />}>
-            <Route path="/savedMovies" element={<SavedMovies />} />
+            <Route path="/saved-movies" element={<SavedMovies />} />
           </Route>
         </Routes>
       </Container>
