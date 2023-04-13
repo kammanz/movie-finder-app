@@ -38,27 +38,46 @@ const Form: FC<Props> = ({ formType }) => {
           try {
             if (formType === 'signup') {
               console.log('in signup type');
-              await signup(email, password);
+              const result = await signup(email, password);
+              console.log('result: ', result);
               await setDoc(doc(db, 'users', email), {
                 movies: [],
               });
             } else if (formType === 'login') {
               console.log('in login type');
+              console.log('email', email);
+              console.log('password', password);
 
-              const user = await login(email, password);
+              // let user;
 
-              if (user) {
-                navigate('/homepage');
-              } else {
-                setErrorMessage('failed to login');
-              }
               // try {
-              //   await login(email, password);
-              //   navigate('/homepage');
+              //   user = await login(email, password);
+              //   console.log('in try, user', user);
               // } catch (error) {
+              //   console.log('here');
               //   console.error(error);
+              // }
+              // // const user = await login(email, password);
+              // console.log('user: ', user);
+
+              // if (user) {
+              //   navigate('/homepage');
+              // } else {
               //   setErrorMessage('failed to login');
               // }
+              try {
+                await login(email, password);
+
+                // if (user) {
+                //   navigate('/homepage');
+                // }
+                // navigate('/homepage');
+              } catch (error) {
+                console.error(error);
+                setErrorMessage('failed to login');
+              } finally {
+                navigate('/homepage');
+              }
             }
           } catch (error) {
             if (error instanceof Error) {

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
+import 'firebase/firestore';
 import { deleteUser } from 'firebase/auth';
 import { useAuth } from '../../auth/useAuth';
 // import { UserEmail } from '../../types';
 import { getAuth, reauthenticateWithCredential } from 'firebase/auth';
 import { auth } from '../../firebase/firebaseSetup';
+import { db } from '../../firebase/firebaseSetup';
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 import { clearStoredUser } from '../../user-storage';
 
@@ -22,8 +25,9 @@ const Header = () => {
 
   const auth = getAuth();
   const user = auth.currentUser;
+  const userEmail = auth.currentUser?.email;
 
-  // console.log('user', user?.uid);
+  // const db = firebase.firestore();
 
   const handleLogout = async () => {
     setError('');
@@ -55,11 +59,47 @@ const Header = () => {
         // await user.reauthenticateWithPopup(provider);
 
         reauthenticateWithCredential(user, credential).then(async () => {
-          await deleteUser(user).then(async () => {
-            //
-            await clearStoredUser();
-            navigate('/login');
-          });
+          // const userRef = await firebase
+          //   .firestore()
+          //   .collection('users')
+          //   .doc(user.email as string);
+
+          const userEmail = user?.email as string;
+          // const usersRef = await doc(db, 'users', userEmail);
+
+          // const docRef = doc(db, `users`, `${userEmail}`);
+
+          //           const docRef = firestore().collection('myCollection').doc('myDoc') as firestore.DocumentReference;
+          // docRef.delete();
+
+          try {
+            // await docRef.delete();
+            await deleteDoc(doc(db, 'users', `${userEmail}`));
+            try {
+              await deleteUser(user);
+              clearStoredUser();
+              navigate('/login');
+            } catch (error) {
+              console.error('error', error);
+              setError('failed to delete doc from firestore');
+            }
+          } catch (error) {
+            console.error('error', error);
+            setError('failed to retrieve doc from firestore');
+          }
+
+          // await updateDoc(usersRef, {
+          //   userEmail: deleteField(),
+          // });
+
+          // await userRef
+          //   .delete()
+          //   .then(function () {
+          //     console.log('document deleted');
+          //   })
+          //   .catch(function (error) {
+          //     console.error('error deleting document', error);
+          //   });
         });
       } catch (error) {
         console.error(error);

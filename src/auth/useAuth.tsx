@@ -35,11 +35,12 @@ export function useAuth(): UseAuth {
   };
 
   const login = async (email: string, password: string) => {
+    console.log('before return, email: ', email);
     return auth
       .signInWithEmailAndPassword(email, password)
       .then(
         firebase.auth().onAuthStateChanged((user) => {
-          console.log('onAuthStateChanged, login, user:', user?.email);
+          // console.log('onAuthStateChanged, login, user:', user?.email);
           setStoredUser(email);
           updateUser(user);
         })
