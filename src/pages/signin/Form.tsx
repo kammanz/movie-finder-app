@@ -37,14 +37,29 @@ const Form: FC<Props> = ({ formType }) => {
           setIsLoading(true);
           try {
             if (formType === 'signup') {
+              console.log('in signup type');
               await signup(email, password);
               await setDoc(doc(db, 'users', email), {
                 movies: [],
               });
             } else if (formType === 'login') {
-              await login(email, password);
+              console.log('in login type');
+
+              const user = await login(email, password);
+
+              if (user) {
+                navigate('/homepage');
+              } else {
+                setErrorMessage('failed to login');
+              }
+              // try {
+              //   await login(email, password);
+              //   navigate('/homepage');
+              // } catch (error) {
+              //   console.error(error);
+              //   setErrorMessage('failed to login');
+              // }
             }
-            navigate('/homepage');
           } catch (error) {
             if (error instanceof Error) {
               let errorString = error.message.slice(
@@ -92,8 +107,8 @@ const Form: FC<Props> = ({ formType }) => {
           {isPasswordVisible ? 'Hide Password' : 'Show Password'}
         </button>
         <br />
-        <p>{errors['password']?.message as unknown as string}</p>
-        <p>{errorMessage}</p>
+        <p>up here:{errors['password']?.message as unknown as string}</p>
+        <p>here: {errorMessage}</p>
         <br />
         <button
           data-testid="submit"
@@ -108,6 +123,7 @@ const Form: FC<Props> = ({ formType }) => {
             : 'Dont have an account? Click here to sign up'}
         </Link>
       </form>
+      {/* {errorMessage && <p>{errorMessage}</p>} */}
     </div>
   );
 };

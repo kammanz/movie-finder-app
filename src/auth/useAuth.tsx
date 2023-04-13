@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import firebase from 'firebase/compat/app';
-import { signOut } from 'firebase/auth';
+import { signOut, deleteUser } from 'firebase/auth';
 import { auth } from '../firebase/firebaseSetup';
 import { useUser } from '../components/user/hooks/useUser';
 import { setStoredUser } from '../user-storage';
@@ -39,16 +39,23 @@ export function useAuth(): UseAuth {
       .signInWithEmailAndPassword(email, password)
       .then(
         firebase.auth().onAuthStateChanged((user) => {
+          console.log('onAuthStateChanged, login, user:', user?.email);
           setStoredUser(email);
           updateUser(user);
         })
       )
-      .catch((err) => console.log('err'));
+      .catch((error) => console.error(error));
   };
   const logout = () => {
     clearUser();
     return signOut(auth);
   };
+
+  // const deleteAccount = () => {
+  //   deleteUser(user).then(()=> {
+  //     // user deleted
+  //   })
+  // }
 
   return { user, signup, login, logout };
 }
