@@ -113,3 +113,12 @@ export const updateCachedMovie = (
 };
 
 export const currentDate = new Date().toISOString().slice(0, 10);
+
+export const parseFirebaseError = (error: Error) => {
+  let errorString = error.message.slice(
+    error.message.indexOf(' '),
+    error.message.indexOf('(')
+  );
+
+  return errorString;
+};

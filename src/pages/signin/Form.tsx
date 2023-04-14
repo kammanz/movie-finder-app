@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import { useAuth } from '../../auth/useAuth';
 import { db } from '../../firebase/firebaseSetup';
+import { parseFirebaseError } from '../../utils/utils';
 
 export type Props = {
   formType: string;
@@ -12,7 +13,7 @@ export type Props = {
 const Form: FC<Props> = ({ formType }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState('');
 
   const {
     formState: { errors },
@@ -46,28 +47,17 @@ const Form: FC<Props> = ({ formType }) => {
             } else if (formType === 'login') {
               console.log('in login type');
               try {
-                const res = await login(email, password);
-                console.log('res', res);
-
-                if (res) {
-                  console.log('in if');
-                  navigate('/homepage');
-                }
+                await login(email, password);
+                navigate('/homepage');
               } catch (error) {
-                console.log('in catch, console.log');
-                console.error('in catch, console.error: ', error);
-                alert(error);
-                setErrorMessage('failed to login');
-              } finally {
+                if (error instanceof Error) {
+                  setError(parseFirebaseError(error));
+                }
               }
             }
           } catch (error) {
             if (error instanceof Error) {
-              let errorString = error.message.slice(
-                error.message.indexOf(' '),
-                error.message.indexOf('(')
-              );
-              setErrorMessage(errorString);
+              setError(parseFirebaseError(error));
             }
           }
           setIsLoading(false);
@@ -81,10 +71,10 @@ const Form: FC<Props> = ({ formType }) => {
             required: 'Email required',
           })}
           placeholder="Enter your email"
-          onChange={() => errorMessage && setErrorMessage('')}
+          onChange={() => error && setError('')}
         />
         <p>{errors['email']?.message as unknown as string}</p>
-        <p>{formType === 'signup' && errorMessage}</p>
+        <p>{formType === 'signup' && error}</p>
         <br />
         <label htmlFor="password">Password</label>
         <br />
@@ -100,7 +90,7 @@ const Form: FC<Props> = ({ formType }) => {
             },
           })}
           placeholder="Enter your password"
-          onChange={() => errorMessage && setErrorMessage('')}
+          onChange={() => error && setError('')}
         />
         <button
           type="button"
@@ -109,7 +99,7 @@ const Form: FC<Props> = ({ formType }) => {
         </button>
         <br />
         <p>up here:{errors['password']?.message as unknown as string}</p>
-        <p>here: {errorMessage}</p>
+        <p>here: {error}</p>
         <br />
         <button
           data-testid="submit"
@@ -124,7 +114,7 @@ const Form: FC<Props> = ({ formType }) => {
             : 'Dont have an account? Click here to sign up'}
         </Link>
       </form>
-      {/* {errorMessage && <p>{errorMessage}</p>} */}
+      {/* {error && <p>{errorMessage}</p>} */}
     </div>
   );
 };
