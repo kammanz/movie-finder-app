@@ -35,18 +35,54 @@ export function useAuth(): UseAuth {
   };
 
   const login = async (email: string, password: string) => {
-    console.log('before return, email: ', email);
-    return auth
-      .signInWithEmailAndPassword(email, password)
-      .then(
-        firebase.auth().onAuthStateChanged((user) => {
-          // console.log('onAuthStateChanged, login, user:', user?.email);
-          setStoredUser(email);
-          updateUser(user);
-        })
-      )
-      .catch((error) => console.error(error));
+    const result = await auth.signInWithEmailAndPassword(email, password);
+    console.log('result: ', result);
+    console.log('typeof result: ', typeof result);
+    setStoredUser(email);
+    updateUser(result.user);
+    return result;
   };
+
+  //   const login = async (email: string, password: string) => {
+  //     console.log('before return, email: ', email);
+  //     // return auth
+  //     //   .signInWithEmailAndPassword(email, password)
+  //     //   .then(
+  //     //     firebase.auth().onAuthStateChanged((user) => {
+  //     //       console.log('onAuthStateChanged, login, user:', user?.email);
+  //     //       setStoredUser(email);
+  //     //       updateUser(user);
+  //     //     })
+  //     //   )
+  //     //   .catch((error) => console.error(error));
+
+  //       try {
+  //          await auth
+  //         .signInWithEmailAndPassword(email, password)
+
+  //         try {
+
+  //           await firebase.auth().onAuthStateChanged((user) => {
+  //             console.log('onAuthStateChanged, login, user:', user?.email);
+  //             setStoredUser(email);
+  //             updateUser(user);
+  //           })
+  //         } catch {
+  // console.log('');
+  //         }
+
+  //         catch (error) {
+  //           console.log('error');
+  //         }
+
+  //         // .then(
+  //         //   firebase.auth().onAuthStateChanged((user) => {
+  //         //     console.log('onAuthStateChanged, login, user:', user?.email);
+  //         //     setStoredUser(email);
+  //         //     updateUser(user);
+  //         //   })
+
+  //   };
   const logout = () => {
     clearUser();
     return signOut(auth);

@@ -45,38 +45,20 @@ const Form: FC<Props> = ({ formType }) => {
               });
             } else if (formType === 'login') {
               console.log('in login type');
-              console.log('email', email);
-              console.log('password', password);
-
-              // let user;
-
-              // try {
-              //   user = await login(email, password);
-              //   console.log('in try, user', user);
-              // } catch (error) {
-              //   console.log('here');
-              //   console.error(error);
-              // }
-              // // const user = await login(email, password);
-              // console.log('user: ', user);
-
-              // if (user) {
-              //   navigate('/homepage');
-              // } else {
-              //   setErrorMessage('failed to login');
-              // }
               try {
-                await login(email, password);
+                const res = await login(email, password);
+                console.log('res', res);
 
-                // if (user) {
-                //   navigate('/homepage');
-                // }
-                // navigate('/homepage');
+                if (res) {
+                  console.log('in if');
+                  navigate('/homepage');
+                }
               } catch (error) {
-                console.error(error);
+                console.log('in catch, console.log');
+                console.error('in catch, console.error: ', error);
+                alert(error);
                 setErrorMessage('failed to login');
               } finally {
-                navigate('/homepage');
               }
             }
           } catch (error) {
