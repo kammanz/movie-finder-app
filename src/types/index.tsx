@@ -27,3 +27,5 @@ export type UseUser = {
   updateUser: (user: User) => void;
   clearUser: () => void;
 };
+
+export type FormType = 'signup' | 'login';

@@ -1,16 +1,13 @@
-import React, { useState, FC } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import { useAuth } from '../../auth/useAuth';
 import { db } from '../../firebase/firebaseSetup';
 import { parseFirebaseError } from '../../utils/utils';
+import { FormType } from '../../types';
 
-export type Props = {
-  formType: string;
-};
-
-const Form: FC<Props> = ({ formType }) => {
+const Form = ({ formType }: { formType: FormType }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [error, setError] = useState('');
