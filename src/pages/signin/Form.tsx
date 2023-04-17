@@ -35,18 +35,19 @@ const Form = ({ formType }: { formType: FormType }) => {
           setIsLoading(true);
           try {
             if (formType === 'signup') {
-              console.log('in signup type');
-              const result = await signup(email, password);
-              console.log('result: ', result);
-              await setDoc(doc(db, 'users', email), {
-                movies: [],
-              });
-              // navigate('/homepage');
+              try {
+                await signup(email, password);
+                await setDoc(doc(db, 'users', email), {
+                  movies: [],
+                });
+              } catch (error) {
+                if (error instanceof Error) {
+                  setError(parseFirebaseError(error));
+                }
+              }
             } else if (formType === 'login') {
-              console.log('in login type');
               try {
                 await login(email, password);
-                // navigate('/homepage');
               } catch (error) {
                 if (error instanceof Error) {
                   setError(parseFirebaseError(error));
