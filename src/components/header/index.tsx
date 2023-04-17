@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import firebase from 'firebase/compat/app';
-import 'firebase/firestore';
-import {
-  getAuth,
-  deleteUser,
-  reauthenticateWithCredential,
-} from 'firebase/auth';
-import { db } from '../../firebase/firebaseSetup';
-import { doc, deleteDoc } from 'firebase/firestore';
 import { useAuth } from '../../auth/useAuth';
-import { clearStoredUser } from '../../user-storage';
 
 const styles = {
   display: 'flex',
@@ -20,10 +10,9 @@ const styles = {
 
 const Header = () => {
   const [error, setError] = useState('');
-  const { logout } = useAuth();
+  const [confirmation, setConfirmation] = useState('');
+  const { user, logout, deleteAccount } = useAuth();
   const navigate = useNavigate();
-  const auth = getAuth();
-  const user = auth.currentUser;
 
   const handleLogout = async () => {
     setError('');
@@ -35,46 +24,35 @@ const Header = () => {
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (password: string) => {
+    setError('');
     if (user) {
       try {
-        const password = prompt(
-          'Please enter your password to confirm account deletion:'
-        );
-        const credential = firebase.auth.EmailAuthProvider.credential(
-          user.email as string,
-          password as string
-        );
-
-        reauthenticateWithCredential(user, credential).then(async () => {
-          const userEmail = user?.email as string;
-          try {
-            await deleteDoc(doc(db, 'users', `${userEmail}`));
-            try {
-              await deleteUser(user);
-              clearStoredUser();
-              navigate('/login');
-            } catch (error) {
-              console.error('error', error);
-              setError('failed to delete doc from firestore');
-            }
-          } catch (error) {
-            console.error('error', error);
-            setError('failed to retrieve doc from firestore');
-          }
-        });
+        await deleteAccount(user, password);
+        setConfirmation('account deleted');
+        setTimeout(() => navigate('/login'), 2000);
       } catch (error) {
-        console.error(error);
-        setError('failed to delete account');
+        console.error('error: ', error);
+        setError('Failed to delete account');
       }
     }
+  };
+
+  const handleDeleteRequest = () => {
+    const password = prompt(
+      'Please enter your password to confirm account deletion:'
+    );
+
+    password && handleDelete(password);
   };
 
   return (
     <header style={styles}>
       <h1>Welcome, {user?.email}</h1>
+      {confirmation && <p>{confirmation}</p>}
       <button onClick={handleLogout}>Logout</button>
-      <button onClick={handleDelete}>Delete Account</button>
+      <button onClick={handleDeleteRequest}>Delete Account</button>
+
       {error && <p>{error}</p>}
     </header>
   );

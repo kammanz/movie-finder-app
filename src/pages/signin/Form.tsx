@@ -41,17 +41,19 @@ const Form = ({ formType }: { formType: FormType }) => {
               await setDoc(doc(db, 'users', email), {
                 movies: [],
               });
+              // navigate('/homepage');
             } else if (formType === 'login') {
               console.log('in login type');
               try {
                 await login(email, password);
-                navigate('/homepage');
+                // navigate('/homepage');
               } catch (error) {
                 if (error instanceof Error) {
                   setError(parseFirebaseError(error));
                 }
               }
             }
+            navigate('/homepage');
           } catch (error) {
             if (error instanceof Error) {
               setError(parseFirebaseError(error));
@@ -69,6 +71,7 @@ const Form = ({ formType }: { formType: FormType }) => {
           })}
           placeholder="Enter your email"
           onChange={() => error && setError('')}
+          onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
         />
         <p>{errors['email']?.message as unknown as string}</p>
         <p>{formType === 'signup' && error}</p>
@@ -95,8 +98,8 @@ const Form = ({ formType }: { formType: FormType }) => {
           {isPasswordVisible ? 'Hide Password' : 'Show Password'}
         </button>
         <br />
-        <p>up here:{errors['password']?.message as unknown as string}</p>
-        <p>here: {error}</p>
+        <p>Password error:{errors['password']?.message as unknown as string}</p>
+        <p>Firebase error: {error}</p>
         <br />
         <button
           data-testid="submit"
@@ -111,7 +114,6 @@ const Form = ({ formType }: { formType: FormType }) => {
             : 'Dont have an account? Click here to sign up'}
         </Link>
       </form>
-      {/* {error && <p>{errorMessage}</p>} */}
     </div>
   );
 };
