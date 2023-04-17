@@ -11,7 +11,7 @@ const styles = {
 const Header = () => {
   const [error, setError] = useState('');
   const [confirmation, setConfirmation] = useState('');
-  const { user, logout, deleteAccount } = useAuth();
+  const { user, logout, deleteUserAccount } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -28,7 +28,7 @@ const Header = () => {
     setError('');
     if (user) {
       try {
-        await deleteAccount(user, password);
+        await deleteUserAccount(user, password);
         setConfirmation('account deleted');
         setTimeout(() => navigate('/login'), 2000);
       } catch (error) {
