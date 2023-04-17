@@ -1,4 +1,4 @@
-import { newReleases } from './utils';
+import { newReleases } from '.';
 
 // type Array = {
 //   date: Date;

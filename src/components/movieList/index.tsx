@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { getImgUrl } from '../../api';
-import { sortMovies } from '../../utils/utils';
-import { addToFirestore, removeFromFirestore } from '../../utils/utils';
+import { sortMovies } from '../../utils';
+import { addToFirestore, removeFromFirestore } from '../../utils';
 import { useAuth } from '../../auth/useAuth';
 
 import { MovieSortOptions, Movie } from '../../types';
-import { useFullMovies } from './hooks';
-import DropdownMenu from './DropdownMenu';
+import { useFullMovies } from '../../pages/homepage/hooks';
+import DropdownMenu from '../../pages/homepage/DropdownMenu';
 import styles from './MovieList.module.css';
 
 const MovieList = () => {

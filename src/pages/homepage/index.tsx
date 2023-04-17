@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../../components/header';
-import MovieList from './MovieList';
+import MovieList from '../../components/movieList/MovieList2';
 import Navbar from '../../components/navbar/Navbar';
 
 const Homepage = () => {

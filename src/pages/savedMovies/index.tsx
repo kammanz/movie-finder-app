@@ -1,17 +1,13 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import Header from '../../components/header';
-import {
-  removeFromFirestore,
-  updateFireStore,
-  sortMovies,
-} from '../../utils/utils';
+import { removeFromFirestore, updateFireStore, sortMovies } from '../../utils';
 import { MovieSortOptions, Movie } from '../../types';
 import { useAuth } from '../../auth/useAuth';
 import { getImgUrl } from '../../api';
 import { useFullMovies } from '../homepage/hooks';
 import DropdownMenu from '../homepage/DropdownMenu';
 import Navbar from '../../components/navbar/Navbar';
-import styles from '../homepage/MovieList.module.css';
+import styles from '../../components/movieList/MovieList.module.css';
 
 const SavedMovies = () => {
   const [menuSortType, setMenuSortType] = useState<MovieSortOptions>('newest');

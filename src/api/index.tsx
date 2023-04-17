@@ -1,5 +1,5 @@
 import { baseUrl, baseImgUrl, genreIds, apiKey } from './constants';
-import { currentDate } from '../utils/utils';
+import { currentDate } from '../utils';
 
 export const getImgUrl = (imgPath: string) => `${baseImgUrl}${imgPath}`;
 
