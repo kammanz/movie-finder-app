@@ -1,10 +1,4 @@
-import {
-  doc,
-  setDoc,
-  deleteDoc,
-  updateDoc,
-  // deleteUser,
-} from 'firebase/firestore';
+import { doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseSetup';
 import { subDays, compareAsc } from 'date-fns';
 import { Movie, MovieSortOptions, UserEmail } from '../types';
@@ -78,8 +72,6 @@ export const updateFireStore = async (movie: Movie, userEmail: UserEmail) => {
     console.log('', error);
   }
 };
-
-export const deleteFirestoreAccount = async () => {};
 
 export const sortMovies = (sortType: MovieSortOptions, movies: Movie[]) => {
   let sorted;
