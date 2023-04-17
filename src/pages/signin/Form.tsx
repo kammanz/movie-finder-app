@@ -1,18 +1,16 @@
-import React, { useState, FC } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import { useAuth } from '../../auth/useAuth';
 import { db } from '../../firebase/firebaseSetup';
+import { parseFirebaseError } from '../../utils/utils';
+import { FormType } from '../../types';
 
-export type Props = {
-  formType: string;
-};
-
-const Form: FC<Props> = ({ formType }) => {
+const Form = ({ formType }: { formType: FormType }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState('');
 
   const {
     formState: { errors },
@@ -37,21 +35,29 @@ const Form: FC<Props> = ({ formType }) => {
           setIsLoading(true);
           try {
             if (formType === 'signup') {
-              await signup(email, password);
-              await setDoc(doc(db, 'users', email), {
-                movies: [],
-              });
+              try {
+                await signup(email, password);
+                await setDoc(doc(db, 'users', email), {
+                  movies: [],
+                });
+              } catch (error) {
+                if (error instanceof Error) {
+                  setError(parseFirebaseError(error));
+                }
+              }
             } else if (formType === 'login') {
-              await login(email, password);
+              try {
+                await login(email, password);
+              } catch (error) {
+                if (error instanceof Error) {
+                  setError(parseFirebaseError(error));
+                }
+              }
             }
             navigate('/homepage');
           } catch (error) {
             if (error instanceof Error) {
-              let errorString = error.message.slice(
-                error.message.indexOf(' '),
-                error.message.indexOf('(')
-              );
-              setErrorMessage(errorString);
+              setError(parseFirebaseError(error));
             }
           }
           setIsLoading(false);
@@ -65,10 +71,11 @@ const Form: FC<Props> = ({ formType }) => {
             required: 'Email required',
           })}
           placeholder="Enter your email"
-          onChange={() => errorMessage && setErrorMessage('')}
+          onChange={() => error && setError('')}
+          onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
         />
         <p>{errors['email']?.message as unknown as string}</p>
-        <p>{formType === 'signup' && errorMessage}</p>
+        <p>{formType === 'signup' && error}</p>
         <br />
         <label htmlFor="password">Password</label>
         <br />
@@ -84,7 +91,7 @@ const Form: FC<Props> = ({ formType }) => {
             },
           })}
           placeholder="Enter your password"
-          onChange={() => errorMessage && setErrorMessage('')}
+          onChange={() => error && setError('')}
         />
         <button
           type="button"
@@ -92,8 +99,8 @@ const Form: FC<Props> = ({ formType }) => {
           {isPasswordVisible ? 'Hide Password' : 'Show Password'}
         </button>
         <br />
-        <p>{errors['password']?.message as unknown as string}</p>
-        <p>{errorMessage}</p>
+        <p>Password error:{errors['password']?.message as unknown as string}</p>
+        <p>Firebase error: {error}</p>
         <br />
         <button
           data-testid="submit"

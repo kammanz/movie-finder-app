@@ -12,7 +12,6 @@ export function useUser() {
   };
 
   const clearUser = () => {
-    queryClient.setQueryData(queryKeys.user, null);
     clearStoredUser();
   };
 
