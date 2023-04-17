@@ -4,7 +4,7 @@ import { Container } from 'react-bootstrap';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { queryClient } from './react-query/queryClient';
-import Form from './components/form/Form3';
+import Form from './components/form';
 import Homepage from './pages/homepage';
 import PrivateRoute from './components/PrivateRoute';
 import SavedMovies from './pages/savedMovies';

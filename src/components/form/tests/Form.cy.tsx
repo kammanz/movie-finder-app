@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from '../Form3';
+import Form from '../index';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
 it('mounts', async () => {

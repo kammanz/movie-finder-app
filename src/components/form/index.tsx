@@ -6,6 +6,7 @@ import { useAuth } from '../../auth/useAuth';
 import { db } from '../../firebase/firebaseSetup';
 import { parseFirebaseError } from '../../utils/utils';
 import { FormType } from '../../types';
+import LoadingOverlay from '../overlay';
 
 const Form = ({ formType }: { formType: FormType }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -46,6 +47,7 @@ const Form = ({ formType }: { formType: FormType }) => {
       }
       navigate('/homepage');
     } catch (e) {
+      console.error('e: ', e);
       if (e instanceof Error) {
         setError(parseFirebaseError(e));
       }
@@ -110,6 +112,7 @@ const Form = ({ formType }: { formType: FormType }) => {
             : 'Dont have an account? Click here to sign up'}
         </Link>
       </form>
+      {isLoading && <LoadingOverlay />}
     </div>
   );
 };

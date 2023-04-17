@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Form from '../Form3';
+import Form from '../index';
 import userEvent from '@testing-library/user-event';
 
 const mockNavigate = jest.fn();
