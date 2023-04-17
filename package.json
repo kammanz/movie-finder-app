@@ -20,6 +20,7 @@
     "react-dom": "^18.2.0",
     "react-firebase-hooks": "^5.1.1",
     "react-hook-form": "^7.41.5",
+    "react-icons": "^4.8.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
@@ -74,5 +75,5 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }  
+  }
 }
