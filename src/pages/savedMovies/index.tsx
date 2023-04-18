@@ -7,7 +7,7 @@ import { getImgUrl } from '../../api';
 import { useFullMovies } from '../homepage/hooks';
 import DropdownMenu from '../../components/dropdown';
 import Navbar from '../../components/navbar/Navbar';
-import styles from '../../components/movieList/MovieList.module.css';
+import styles from '../../components/movieList/index.module.css';
 
 const SavedMovies = () => {
   const [sortType, setsortType] = useState<MovieSortOptions>('newest');
