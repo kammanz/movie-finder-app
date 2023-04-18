@@ -5,7 +5,7 @@ import { MovieSortOptions, Movie } from '../../types';
 import { useAuth } from '../../auth/useAuth';
 import { getImgUrl } from '../../api';
 import { useFullMovies } from '../homepage/hooks';
-import DropdownMenu from '../homepage/DropdownMenu';
+import DropdownMenu from '../../components/dropdown';
 import Navbar from '../../components/navbar/Navbar';
 import styles from '../../components/movieList/MovieList.module.css';
 

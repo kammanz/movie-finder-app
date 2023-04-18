@@ -4,7 +4,7 @@ import { MovieSortOptions } from '../../types';
 import Header from '../../components/header';
 import MovieList from '../../components/movieList/MovieList2';
 import Navbar from '../../components/navbar/Navbar';
-import DropdownMenu from './DropdownMenu';
+import DropdownMenu from '../../components/dropdown';
 
 const Homepage = () => {
   const [sortType, setSortType] = useState<MovieSortOptions>('newest');
