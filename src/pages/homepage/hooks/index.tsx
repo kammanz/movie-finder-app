@@ -46,11 +46,9 @@ export const useFullMovies = () => {
 
   const getFirestoreMovies = useCallback(async () => {
     try {
-      console.log('getFirestoreMovies, in try, good');
       const result = await getSavedMovies(userEmail);
       setSavedMovies(result);
     } catch (e) {
-      console.log('getFirestoreMovies, in catch, bad');
       console.error(e);
       throw Error;
     }

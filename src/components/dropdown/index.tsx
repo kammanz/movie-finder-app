@@ -12,7 +12,6 @@ const DropdownMenu = ({
   isDisabled,
 }: DropDownMenuType) => {
   const handleChange = (newSortType: MovieSortOptions) => {
-    console.log('1. in DropdownMenu, in handleChange, good');
     onSortChange(newSortType);
   };
 
