@@ -10,7 +10,7 @@ import Navbar from '../../components/navbar/Navbar';
 import styles from '../../components/movieList/MovieList.module.css';
 
 const SavedMovies = () => {
-  const [menuSortType, setMenuSortType] = useState<MovieSortOptions>('newest');
+  const [sortType, setsortType] = useState<MovieSortOptions>('newest');
   const [savedMoviesError, setSavedMoviesError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const { savedMovies, getFirestoreMovies } = useFullMovies();
@@ -45,7 +45,7 @@ const SavedMovies = () => {
   };
 
   const handleSortChange = (sortType: MovieSortOptions) => {
-    setMenuSortType(sortType);
+    setsortType(sortType);
   };
 
   const initialSavedMovies = useCallback(
@@ -53,7 +53,7 @@ const SavedMovies = () => {
     [savedMovies]
   );
   const movies: Movie[] | undefined = sortMovies(
-    menuSortType,
+    sortType,
     initialSavedMovies()
   );
 
@@ -62,7 +62,7 @@ const SavedMovies = () => {
       <Header />
       <Navbar />
       <DropdownMenu
-        menuSortType={menuSortType}
+        sortType={sortType}
         onSortChange={handleSortChange}
         onResetMovies={() => handleSortChange('newest')}
         isDisabled={movies?.length === 0}

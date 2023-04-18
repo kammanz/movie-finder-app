@@ -45,13 +45,15 @@ export const useFullMovies = () => {
   const userEmail = user?.email;
 
   const getFirestoreMovies = useCallback(async () => {
-    getSavedMovies(userEmail) // 'dan.page@gmail.com'
-      .then((savedMovies) => {
-        setSavedMovies(savedMovies);
-      })
-      .catch((savedMoviesError) => {
-        setSavedMoviesError(savedMoviesError);
-      });
+    try {
+      console.log('getFirestoreMovies, in try, good');
+      const result = await getSavedMovies(userEmail);
+      setSavedMovies(result);
+    } catch (e) {
+      console.log('getFirestoreMovies, in catch, bad');
+      console.error(e);
+      throw Error;
+    }
   }, [userEmail]);
 
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled
@@ -98,6 +100,7 @@ export const addSavedMoviesToList = (
             return { ...rawMovie, isAdded: isMatched };
           })
         : rawMovies;
+
     return moviesWithUsersSelections;
   }
 };

@@ -1,8 +1,12 @@
 import React from 'react';
 import { FaSpinner } from 'react-icons/fa';
 
-const LoadingOverlay = () => {
-  return (
+interface Props {
+  isLoading: boolean;
+}
+
+const LoadingOverlay = ({ isLoading }: Props) => {
+  return isLoading ? (
     <div
       style={{
         position: 'fixed',
@@ -18,7 +22,7 @@ const LoadingOverlay = () => {
       }}>
       <FaSpinner size={50} color="black" />
     </div>
-  );
+  ) : null;
 };
 
 export default LoadingOverlay;

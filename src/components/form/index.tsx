@@ -112,7 +112,7 @@ const Form = ({ formType }: { formType: FormType }) => {
             : 'Dont have an account? Click here to sign up'}
         </Link>
       </form>
-      {isLoading && <LoadingOverlay />}
+      <LoadingOverlay isLoading={isLoading} />
     </div>
   );
 };
