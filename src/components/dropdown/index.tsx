@@ -6,7 +6,7 @@ import {
 import { SELECT_MENU_OPTIONS } from '../../constants/selectMenuOptions';
 
 const DropdownMenu = ({
-  menuSortType,
+  sortType,
   onSortChange,
   onResetMovies,
   isDisabled,
@@ -22,7 +22,7 @@ const DropdownMenu = ({
         <select
           id="sort-movies"
           data-testid="select"
-          value={menuSortType}
+          value={sortType}
           disabled={isDisabled}
           onChange={(event) =>
             handleChange(event.target.value as MovieSortOptions)

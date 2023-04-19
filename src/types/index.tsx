@@ -3,7 +3,7 @@ import { SELECT_MENU_OPTIONS } from '../constants/selectMenuOptions';
 
 export type ClickType = 'add' | 'remove';
 export type DropdownMenu = {
-  menuSortType: MovieSortOptions;
+  sortType: MovieSortOptions;
   onSortChange: (value: MovieSortOptions) => void;
   onResetMovies: () => void;
   isDisabled: boolean;
@@ -27,5 +27,16 @@ export type UseUser = {
   updateUser: (user: User) => void;
   clearUser: () => void;
 };
-
 export type FormType = 'signup' | 'login';
+
+export type MovieListProps = {
+  sortType: MovieSortOptions;
+  listType: 'databaseMovies' | 'usersSavedMovies';
+};
+
+export type CardProps = {
+  movie: Movie;
+  handleAdd: (movie: Movie) => void;
+  handleRemove: (movie: Movie) => void;
+  listType: 'databaseMovies' | 'usersSavedMovies';
+};

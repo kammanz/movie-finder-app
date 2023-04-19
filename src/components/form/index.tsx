@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import { useAuth } from '../../auth/useAuth';
 import { db } from '../../firebase/firebaseSetup';
-import { parseFirebaseError } from '../../utils/utils';
+import { parseFirebaseError } from '../../utils';
 import { FormType } from '../../types';
 import LoadingOverlay from '../overlay';
 
@@ -112,7 +112,7 @@ const Form = ({ formType }: { formType: FormType }) => {
             : 'Dont have an account? Click here to sign up'}
         </Link>
       </form>
-      {isLoading && <LoadingOverlay />}
+      <LoadingOverlay isLoading={isLoading} />
     </div>
   );
 };

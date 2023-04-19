@@ -69,7 +69,7 @@ export const updateFireStore = async (movie: Movie, userEmail: UserEmail) => {
       isWatched: true,
     });
   } catch (error) {
-    console.log('', error);
+    console.error('error: ', error);
   }
 };
 
