@@ -8,7 +8,7 @@ export type DropdownMenu = {
   onResetMovies: () => void;
   isDisabled: boolean;
 };
-export type UserEmail = string | null | undefined;
+export type UserId = string | null | undefined;
 export type Movie = {
   isAdded: boolean;
   isWatched: boolean;
@@ -22,11 +22,6 @@ export type MovieSortOptions =
   | typeof SELECT_MENU_OPTIONS[1]['label']
   | typeof SELECT_MENU_OPTIONS[2]['label'];
 export type User = firebase.User | null;
-export type UseUser = {
-  user: User;
-  updateUser: (user: User) => void;
-  clearUser: () => void;
-};
 export type FormType = 'signup' | 'login';
 
 export type MovieListProps = {

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { collection, query, getDocs } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseSetup';
 import { fullUrl } from '../../../api';
-import { UserEmail, Movie } from '../../../types';
+import { UserId, Movie } from '../../../types';
 import { useAuth } from '../../../auth/useAuth';
 
 export const getRawMovies = async (): Promise<Movie[]> => {
@@ -15,8 +15,8 @@ export const getRawMovies = async (): Promise<Movie[]> => {
   return movies;
 };
 
-export const getSavedMovies = async (userEmail: UserEmail) => {
-  const usersMoviesRef = await collection(db, `users/${userEmail}/movies`);
+export const getSavedMovies = async (UserId: UserId) => {
+  const usersMoviesRef = await collection(db, `users/${UserId}/movies`);
   const q = query(usersMoviesRef);
   const querySnapshot = await getDocs(q);
   let savedMovies: Array<Movie> = [];
@@ -42,17 +42,16 @@ export const useFullMovies = () => {
   const [rawMoviesError, setRawMoviesError] = useState<string>();
   const [savedMoviesError, setSavedMoviesError] = useState<string>();
   const { user } = useAuth();
-  const userEmail = user?.email;
 
   const getFirestoreMovies = useCallback(async () => {
     try {
-      const result = await getSavedMovies(userEmail);
+      const result = await getSavedMovies(user?.uid);
       setSavedMovies(result);
     } catch (e) {
       console.error(e);
       throw Error;
     }
-  }, [userEmail]);
+  }, [user?.uid]);
 
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseSetup';
 import { subDays, compareAsc } from 'date-fns';
-import { Movie, MovieSortOptions, UserEmail } from '../types';
+import { Movie, MovieSortOptions, UserId } from '../types';
 import { SELECT_MENU_OPTIONS } from '../constants/selectMenuOptions';
 
 export const sortByProperty = (
@@ -36,9 +36,9 @@ export const newReleases = (movies: Array<Movie>, numberOfDaysAgo: number) => {
   return filteredMovies;
 };
 
-export const addToFirestore = async (movie: Movie, userEmail: UserEmail) => {
+export const addToFirestore = async (movie: Movie, userId: UserId) => {
   try {
-    await setDoc(doc(db, `users/${userEmail}/movies/${movie.id}`), {
+    await setDoc(doc(db, `users/${userId}/movies/${movie.id}`), {
       id: movie.id,
       poster_path: movie.poster_path,
       release_date: movie.release_date,
@@ -51,20 +51,17 @@ export const addToFirestore = async (movie: Movie, userEmail: UserEmail) => {
   }
 };
 
-export const removeFromFirestore = async (
-  movie: Movie,
-  userEmail: UserEmail
-) => {
+export const removeFromFirestore = async (movie: Movie, UserId: UserId) => {
   try {
-    await deleteDoc(doc(db, `users/${userEmail}/movies/${movie.id}`));
+    await deleteDoc(doc(db, `users/${UserId}/movies/${movie.id}`));
   } catch (error) {
     throw error;
   }
 };
 
-export const updateFireStore = async (movie: Movie, userEmail: UserEmail) => {
+export const updateFireStore = async (movie: Movie, UserId: UserId) => {
   try {
-    const docRef = await doc(db, `users/${userEmail}/movies/${movie.id}`);
+    const docRef = await doc(db, `users/${UserId}/movies/${movie.id}`);
     updateDoc(docRef, {
       isWatched: true,
     });

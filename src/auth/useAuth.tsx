@@ -6,10 +6,8 @@ import {
   reauthenticateWithCredential,
 } from 'firebase/auth';
 import { auth, db } from '../firebase/firebaseSetup';
-import { useUser } from '../components/user/hooks/useUser';
-import { setStoredUser } from '../user-storage';
 import { doc, deleteDoc } from 'firebase/firestore';
-import { clearStoredUser } from '../user-storage';
+import { setStoredUser, clearStoredUser } from '../user-storage';
 
 interface UseAuth {
   user: firebase.User | null;
@@ -27,7 +25,6 @@ interface UseAuth {
 
 export function useAuth(): UseAuth {
   const [user, setUser] = useState<firebase.User | null>(null);
-  const { updateUser, clearUser } = useUser();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -40,8 +37,7 @@ export function useAuth(): UseAuth {
   const signup = async (email: string, password: string) => {
     const result = await auth.createUserWithEmailAndPassword(email, password);
     if (result.user) {
-      setStoredUser(email);
-      updateUser(result.user);
+      setStoredUser(result.user.uid);
     }
 
     return result;
@@ -50,15 +46,14 @@ export function useAuth(): UseAuth {
   const login = async (email: string, password: string) => {
     const result = await auth.signInWithEmailAndPassword(email, password);
     if (result.user) {
-      setStoredUser(email);
-      updateUser(result.user);
+      setStoredUser(result.user.uid);
     }
 
     return result;
   };
 
   const logout = () => {
-    clearUser();
+    clearStoredUser();
     return signOut(auth);
   };
 
