@@ -1,11 +1,14 @@
 import React from 'react';
 
-const Clapper = () => (
+const Clapper = (title: any) => (
   <svg
     width="200"
     height="300"
     viewBox="0 0 260 280"
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-labelledby="svgTitle">
+    <title id="svgTitle">movie clapper</title>
     <rect width="100%" height="100%" fill="white" />
     <g transform="translate(0, 280) scale(0.075, -0.075)">
       <path

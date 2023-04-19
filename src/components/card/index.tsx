@@ -8,7 +8,7 @@ const Card = ({ movie, handleAdd, handleRemove, listType }: CardProps) => {
   const moviePoster = movie.poster_path ? (
     <img src={getImgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
   ) : (
-    <Clapboard />
+    <Clapboard title="movie clapper" />
   );
 
   return (
