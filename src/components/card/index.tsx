@@ -5,13 +5,15 @@ import Clapboard from '../placeholder';
 import styles from './index.module.css';
 
 const Card = ({ movie, handleAdd, handleRemove, listType }: CardProps) => {
+  const moviePoster = movie.poster_path ? (
+    <img src={getImgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
+  ) : (
+    <Clapboard />
+  );
+
   return (
     <li key={movie.id} className={styles.card}>
-      {movie.poster_path ? (
-        <img src={getImgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
-      ) : (
-        <Clapboard />
-      )}
+      {moviePoster}
       <h6>{movie.title}</h6>
       <p>Released: {movie.release_date}</p>
       {listType === 'databaseMovies' && (
