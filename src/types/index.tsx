@@ -8,7 +8,7 @@ export type DropdownMenu = {
   onResetMovies: () => void;
   isDisabled: boolean;
 };
-export type UserEmail = string | null | undefined;
+export type UserId = string | null | undefined;
 export type Movie = {
   isAdded: boolean;
   isWatched: boolean;

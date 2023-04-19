@@ -5,8 +5,8 @@ export function getStoredUser(): string | null {
   return storedUser ? storedUser : null;
 }
 
-export function setStoredUser(userEmail: string) {
-  localStorage.setItem(USER_LOCALSTORAGE_KEY, userEmail);
+export function setStoredUser(UserId: string) {
+  localStorage.setItem(USER_LOCALSTORAGE_KEY, UserId);
 }
 
 export function clearStoredUser() {

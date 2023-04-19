@@ -24,8 +24,10 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
   const handleAdd = async (movie: Movie) => {
     setIsLoading(true);
     try {
-      await addToFirestore(movie, user?.email);
-      await getFirestoreMovies();
+      if (user?.uid) {
+        await addToFirestore(movie, user.uid);
+        await getFirestoreMovies();
+      }
     } catch (e) {
       console.error(e);
       e instanceof Error && setError(parseFirebaseError(e));
@@ -37,7 +39,7 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
   const handleRemove = async (movie: Movie) => {
     setIsLoading(true);
     try {
-      await removeFromFirestore(movie, user?.email);
+      await removeFromFirestore(movie, user?.uid);
       await getFirestoreMovies();
     } catch (e) {
       console.error(e);
