@@ -33,3 +33,10 @@ export type MovieListProps = {
   sortType: MovieSortOptions;
   listType: 'databaseMovies' | 'usersSavedMovies';
 };
+
+export type CardProps = {
+  movie: Movie;
+  handleAdd: (movie: Movie) => void;
+  handleRemove: (movie: Movie) => void;
+  listType: 'databaseMovies' | 'usersSavedMovies';
+};

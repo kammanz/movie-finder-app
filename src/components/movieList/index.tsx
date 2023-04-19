@@ -58,6 +58,7 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
             movie={movie}
             handleAdd={handleAdd}
             handleRemove={handleRemove}
+            listType={listType}
           />
         ))}
       </ul>
