@@ -6,10 +6,10 @@ import MovieList from '../../components/movieList';
 import Navbar from '../../components/navbar/Navbar';
 import DropdownMenu from '../../components/dropdown';
 
-const Homepage = () => {
+const SavedMovies = () => {
   const [sortType, setSortType] = useState<MovieSortOptions>('newest');
-  const { moviesToRender } = useFullMovies();
-  const isDisabled = moviesToRender?.length === 0;
+  const { savedMovies } = useFullMovies();
+  const isDisabled = savedMovies?.length === 0;
 
   const handleSortChange = (sortType: MovieSortOptions) => {
     setSortType(sortType);
@@ -29,9 +29,9 @@ const Homepage = () => {
         onResetMovies={handleResetMovies}
         isDisabled={isDisabled}
       />
-      <MovieList sortType={sortType} listType="databaseMovies" />
+      <MovieList sortType={sortType} listType="usersSavedMovies" />
     </>
   );
 };
 
-export default Homepage;
+export default SavedMovies;

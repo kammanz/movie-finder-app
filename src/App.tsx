@@ -7,7 +7,7 @@ import { queryClient } from './react-query/queryClient';
 import Form from './components/form';
 import Homepage from './pages/homepage';
 import PrivateRoute from './components/PrivateRoute';
-import SavedMovies from './pages/savedMovies';
+import SavedMovies from './pages/savedMovies/index2';
 
 const App = () => {
   return (

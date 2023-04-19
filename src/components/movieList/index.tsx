@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Movie, MovieSortOptions } from '../../types';
+import { Movie, MovieListProps } from '../../types';
 import {
   addToFirestore,
   removeFromFirestore,
@@ -12,11 +12,14 @@ import Card from '../card';
 import LoadingOverlay from '../overlay';
 import styles from './index.module.css';
 
-const MovieList = ({ sortType }: { sortType: MovieSortOptions }) => {
+const MovieList = ({ sortType, listType }: MovieListProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const { getFirestoreMovies, moviesToRender } = useFullMovies();
+  const { getFirestoreMovies, moviesToRender, savedMovies } = useFullMovies();
   const { user } = useAuth();
+
+  const initialMovies =
+    listType === 'databaseMovies' ? moviesToRender : savedMovies;
 
   const handleAdd = async (movie: Movie) => {
     setIsLoading(true);
@@ -44,12 +47,12 @@ const MovieList = ({ sortType }: { sortType: MovieSortOptions }) => {
     }
   };
 
-  let movies = moviesToRender && sortMovies(sortType, moviesToRender);
+  let sortedMovies = initialMovies && sortMovies(sortType, initialMovies);
 
   return (
     <>
       <ul className={styles.container}>
-        {movies?.map((movie) => (
+        {sortedMovies?.map((movie) => (
           <Card
             key={movie.id}
             movie={movie}

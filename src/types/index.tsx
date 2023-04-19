@@ -28,3 +28,8 @@ export type UseUser = {
   clearUser: () => void;
 };
 export type FormType = 'signup' | 'login';
+
+export type MovieListProps = {
+  sortType: MovieSortOptions;
+  listType: 'databaseMovies' | 'usersSavedMovies';
+};
