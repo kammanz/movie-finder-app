@@ -24,10 +24,8 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
   const handleAdd = async (movie: Movie) => {
     setIsLoading(true);
     try {
-      if (user?.uid) {
-        await addToFirestore(movie, user.uid);
-        await getFirestoreMovies();
-      }
+      await addToFirestore(movie, user?.uid);
+      await getFirestoreMovies();
     } catch (e) {
       console.error(e);
       e instanceof Error && setError(parseFirebaseError(e));
