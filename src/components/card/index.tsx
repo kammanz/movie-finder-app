@@ -1,12 +1,17 @@
 import React from 'react';
 import { getImgUrl } from '../../api/index';
-import styles from './index.module.css';
 import { CardProps } from '../../types';
+import Clapboard from '../placeholder';
+import styles from './index.module.css';
 
 const Card = ({ movie, handleAdd, handleRemove, listType }: CardProps) => {
   return (
     <li key={movie.id} className={styles.card}>
-      <img src={getImgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
+      {movie.poster_path ? (
+        <img src={getImgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
+      ) : (
+        <Clapboard />
+      )}
       <h6>{movie.title}</h6>
       <p>Released: {movie.release_date}</p>
       {listType === 'databaseMovies' && (
