@@ -24,13 +24,6 @@ function Navbar() {
             Saved Movies
           </NavLink>
         </li>
-        <li>
-          <NavLink
-            to="/watched-movies"
-            className={({ isActive }) => (isActive ? 'active' : 'inactive')}>
-            Watched Movies
-          </NavLink>
-        </li>
       </ul>
     </nav>
   );
