@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useFullMovies } from '../../pages/homepage/hooks';
+import { useFullMovies } from '../../hooks';
 import { MovieSortOptions } from '../../types';
 import Header from '../../components/header';
 import MovieList from '../../components/movieList';
