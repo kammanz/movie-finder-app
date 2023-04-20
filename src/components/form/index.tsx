@@ -14,7 +14,6 @@ const Form = ({ formType }: { formType: FormType }) => {
     'password'
   );
   const [error, setError] = useState('');
-
   const {
     formState: { errors },
     handleSubmit,
@@ -25,13 +24,19 @@ const Form = ({ formType }: { formType: FormType }) => {
       password: '',
     },
   });
-
-  const { signup, login } = useAuth();
+  const { signup, login, loginGuest } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setError('');
-  }, []);
+  const submitGuest = async () => {
+    try {
+      await loginGuest();
+      navigate('/homepage');
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(parseFirebaseError(e));
+      }
+    }
+  };
 
   const onSubmit = async ({ email, password }: any) => {
     if (!email && !password) return;
@@ -103,8 +108,9 @@ const Form = ({ formType }: { formType: FormType }) => {
         <p>{error}</p>
         <br />
         <button data-testid="submit" type="submit" disabled={isLoading}>
-          {isLoading ? 'Loading...' : 'Submit'}
+          Submit
         </button>
+        <button onClick={submitGuest}>Continue as guest</button>
         <br />
         <Link to={formType === 'signup' ? '/login' : '/'}>
           {formType === 'signup'
