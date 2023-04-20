@@ -6,9 +6,6 @@ const styles = {
   display: 'flex',
   justifyContent: 'space-between',
   backgroundColor: 'lightsalmon',
-  button: {
-    width: '100px',
-  },
 };
 
 const Header = () => {
@@ -54,16 +51,10 @@ const Header = () => {
     <header style={styles}>
       <h1>Welcome, {name}</h1>
       {confirmation && <p>{confirmation}</p>}
-      <button style={styles.button} onClick={handleLogout}>
-        Logout
-      </button>
-      <button
-        disabled={user?.email ? false : true}
-        style={styles.button}
-        onClick={handleDeleteRequest}>
+      <button onClick={handleLogout}>Logout</button>
+      <button disabled={!user?.email} onClick={handleDeleteRequest}>
         Delete Account
       </button>
-
       {error && <p>{error}</p>}
     </header>
   );
