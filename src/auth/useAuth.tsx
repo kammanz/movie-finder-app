@@ -21,6 +21,7 @@ interface UseAuth {
   ) => Promise<firebase.auth.UserCredential>;
   logout: () => void;
   deleteUserAccount: (user: firebase.User, password: string) => Promise<void>;
+  loginGuest: () => void;
 }
 
 export function useAuth(): UseAuth {
@@ -50,6 +51,11 @@ export function useAuth(): UseAuth {
     }
 
     return result;
+  };
+
+  const loginGuest = () => {
+    firebase.auth().signInAnonymously();
+    setStoredUser('guest');
   };
 
   const logout = () => {
@@ -104,5 +110,5 @@ export function useAuth(): UseAuth {
     }
   };
 
-  return { user, signup, login, logout, deleteUserAccount };
+  return { user, signup, login, loginGuest, logout, deleteUserAccount };
 }
