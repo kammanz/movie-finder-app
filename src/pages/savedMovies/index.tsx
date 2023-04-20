@@ -9,7 +9,7 @@ import DropdownMenu from '../../components/dropdown';
 const SavedMovies = () => {
   const [sortType, setSortType] = useState<MovieSortOptions>('newest');
   const { savedMovies } = useFullMovies();
-  const isDisabled = savedMovies?.length === 0;
+  const isDisabled = savedMovies?.length < 2;
 
   const handleSortChange = (sortType: MovieSortOptions) => {
     setSortType(sortType);

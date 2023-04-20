@@ -21,7 +21,7 @@ interface UseAuth {
   ) => Promise<firebase.auth.UserCredential>;
   logout: () => void;
   deleteUserAccount: (user: firebase.User, password: string) => Promise<void>;
-  loginGuest: () => void;
+  loginGuest: () => Promise<firebase.auth.UserCredential>;
 }
 
 export function useAuth(): UseAuth {
@@ -31,7 +31,6 @@ export function useAuth(): UseAuth {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -40,7 +39,6 @@ export function useAuth(): UseAuth {
     if (result.user) {
       setStoredUser(result.user.uid);
     }
-
     return result;
   };
 
@@ -49,13 +47,15 @@ export function useAuth(): UseAuth {
     if (result.user) {
       setStoredUser(result.user.uid);
     }
-
     return result;
   };
 
-  const loginGuest = () => {
-    firebase.auth().signInAnonymously();
-    setStoredUser('guest');
+  const loginGuest = async () => {
+    const result = await firebase.auth().signInAnonymously();
+    if (result.user) {
+      setStoredUser('guest');
+    }
+    return result;
   };
 
   const logout = () => {

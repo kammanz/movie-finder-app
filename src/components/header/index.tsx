@@ -13,7 +13,7 @@ const Header = () => {
   const [confirmation, setConfirmation] = useState('');
   const { user, logout, deleteUserAccount } = useAuth();
   const navigate = useNavigate();
-  const name = user?.email || 'guest';
+  const name = user?.email || 'Guest';
 
   const handleLogout = async () => {
     setError('');
@@ -30,7 +30,7 @@ const Header = () => {
     if (user) {
       try {
         await deleteUserAccount(user, password);
-        setConfirmation('account deleted');
+        setConfirmation('account deleted, redirecting to login page...');
         setTimeout(() => navigate('/login'), 2000);
       } catch (error) {
         console.error('error: ', error);
@@ -43,7 +43,6 @@ const Header = () => {
     const password = prompt(
       'Please enter your password to confirm account deletion:'
     );
-
     password && handleDelete(password);
   };
 
