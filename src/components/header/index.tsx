@@ -57,7 +57,10 @@ const Header = () => {
       <button style={styles.button} onClick={handleLogout}>
         Logout
       </button>
-      <button style={styles.button} onClick={handleDeleteRequest}>
+      <button
+        disabled={user?.email ? false : true}
+        style={styles.button}
+        onClick={handleDeleteRequest}>
         Delete Account
       </button>
 
