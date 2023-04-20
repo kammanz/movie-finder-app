@@ -6,6 +6,9 @@ const styles = {
   display: 'flex',
   justifyContent: 'space-between',
   backgroundColor: 'lightsalmon',
+  button: {
+    width: '100px',
+  },
 };
 
 const Header = () => {
@@ -13,6 +16,7 @@ const Header = () => {
   const [confirmation, setConfirmation] = useState('');
   const { user, logout, deleteUserAccount } = useAuth();
   const navigate = useNavigate();
+  const name = user?.email || 'guest';
 
   const handleLogout = async () => {
     setError('');
@@ -48,10 +52,14 @@ const Header = () => {
 
   return (
     <header style={styles}>
-      <h1>Welcome, {user?.email}</h1>
+      <h1>Welcome, {name}</h1>
       {confirmation && <p>{confirmation}</p>}
-      <button onClick={handleLogout}>Logout</button>
-      <button onClick={handleDeleteRequest}>Delete Account</button>
+      <button style={styles.button} onClick={handleLogout}>
+        Logout
+      </button>
+      <button style={styles.button} onClick={handleDeleteRequest}>
+        Delete Account
+      </button>
 
       {error && <p>{error}</p>}
     </header>
