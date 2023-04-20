@@ -7,7 +7,7 @@ import {
   sortMovies,
 } from '../../utils';
 import { useAuth } from '../../auth/useAuth';
-import { useFullMovies } from '../../pages/homepage/hooks';
+import { useFullMovies } from '../../hooks';
 import Card from '../card';
 import LoadingOverlay from '../overlay';
 import styles from './index.module.css';
@@ -15,11 +15,19 @@ import styles from './index.module.css';
 const MovieList = ({ sortType, listType }: MovieListProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const { getFirestoreMovies, moviesToRender, savedMovies } = useFullMovies();
+  const {
+    getFirestoreMovies,
+    moviesToRender,
+    savedMovies,
+    rawMoviesError,
+    savedMoviesError,
+  } = useFullMovies();
   const { user } = useAuth();
 
   const initialMovies =
     listType === 'databaseMovies' ? moviesToRender : savedMovies;
+
+  let sortedMovies = initialMovies && sortMovies(sortType, initialMovies);
 
   const handleAdd = async (movie: Movie) => {
     setIsLoading(true);
@@ -27,7 +35,6 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
       await addToFirestore(movie, user?.uid);
       await getFirestoreMovies();
     } catch (e) {
-      console.error(e);
       e instanceof Error && setError(parseFirebaseError(e));
     } finally {
       setIsLoading(false);
@@ -40,14 +47,11 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
       await removeFromFirestore(movie, user?.uid);
       await getFirestoreMovies();
     } catch (e) {
-      console.error(e);
       e instanceof Error && setError(parseFirebaseError(e));
     } finally {
       setIsLoading(false);
     }
   };
-
-  let sortedMovies = initialMovies && sortMovies(sortType, initialMovies);
 
   return (
     <>
@@ -63,6 +67,8 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
         ))}
       </ul>
       {error && <p>{error}</p>}
+      {rawMoviesError && <p>{rawMoviesError}</p>}
+      {savedMoviesError && <p>{savedMoviesError}</p>}
       <LoadingOverlay isLoading={isLoading} />
     </>
   );

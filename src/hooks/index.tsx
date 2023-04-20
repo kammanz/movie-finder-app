@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { collection, query, getDocs } from 'firebase/firestore';
-import { db } from '../../../firebase/firebaseSetup';
-import { fullUrl } from '../../../api';
-import { UserId, Movie } from '../../../types';
-import { useAuth } from '../../../auth/useAuth';
+import { db } from '../firebase/firebaseSetup';
+import { fullUrl } from '../api';
+import { UserId, Movie } from '../types';
+import { useAuth } from '../auth/useAuth';
 
 export const getRawMovies = async (): Promise<Movie[]> => {
   const { results } = await (await fetch(fullUrl)).json();
@@ -48,12 +48,10 @@ export const useFullMovies = () => {
       const result = await getSavedMovies(user?.uid);
       setSavedMovies(result);
     } catch (e) {
-      console.error(e);
-      throw Error;
+      setSavedMoviesError(e as string);
     }
   }, [user?.uid]);
 
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled
   useEffect(() => {
     getRawMovies()
       .then((rawMovies) => {
