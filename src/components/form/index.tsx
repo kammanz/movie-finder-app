@@ -105,6 +105,7 @@ const Form = ({ formType }: { formType: FormType }) => {
         <button data-testid="submit" type="submit" disabled={isLoading}>
           {isLoading ? 'Loading...' : 'Submit'}
         </button>
+        <button>Continue as guest</button>
         <br />
         <Link to={formType === 'signup' ? '/login' : '/'}>
           {formType === 'signup'
