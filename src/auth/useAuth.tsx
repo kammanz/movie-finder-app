@@ -21,7 +21,7 @@ interface UseAuth {
   ) => Promise<firebase.auth.UserCredential>;
   logout: () => void;
   deleteUserAccount: (user: firebase.User, password: string) => Promise<void>;
-  loginGuest: () => Promise<any>;
+  loginGuest: () => Promise<firebase.auth.UserCredential>;
 }
 
 export function useAuth(): UseAuth {
