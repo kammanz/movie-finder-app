@@ -12,18 +12,28 @@ const Card = ({ movie, handleAdd, handleRemove, listType }: CardProps) => {
   );
 
   return (
-    <li key={movie.id} className={styles.card}>
-      {moviePoster}
-      <h6>{movie.title}</h6>
-      <p>Released: {movie.release_date}</p>
-      {listType === 'databaseMovies' && (
-        <button onClick={() => handleAdd(movie)} disabled={movie.isAdded}>
-          Add
-        </button>
-      )}
-      <button disabled={!movie.isAdded} onClick={() => handleRemove(movie)}>
-        Remove
-      </button>
+    <li key={movie.id} className={styles.cardContainer}>
+      <div className={styles.innerContainer}>
+        <div className={styles.posterContainer}>{moviePoster}</div>
+        <div className={styles.textContainer}>
+          <h6 className={styles.title} title={movie.title}>
+            {movie.title}
+          </h6>
+          <p
+            className={styles.releaseDate}
+            title={`Released: ${movie.release_date}`}>
+            Released: {movie.release_date}
+          </p>
+          {listType === 'databaseMovies' && (
+            <button onClick={() => handleAdd(movie)} disabled={movie.isAdded}>
+              Add
+            </button>
+          )}
+          <button disabled={!movie.isAdded} onClick={() => handleRemove(movie)}>
+            Remove
+          </button>
+        </div>
+      </div>
     </li>
   );
 };
