@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
@@ -14,6 +14,7 @@ const Form = ({ formType }: { formType: FormType }) => {
     'password'
   );
   const [error, setError] = useState('');
+  const [isGuest, setIsGuest] = useState(false);
   const {
     formState: { errors },
     handleSubmit,
@@ -29,9 +30,11 @@ const Form = ({ formType }: { formType: FormType }) => {
 
   const submitGuest = async () => {
     try {
+      setIsGuest(true);
       await loginGuest();
       navigate('/homepage');
     } catch (e) {
+      console.error('e:', e);
       if (e instanceof Error) {
         setError(parseFirebaseError(e));
       }
@@ -78,7 +81,7 @@ const Form = ({ formType }: { formType: FormType }) => {
           })}
           placeholder="Enter your email"
         />
-        <p>{errors.email?.message}</p>
+        <p>{!isGuest && errors.email?.message}</p>
         <p>{formType === 'signup' && error}</p>
         <br />
         <label htmlFor="password">Password</label>
@@ -104,7 +107,7 @@ const Form = ({ formType }: { formType: FormType }) => {
           {passwordType === 'password' ? 'Show Password' : 'Hide Password'}
         </button>
         <br />
-        <p>{errors.password?.message}</p>
+        <p>{!isGuest && errors.password?.message}</p>
         <p>{error}</p>
         <br />
         <button data-testid="submit" type="submit" disabled={isLoading}>
