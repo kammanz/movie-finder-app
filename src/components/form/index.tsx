@@ -34,7 +34,6 @@ const Form = ({ formType }: { formType: FormType }) => {
       await loginGuest();
       navigate('/homepage');
     } catch (e) {
-      console.error('e:', e);
       if (e instanceof Error) {
         setError(parseFirebaseError(e));
       }
