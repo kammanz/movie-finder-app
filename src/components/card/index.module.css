@@ -9,11 +9,12 @@
     margin-bottom: 1rem;
     background-color: #fff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+    border-radius: 16px;
     overflow: hidden;
     font-family: 'Roboto';
     font-style: normal;
     color: #000000;
+    margin: 15px 22px;
   }
   
   .innerContainer {
@@ -49,21 +50,24 @@
   .releaseDate {
     font-weight: 500;
     font-size: 12px;
-    line-height: 14px;    
+    line-height: 14px;   
+    margin-bottom: 16px; 
   }
 
   .buttonContainer {
     display: flex ;
-    position: relative;
+    justify-content: center;
+    /* position: relative; */
   }
   
   .addButton {
     width: 84px;
     height: 36px;
-    margin-left: 15%;
+    margin: 0 10px;
     background: #409DE1;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
     border-radius: 6px;
+    /* border-radius: 10px 0 0 10px; */
     border: none;
     font-family: 'Roboto';
     font-style: normal;
@@ -75,12 +79,13 @@
   }
 
   .removeButton {
-    position: absolute;
-    right: 8%;
+    /* position: absolute;
+    right: 8%; */
     z-index: 2;
     height: 36px;
+    margin: 0 10px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 6px;
+    border-radius: 0px 10px 10px 0px;
     border: none;
     font-family: 'Roboto';
     font-style: normal;
