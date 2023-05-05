@@ -6,7 +6,11 @@ import styles from './index.module.css';
 
 const Card = ({ movie, handleAdd, handleRemove, listType }: CardProps) => {
   const moviePoster = movie.poster_path ? (
-    <img src={getImgUrl(movie.poster_path)} alt={`${movie.title} poster`} />
+    <img
+      src={getImgUrl(movie.poster_path)}
+      alt={`${movie.title} poster`}
+      className={styles.poster}
+    />
   ) : (
     <Clapboard title="movie clapper" />
   );
@@ -24,14 +28,26 @@ const Card = ({ movie, handleAdd, handleRemove, listType }: CardProps) => {
             title={`Released: ${movie.release_date}`}>
             Released: {movie.release_date}
           </p>
-          {listType === 'databaseMovies' && (
-            <button onClick={() => handleAdd(movie)} disabled={movie.isAdded}>
-              Add
+          <div className={styles.buttonContainer}>
+            {listType === 'databaseMovies' && (
+              <button
+                onClick={() => handleAdd(movie)}
+                disabled={movie.isAdded}
+                className={`${styles.addButton} ${
+                  movie.isAdded ? styles.clicked : ''
+                }`}>
+                {movie.isAdded ? 'Added!' : 'Add'}
+              </button>
+            )}
+            <button
+              disabled={!movie.isAdded}
+              onClick={() => handleRemove(movie)}
+              className={`${styles.removeButton} ${
+                movie.isAdded ? '' : styles.clicked
+              }`}>
+              Remove
             </button>
-          )}
-          <button disabled={!movie.isAdded} onClick={() => handleRemove(movie)}>
-            Remove
-          </button>
+          </div>
         </div>
       </div>
     </li>

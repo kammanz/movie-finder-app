@@ -1,4 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+
 .cardContainer {
+  width: 236px;
+  height: 387px;
     display: flex;
     align-items: stretch;
     margin-bottom: 1rem;
@@ -6,6 +11,9 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     overflow: hidden;
+    font-family: 'Roboto';
+    font-style: normal;
+    color: #000000;
   }
   
   .innerContainer {
@@ -15,6 +23,8 @@
   }
   
   .posterContainer {
+    width: 236px;
+    height: 262px;
     flex: 1;
     display: flex;
     justify-content: center;
@@ -23,7 +33,7 @@
   }
   
   .posterContainer img {
-    height: 100%;
+    width: 236px;
   }
   
   .textContainer {
@@ -31,38 +41,68 @@
   }
   
   .title {
-    max-width: 168px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
   }
   
   .releaseDate {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;    
+  }
+
+  .buttonContainer {
+    display: flex ;
+    position: relative;
   }
   
-  button {
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
+  .addButton {
+    width: 84px;
+    height: 36px;
+    margin-left: 15%;
+    background: #409DE1;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
     border: none;
-    background-color: #eee;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    color: #FFFFFF;
+    z-index: 2;
   }
-  
-  button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+
+  .removeButton {
+    position: absolute;
+    right: 8%;
+    z-index: 2;
+    height: 36px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+    border: none;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    width: 84px;
+    height: 36px;
+    background: #409DE1;
+    border-radius: 10px 6px 6px 10px;
+    color: #FFFFFF;
   }
-  
-  button:not(:disabled):hover {
-    background-color: #ddd;
+
+  .clicked {
+    color: rgba(0, 0, 0, 0.3);
+    background: #FAF8F8;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+    z-index: 1;
   }
-  
+
+   
+
+
+

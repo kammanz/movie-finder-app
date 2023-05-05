@@ -55,6 +55,7 @@ export const useFullMovies = () => {
   useEffect(() => {
     getRawMovies()
       .then((rawMovies) => {
+        console.log('raw movies');
         setRawMovies(rawMovies);
       })
       .catch((rawMoviesError: string) => {

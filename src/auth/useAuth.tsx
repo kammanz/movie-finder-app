@@ -52,8 +52,9 @@ export function useAuth(): UseAuth {
 
   const loginGuest = async () => {
     const result = await firebase.auth().signInAnonymously();
-    if (result.user) {
-      setStoredUser('guest');
+    const guestUid = await firebase.auth().currentUser?.uid;
+    if (result.user && guestUid) {
+      setStoredUser(guestUid);
     }
     return result;
   };
