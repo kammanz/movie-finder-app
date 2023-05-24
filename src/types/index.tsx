@@ -1,5 +1,5 @@
 import firebase from 'firebase/compat/app';
-import { SELECT_MENU_OPTIONS } from '../constants/selectMenuOptions';
+import { recentDays } from '../constants/selectMenuOptions';
 
 export type ClickType = 'add' | 'remove';
 export type DropdownMenu = {
@@ -17,10 +17,7 @@ export type Movie = {
   release_date: string;
   title: string;
 };
-export type MovieSortOptions =
-  | typeof SELECT_MENU_OPTIONS[0]['label']
-  | typeof SELECT_MENU_OPTIONS[1]['label']
-  | typeof SELECT_MENU_OPTIONS[2]['label'];
+export type MovieSortOptions = 'newest' | 'oldest' | typeof recentDays;
 export type User = firebase.User | null;
 export type FormType = 'signup' | 'login';
 
