@@ -1,7 +1,8 @@
 .container {
     display: flex;
     flex-wrap: wrap;
-    background: rgba(250, 248, 248, 1)
+    padding: 0;
+    /* background: rgba(250, 248, 248, 1) */
 } 
 
 .card {

@@ -5,6 +5,7 @@ import Header from '../../components/header';
 import MovieList from '../../components/movieList';
 import Navbar from '../../components/navbar/Navbar';
 import DropdownMenu from '../../components/dropdown';
+import styles from './index.module.css';
 
 const Homepage = () => {
   const [sortType, setSortType] = useState<MovieSortOptions>('newest');
@@ -23,13 +24,15 @@ const Homepage = () => {
     <>
       <Header />
       <Navbar />
-      <DropdownMenu
-        sortType={sortType}
-        onSortChange={handleSortChange}
-        onResetMovies={handleResetMovies}
-        isDisabled={isDisabled}
-      />
-      <MovieList sortType={sortType} listType="databaseMovies" />
+      <div className={styles.listContainer}>
+        <DropdownMenu
+          sortType={sortType}
+          onSortChange={handleSortChange}
+          onResetMovies={handleResetMovies}
+          isDisabled={isDisabled}
+        />
+        <MovieList sortType={sortType} listType="databaseMovies" />
+      </div>
     </>
   );
 };

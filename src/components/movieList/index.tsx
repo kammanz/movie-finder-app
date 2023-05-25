@@ -28,27 +28,15 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
   const [renderCount, setRenderCount] = useState(0);
 
   useEffect(() => {
-    // This code will run after every re-render of the component
-    console.log('Component has re-rendered');
-    // Increase the render count
     setRenderCount((renderCount) => renderCount + 1);
     return () => {
-      setShowIt(false); // Cancels any pending state changes to showIt
+      setShowIt(false);
     };
   }, []);
 
   useEffect(() => {
-    // This code will only run after the component has finished all of its re-renders
-    console.log('Component has finished re-rendering');
     setShowIt(true);
-    // This function will run when the component is unmounted
-    // return () => {
-    //   console.log('Component is unmounting');
-    // };
   }, [renderCount, moviesToRender, savedMovies]);
-
-  console.log('moviesToRender: ', moviesToRender);
-  console.log('savedMovies: ', savedMovies);
 
   const initialMovies =
     listType === 'databaseMovies' ? moviesToRender : savedMovies;
@@ -79,8 +67,6 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
       setIsLoading(false);
     }
   };
-
-  console.log('sortedMovies: ', sortedMovies);
 
   return (
     <>
