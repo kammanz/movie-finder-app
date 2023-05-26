@@ -1,10 +1,16 @@
 import React from 'react';
+import { format } from 'date-fns';
 import { getImgUrl } from '../../api/index';
 import { CardProps } from '../../types';
 import Clapboard from '../placeholder';
+import Star from '../starSVG';
 import styles from './index.module.css';
 
 const Card = ({ movie, handleAdd, handleRemove, listType }: CardProps) => {
+  console.log('movie', movie);
+  const date = new Date(movie.release_date);
+  const formattedDate = format(date, 'MMMM d, yyyy');
+
   const moviePoster = movie.poster_path ? (
     <img
       src={getImgUrl(movie.poster_path)}
@@ -25,9 +31,19 @@ const Card = ({ movie, handleAdd, handleRemove, listType }: CardProps) => {
           </h6>
           <p
             className={styles.releaseDate}
-            title={`Released: ${movie.release_date}`}>
-            Released: {movie.release_date}
+            title={`Released: ${formattedDate}`}>
+            Released: {formattedDate}
           </p>
+          <div className={styles.popularityContainer}>
+            <span>
+              <Star />
+            </span>
+            <p
+              className={styles.popularity}
+              title={`Released: ${formattedDate}`}>
+              {movie.popularity}
+            </p>
+          </div>
           <div className={styles.buttonContainer}>
             {listType === 'databaseMovies' && (
               <button

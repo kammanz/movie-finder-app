@@ -1,0 +1,29 @@
+.listContainer {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 23px;
+    color: #000000;
+}
+
+.listContainer li {
+    padding: 18px 30px
+}
+
+.listContainer a {
+    text-decoration: none;
+}
+
+.active {
+    color: lightgrey;
+    pointer-events: none;
+}
+
+.inActive {
+    color: var(--blue)
+}

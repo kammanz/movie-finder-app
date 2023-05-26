@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
+// import { Container } from 'react-bootstrap';
 import Form from './components/form';
 import Homepage from './pages/homepage';
 import PrivateRoute from './components/PrivateRoute';
@@ -8,7 +8,8 @@ import SavedMovies from './pages/savedMovies';
 
 const App = () => {
   return (
-    <Container>
+    // <Container>
+    <div>
       <Routes>
         <Route path="/" element={<Form formType="signup" />} />
       </Routes>
@@ -21,7 +22,9 @@ const App = () => {
           <Route path="/saved-movies" element={<SavedMovies />} />
         </Route>
       </Routes>
-    </Container>
+    </div>
+
+    // </Container>
   );
 };
 

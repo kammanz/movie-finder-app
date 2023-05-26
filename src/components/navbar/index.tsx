@@ -1,16 +1,16 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import styles from './Navbar.module.css';
+import styles from './index.module.css';
 
 function Navbar() {
   return (
-    <nav>
-      <ul>
+    <nav className={styles.navContainer}>
+      <ul className={styles.listContainer}>
         <li>
           <NavLink
             to="/homepage"
             className={({ isActive }) =>
-              isActive ? styles.active : 'inactive'
+              isActive ? styles.active : styles.inActive
             }>
             Homepage
           </NavLink>
@@ -19,7 +19,7 @@ function Navbar() {
           <NavLink
             to="/saved-movies"
             className={({ isActive }) =>
-              isActive ? styles.active : 'inactive'
+              isActive ? styles.active : styles.inActive
             }>
             Saved Movies
           </NavLink>

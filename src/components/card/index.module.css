@@ -2,8 +2,7 @@
 
 
 .cardContainer {
-  width: 236px;
-  height: 387px;
+    width: 236px;
     display: flex;
     align-items: stretch;
     margin-bottom: 1rem;
@@ -27,9 +26,6 @@
     width: 236px;
     height: 300px;
     flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     overflow: hidden;
   }
   
@@ -51,23 +47,31 @@
     font-weight: 500;
     font-size: 12px;
     line-height: 14px;   
+    margin-bottom: 3px; 
+  }
+
+  .popularity {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;   
     margin-bottom: 16px; 
+    margin: 0;
+    align-self: center;
+    padding-left: 5px;
   }
 
   .buttonContainer {
     display: flex ;
     justify-content: center;
-    /* position: relative; */
   }
   
   .addButton {
     width: 84px;
     height: 36px;
     margin: 0 10px;
-    background: #409DE1;
+    background: var(--blue);
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
     border-radius: 6px;
-    /* border-radius: 10px 0 0 10px; */
     border: none;
     font-family: 'Roboto';
     font-style: normal;
@@ -79,8 +83,6 @@
   }
 
   .removeButton {
-    /* position: absolute;
-    right: 8%; */
     z-index: 2;
     height: 36px;
     margin: 0 10px;
@@ -105,6 +107,11 @@
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
     border-radius: 6px;
     z-index: 1;
+  }
+
+  .popularityContainer {
+    display: flex;
+    margin-bottom: 10px;
   }
 
    

@@ -83,7 +83,6 @@ export const sortMovies = (sortType: MovieSortOptions, movies: Movie[]) => {
       sorted = newReleases(movies, parseInt(sortType));
       break;
   }
-
   return sorted;
 };
 

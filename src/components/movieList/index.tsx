@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Movie, MovieListProps } from '../../types';
 import {
   addToFirestore,
@@ -9,13 +9,15 @@ import {
 import { useAuth } from '../../auth/useAuth';
 import { useFullMovies } from '../../hooks';
 import Card from '../card';
+import DropdownMenu from '../dropdown';
 import LoadingOverlay from '../overlay';
 import styles from './index.module.css';
+import { MovieSortOptions } from '../../types';
 
-const MovieList = ({ sortType, listType }: MovieListProps) => {
+const MovieList = ({ listType }: MovieListProps) => {
+  const [sortType, setSortType] = useState<MovieSortOptions>('newest');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [showIt, setShowIt] = useState(false);
   const {
     getFirestoreMovies,
     moviesToRender,
@@ -25,24 +27,12 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
   } = useFullMovies();
   const { user } = useAuth();
 
-  const [renderCount, setRenderCount] = useState(0);
-
-  useEffect(() => {
-    setRenderCount((renderCount) => renderCount + 1);
-    return () => {
-      setShowIt(false);
-    };
-  }, []);
-
-  useEffect(() => {
-    setShowIt(true);
-  }, [renderCount, moviesToRender, savedMovies]);
-
   const initialMovies =
     listType === 'databaseMovies' ? moviesToRender : savedMovies;
 
-  let sortedMovies: Movie[] | undefined =
-    initialMovies && sortMovies(sortType, initialMovies);
+  const handleSortChange = (sortType: MovieSortOptions) => {
+    setSortType(sortType);
+  };
 
   const handleAdd = async (movie: Movie) => {
     setIsLoading(true);
@@ -68,12 +58,13 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
     }
   };
 
+  let sortedMovies: Movie[] | undefined =
+    initialMovies && sortMovies(sortType, initialMovies);
+
   return (
-    <>
-      {listType === 'usersSavedMovies' && showIt && savedMovies.length < 1 ? (
-        <p>You have no saved movies yet</p>
-      ) : null}
-      <ul className={styles.container}>
+    <div className={styles.container}>
+      <DropdownMenu onSortChange={handleSortChange} />
+      <ul className={styles.listContainer}>
         {sortedMovies?.map((movie) => (
           <Card
             key={movie.id}
@@ -88,7 +79,7 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
       {rawMoviesError && <p>{rawMoviesError}</p>}
       {savedMoviesError && <p>{savedMoviesError}</p>}
       <LoadingOverlay isLoading={isLoading} />
-    </>
+    </div>
   );
 };
 
