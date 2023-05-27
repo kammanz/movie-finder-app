@@ -43,6 +43,21 @@ const Header = () => {
     password && handleDelete(password);
   };
 
+  const handleRedirect = async (isSignup: boolean) => {
+    setError('');
+    try {
+      await logout();
+
+      if (isSignup) {
+        navigate('/');
+      } else {
+        navigate('/login');
+      }
+    } catch (error) {
+      setError('Failed to redirect');
+    }
+  };
+
   return (
     <header className={styles.container}>
       <div className={styles.userContainer}>
@@ -52,11 +67,18 @@ const Header = () => {
         <Navbar />
       </div>
       <div className={styles.buttonContainer}>
-        <button onClick={handleLogout}>Logout</button>
-        {user?.email && (
-          <button disabled={!user?.email} onClick={handleDeleteRequest}>
-            Delete Account
-          </button>
+        {user?.email ? (
+          <>
+            <button onClick={handleLogout}>Logout</button>
+            <button disabled={!user?.email} onClick={handleDeleteRequest}>
+              Delete Account
+            </button>
+          </>
+        ) : (
+          <>
+            <button onClick={() => handleRedirect(true)}>Signup</button>
+            <button onClick={() => handleRedirect(false)}>Login</button>
+          </>
         )}
       </div>
       {confirmation && <p>{confirmation}</p>}
