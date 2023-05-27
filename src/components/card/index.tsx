@@ -9,7 +9,6 @@ import styles from './index.module.css';
 const Card = ({ movie, handleAdd, handleRemove, listType }: CardProps) => {
   const date = new Date(movie.release_date);
   const formattedDate = format(date, 'MMMM d, yyyy');
-
   const moviePoster = movie.poster_path ? (
     <img
       src={getImgUrl(movie.poster_path)}
