@@ -26,7 +26,7 @@ const MovieList = ({ listType }: MovieListProps) => {
     savedMoviesError,
   } = useFullMovies();
   const { user } = useAuth();
-
+  const heading = listType === 'databaseMovies' ? 'Search' : 'Saved';
   const initialMovies =
     listType === 'databaseMovies' ? moviesToRender : savedMovies;
 
@@ -63,7 +63,12 @@ const MovieList = ({ listType }: MovieListProps) => {
 
   return (
     <div className={styles.container}>
-      <DropdownMenu onSortChange={handleSortChange} />
+      <div className={styles.headerContainer}>
+        <p>
+          <span>{heading}</span> Movies
+        </p>
+        <DropdownMenu onSortChange={handleSortChange} />
+      </div>
       <ul className={styles.listContainer}>
         {sortedMovies?.map((movie) => (
           <Card

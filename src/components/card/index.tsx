@@ -7,7 +7,6 @@ import Star from '../starSVG';
 import styles from './index.module.css';
 
 const Card = ({ movie, handleAdd, handleRemove, listType }: CardProps) => {
-  console.log('movie', movie);
   const date = new Date(movie.release_date);
   const formattedDate = format(date, 'MMMM d, yyyy');
 
@@ -22,48 +21,40 @@ const Card = ({ movie, handleAdd, handleRemove, listType }: CardProps) => {
   );
 
   return (
-    <li key={movie.id} className={styles.cardContainer}>
-      <div className={styles.innerContainer}>
-        <div className={styles.posterContainer}>{moviePoster}</div>
-        <div className={styles.textContainer}>
-          <h6 className={styles.title} title={movie.title}>
-            {movie.title}
-          </h6>
-          <p
-            className={styles.releaseDate}
-            title={`Released: ${formattedDate}`}>
-            Released: {formattedDate}
+    <li key={movie.id} className={styles.container}>
+      <div className={styles.posterContainer}>{moviePoster}</div>
+      <div className={styles.descriptionContainer}>
+        <h6 className={styles.title} title={movie.title}>
+          {movie.title}
+        </h6>
+        <p className={styles.date} title={`Released: ${formattedDate}`}>
+          Released: {formattedDate}
+        </p>
+        <div className={styles.popularityContainer}>
+          <span>
+            <Star />
+          </span>
+          <p className={styles.popularity} title={`Released: ${formattedDate}`}>
+            {movie.popularity}
           </p>
-          <div className={styles.popularityContainer}>
-            <span>
-              <Star />
-            </span>
-            <p
-              className={styles.popularity}
-              title={`Released: ${formattedDate}`}>
-              {movie.popularity}
-            </p>
-          </div>
-          <div className={styles.buttonContainer}>
-            {listType === 'databaseMovies' && (
-              <button
-                onClick={() => handleAdd(movie)}
-                disabled={movie.isAdded}
-                className={`${styles.addButton} ${
-                  movie.isAdded ? styles.clicked : ''
-                }`}>
-                {movie.isAdded ? 'Added!' : 'Add'}
-              </button>
-            )}
+        </div>
+        <div className={styles.buttonContainer}>
+          {listType === 'databaseMovies' && (
             <button
-              disabled={!movie.isAdded}
-              onClick={() => handleRemove(movie)}
-              className={`${styles.removeButton} ${
-                movie.isAdded ? '' : styles.clicked
+              onClick={() => handleAdd(movie)}
+              disabled={movie.isAdded}
+              className={`${styles.button} ${
+                movie.isAdded && styles.disabled
               }`}>
-              Remove
+              {movie.isAdded ? 'Added!' : 'Add'}
             </button>
-          </div>
+          )}
+          <button
+            disabled={!movie.isAdded}
+            onClick={() => handleRemove(movie)}
+            className={`${styles.button} ${!movie.isAdded && styles.disabled}`}>
+            Remove
+          </button>
         </div>
       </div>
     </li>

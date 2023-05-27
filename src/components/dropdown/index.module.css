@@ -1,23 +1,12 @@
 .container {
     display: flex;
     justify-content: end;
-    padding-bottom: 60px;
 }
 
 .container p {
     align-self: center;
     margin: 0;
     padding-right: 10px;
-}
-
-.container p:first-child {
-    flex: 1;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 30px;
-    line-height: 35px;
-    color: var(--blue);
 }
 
 .container p:first-child span {

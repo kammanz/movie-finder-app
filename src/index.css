@@ -4,6 +4,7 @@ body {
     --blue: #409DE1;
     --black: #000;
     --grey: #f9f9f9;
+    --white: #fff;
     /* font-family: 'Roboto'; */
     font-family: 'Roboto', sans-serif;
 }

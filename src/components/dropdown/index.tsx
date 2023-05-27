@@ -16,9 +16,6 @@ const DropdownMenu = ({ onSortChange }: DropDownMenuType) => {
 
   return (
     <div className={styles.container}>
-      <p>
-        <span>Stuff</span> Movies
-      </p>
       <p>Sort by: </p>
       <form style={{ position: 'relative' }}>
         <Select

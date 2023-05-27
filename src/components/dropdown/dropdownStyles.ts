@@ -4,8 +4,8 @@ export const dropdownStyles = {
     width: 200,
     height: 50,
     paddingLeft: 10,
-    boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.25)',
     borderRadius: 10,
+    boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.25)',
   }),
   dropdownIndicator: (base: any) => ({
     ...base,

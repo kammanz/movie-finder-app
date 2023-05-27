@@ -45,6 +45,7 @@ export const addToFirestore = async (movie: Movie, userId: UserId) => {
       title: movie.title,
       isAdded: true,
       isWatched: false,
+      popularity: movie.popularity,
     });
   } catch (error) {
     throw error;

@@ -2,6 +2,30 @@
     padding: 65px 100px 100px 100px;
     background-color: var(--grey);
 }
+
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 60px;
+}
+
+.headerContainer > p {
+    align-self: center;
+    margin: 0;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 35px;
+    color: var(--blue);
+
+}
+
+.headerContainer > p span {
+    color:var(--black)
+}
+
+
 .listContainer {
     display: flex;
     flex-wrap: wrap;

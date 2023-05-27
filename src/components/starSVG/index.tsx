@@ -4,7 +4,7 @@ const Star = () => (
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
     width={15}
-    height={17}
+    height={20}
     fill="none">
     <path fill="url(#a)" d="M0 0h15v14.1H0z" />
     <defs>
