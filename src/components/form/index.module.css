@@ -1,17 +1,14 @@
 .container {
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
-  max-width: 504px;
-  margin: 0 auto;
+  min-width: 504px;
   padding: 25px 44px 63px 44px;
-background: #FFFFFF;
-box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
-border-radius: 16px;
-
+  background-color: var(--white);
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
 }
 
-h2 {
+.title {
   align-self: center;
   margin-bottom: 25px;
   font-family: 'Roboto';
@@ -51,9 +48,17 @@ label {
   color: rgba(0, 0, 0, 0.7);
 }
 
+.emailContainer {
+  margin-bottom: 20px;
+}
+
 .passwordContainer {
   position: relative;
   margin-bottom: 35px;
+}
+
+.inputContainer {
+  position: relative;
 }
 
 .eyeIcon {
@@ -96,3 +101,9 @@ border-radius: 30px;
 .linkContainer div {
   margin-bottom: 15px;
 }
+
+.error {
+  margin: 10px 0 0 0;
+  color: var(--error);
+}
+

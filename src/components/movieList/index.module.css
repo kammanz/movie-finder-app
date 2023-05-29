@@ -1,4 +1,5 @@
 .container {
+    min-height: 100vh;
     padding: 65px 100px 100px 100px;
     background-color: var(--grey);
 }
@@ -12,19 +13,17 @@
 .headerContainer > p {
     align-self: center;
     margin: 0;
+    line-height: 35px;
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 700;
     font-size: 30px;
-    line-height: 35px;
     color: var(--blue);
-
 }
 
 .headerContainer > p span {
     color:var(--black)
 }
-
 
 .listContainer {
     display: flex;
@@ -34,6 +33,6 @@
 .card {
     margin: 4px 8px;
     padding: 4px 8px;
-    background-color: lightgrey;
+    background-color: var(--grey);
     list-style: none;
 }

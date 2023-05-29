@@ -15,7 +15,7 @@ import styles from './index.module.css';
 const Form = ({ isSignup }: { isSignup: isSignup }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [error, setError] = useState('');
+  const [firebaseError, setFirebaseError] = useState('');
   const [isGuest, setIsGuest] = useState(false);
   const {
     formState: { errors },
@@ -30,10 +30,10 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
   const { signup, login, loginGuest } = useAuth();
   const navigate = useNavigate();
 
-  const questionText = isSignup
+  const question = isSignup
     ? 'Already have an account?'
     : `Don't have an account?`;
-  const navText = isSignup ? 'Log In' : 'Sign Up';
+  const cta = isSignup ? 'Log In' : 'Sign Up';
   const path = isSignup ? '/login' : '/';
 
   const togglePasswordVisibility = () => {
@@ -47,7 +47,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
       navigate('/homepage');
     } catch (e) {
       if (e instanceof Error) {
-        setError(parseFirebaseError(e));
+        setFirebaseError(parseFirebaseError(e));
       }
     }
   };
@@ -66,9 +66,8 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
       }
       navigate('/homepage');
     } catch (e) {
-      console.error('e: ', e);
       if (e instanceof Error) {
-        setError(parseFirebaseError(e));
+        setFirebaseError(parseFirebaseError(e));
       }
     }
     setIsLoading(false);
@@ -76,64 +75,62 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
 
   return (
     <div className={styles.container}>
-      <h2>{isSignup ? 'Sign Up' : 'Log In'}</h2>
+      <h2 className={styles.title}>{isSignup ? 'Sign Up' : 'Log In'}</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="email">Email</label>
-        <br />
-        <input
-          id="email"
-          data-testid="email"
-          {...register('email', {
-            required: 'Email required',
-            pattern: {
-              value: /\S+@\S+\.\S+/,
-              message: 'Invalid email format',
-            },
-          })}
-          placeholder="Enter your email"
-          className={styles.input}
-        />
-
-        <p>{!isGuest && errors.email?.message}</p>
-        <p>{isSignup && error}</p>
-        <br />
-        <label htmlFor="password">Password</label>
-        <br />
-        <div className={styles.passwordContainer}>
+        <div className={styles.emailContainer}>
+          <label htmlFor="email">Email</label>
           <input
-            type={passwordVisible ? 'text' : 'password'}
-            data-testid="password"
-            id="password"
-            {...register('password', {
-              required: 'Password required',
-              minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters',
+            id="email"
+            data-testid="email"
+            {...register('email', {
+              required: 'Email required',
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: 'Invalid email format',
               },
             })}
-            placeholder="Enter your password"
+            placeholder="Enter your email"
             className={styles.input}
           />
-          <FontAwesomeIcon
-            icon={passwordVisible ? faEyeSlash : faEye}
-            onClick={togglePasswordVisibility}
-            className={styles.eyeIcon}
-          />
+          <p className={styles.error}>{!isGuest && errors.email?.message}</p>
         </div>
-        {!isGuest && <p>{errors.password?.message}</p>}
-        {error && <p>{error}</p>}
+        <div className={styles.passwordContainer}>
+          <label htmlFor="password">Password</label>
+          <div className={styles.inputContainer}>
+            <input
+              type={passwordVisible ? 'text' : 'password'}
+              data-testid="password"
+              id="password"
+              {...register('password', {
+                required: 'Password required',
+                minLength: {
+                  value: 6,
+                  message: 'Password must be at least 6 characters',
+                },
+              })}
+              placeholder="Enter your password"
+              className={styles.input}
+            />
+            <FontAwesomeIcon
+              icon={passwordVisible ? faEyeSlash : faEye}
+              onClick={togglePasswordVisibility}
+              className={styles.eyeIcon}
+            />
+          </div>
+          <p className={styles.error}>{errors.password?.message}</p>
+        </div>
         <button
-          data-testid="submit"
           type="submit"
           disabled={isLoading}
           className={styles.submitButton}>
           Submit
         </button>
+        {firebaseError && <p className={styles.error}>{firebaseError}</p>}
         <div className={styles.linkContainer}>
           <div>
-            {questionText}{' '}
+            {question}{' '}
             <span>
-              <Link to={path}>{navText}</Link>
+              <Link to={path}>{cta}</Link>
             </span>
           </div>
           <p>OR</p>
