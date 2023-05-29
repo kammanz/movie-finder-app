@@ -21,7 +21,7 @@ export type Movie = {
 };
 export type MovieSortOptions = 'newest' | 'oldest' | typeof recentDays;
 export type User = firebase.User | null;
-export type FormType = 'signup' | 'login';
+export type isSignup = boolean;
 
 export type MovieListProps = {
   // sortType: MovieSortOptions;

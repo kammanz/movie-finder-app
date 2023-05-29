@@ -11,10 +11,10 @@ const App = () => {
     // <Container>
     <div>
       <Routes>
-        <Route path="/" element={<Form formType="signup" />} />
+        <Route path="/" element={<Form isSignup />} />
       </Routes>
       <Routes>
-        <Route path="/login" element={<Form formType="login" />} />
+        <Route path="/login" element={<Form isSignup={false} />} />
       </Routes>
       <Routes>
         <Route element={<PrivateRoute />}>

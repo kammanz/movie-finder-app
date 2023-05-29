@@ -4,7 +4,7 @@ import Form from '../../components/form';
 const Signup = () => {
   return (
     <div>
-      <Form formType={'signup'} />
+      <Form isSignup={true} />
     </div>
   );
 };
