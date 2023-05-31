@@ -36,3 +36,14 @@
     background-color: var(--grey);
     list-style: none;
 }
+
+@media screen and (max-width: 767px) {
+    .container {
+        padding: 0;
+    }
+    .listContainer {
+        justify-content: center;
+        padding: 0;
+    }    
+} 
+    

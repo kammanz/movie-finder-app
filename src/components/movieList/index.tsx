@@ -63,12 +63,12 @@ const MovieList = ({ listType }: MovieListProps) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.headerContainer}>
+      {/* <div className={styles.headerContainer}>
         <p>
           <span>{heading}</span> Movies
         </p>
         <DropdownMenu onSortChange={handleSortChange} />
-      </div>
+      </div> */}
       <ul className={styles.listContainer}>
         {sortedMovies?.map((movie) => (
           <Card
