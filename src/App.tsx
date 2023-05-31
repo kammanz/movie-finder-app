@@ -1,19 +1,19 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
-import Form from './components/form';
+import Signup from './pages/signup';
+import Login from './pages/login';
 import Homepage from './pages/homepage';
 import PrivateRoute from './components/PrivateRoute';
 import SavedMovies from './pages/savedMovies';
 
 const App = () => {
   return (
-    <Container>
+    <>
       <Routes>
-        <Route path="/" element={<Form formType="signup" />} />
+        <Route path="/" element={<Signup />} />
       </Routes>
       <Routes>
-        <Route path="/login" element={<Form formType="login" />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       <Routes>
         <Route element={<PrivateRoute />}>
@@ -21,7 +21,7 @@ const App = () => {
           <Route path="/saved-movies" element={<SavedMovies />} />
         </Route>
       </Routes>
-    </Container>
+    </>
   );
 };
 

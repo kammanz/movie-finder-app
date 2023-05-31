@@ -1,6 +1,6 @@
-const recentDays = 2;
+export const recentDays = '2';
 export const SELECT_MENU_OPTIONS = [
-  { label: 'newest', value: 'newest' },
-  { label: 'oldest', value: 'oldest' },
-  { label: `${recentDays} days`, value: recentDays },
+  { value: 'newest', label: 'Newest' },
+  { value: 'oldest', label: 'Oldest' },
+  { value: recentDays, label: `${recentDays} days` },
 ];

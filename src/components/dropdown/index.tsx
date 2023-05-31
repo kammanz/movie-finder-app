@@ -1,44 +1,30 @@
 import React from 'react';
+import Select from 'react-select';
 import {
   MovieSortOptions,
   DropdownMenu as DropDownMenuType,
 } from '../../types';
 import { SELECT_MENU_OPTIONS } from '../../constants/selectMenuOptions';
+import { dropdownStyles } from './dropdownStyles';
+import styles from './index.module.css';
 
-const DropdownMenu = ({
-  sortType,
-  onSortChange,
-  onResetMovies,
-  isDisabled,
-}: DropDownMenuType) => {
-  const handleChange = (newSortType: MovieSortOptions) => {
-    onSortChange(newSortType);
+const DropdownMenu = ({ onSortChange }: DropDownMenuType) => {
+  const handleChange = (selectedOption: any) => {
+    console.log('selectedOption', selectedOption);
+    onSortChange(selectedOption.value as MovieSortOptions);
   };
 
   return (
-    <div style={{ backgroundColor: 'lightyellow' }}>
-      <form>
-        <label htmlFor="sort-movies">Sort by:</label>
-        <select
-          id="sort-movies"
-          data-testid="select"
-          value={sortType}
-          disabled={isDisabled}
-          onChange={(event) =>
-            handleChange(event.target.value as MovieSortOptions)
-          }>
-          {SELECT_MENU_OPTIONS.map((option) => {
-            return (
-              <option key={option.label} value={option.value}>
-                {option.label}
-              </option>
-            );
-          })}
-        </select>
+    <div className={styles.container}>
+      <p>Sort by: </p>
+      <form style={{ position: 'relative' }}>
+        <Select
+          defaultValue={SELECT_MENU_OPTIONS[0]}
+          options={SELECT_MENU_OPTIONS}
+          onChange={handleChange}
+          styles={dropdownStyles}
+        />
       </form>
-      <button type="button" disabled={isDisabled} onClick={onResetMovies}>
-        Show all movies
-      </button>
     </div>
   );
 };

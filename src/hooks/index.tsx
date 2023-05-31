@@ -21,8 +21,15 @@ export const getSavedMovies = async (UserId: UserId) => {
   const querySnapshot = await getDocs(q);
   let savedMovies: Array<Movie> = [];
   querySnapshot.forEach((doc) => {
-    const { id, isAdded, poster_path, release_date, title, isWatched } =
-      doc.data();
+    const {
+      id,
+      isAdded,
+      poster_path,
+      release_date,
+      title,
+      isWatched,
+      popularity,
+    } = doc.data();
     savedMovies.push({
       id,
       isAdded,
@@ -30,6 +37,7 @@ export const getSavedMovies = async (UserId: UserId) => {
       poster_path,
       release_date,
       title,
+      popularity,
     });
   });
 
@@ -55,6 +63,7 @@ export const useFullMovies = () => {
   useEffect(() => {
     getRawMovies()
       .then((rawMovies) => {
+        console.log('raw movies');
         setRawMovies(rawMovies);
       })
       .catch((rawMoviesError: string) => {

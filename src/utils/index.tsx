@@ -45,6 +45,7 @@ export const addToFirestore = async (movie: Movie, userId: UserId) => {
       title: movie.title,
       isAdded: true,
       isWatched: false,
+      popularity: movie.popularity,
     });
   } catch (error) {
     throw error;
@@ -79,11 +80,10 @@ export const sortMovies = (sortType: MovieSortOptions, movies: Movie[]) => {
     case SELECT_MENU_OPTIONS[1].value:
       sorted = sortByProperty(movies, 'release_date', false);
       break;
-    case SELECT_MENU_OPTIONS[2].value.toString():
-      sorted = newReleases(movies, Number(SELECT_MENU_OPTIONS[2].value));
+    case SELECT_MENU_OPTIONS[2].value:
+      sorted = newReleases(movies, parseInt(sortType));
       break;
   }
-
   return sorted;
 };
 

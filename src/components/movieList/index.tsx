@@ -9,10 +9,13 @@ import {
 import { useAuth } from '../../auth/useAuth';
 import { useFullMovies } from '../../hooks';
 import Card from '../card';
+import DropdownMenu from '../dropdown';
 import LoadingOverlay from '../overlay';
 import styles from './index.module.css';
+import { MovieSortOptions } from '../../types';
 
-const MovieList = ({ sortType, listType }: MovieListProps) => {
+const MovieList = ({ listType }: MovieListProps) => {
+  const [sortType, setSortType] = useState<MovieSortOptions>('newest');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const {
@@ -23,11 +26,13 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
     savedMoviesError,
   } = useFullMovies();
   const { user } = useAuth();
-
+  const heading = listType === 'databaseMovies' ? 'Search' : 'Saved';
   const initialMovies =
     listType === 'databaseMovies' ? moviesToRender : savedMovies;
 
-  let sortedMovies = initialMovies && sortMovies(sortType, initialMovies);
+  const handleSortChange = (sortType: MovieSortOptions) => {
+    setSortType(sortType);
+  };
 
   const handleAdd = async (movie: Movie) => {
     setIsLoading(true);
@@ -53,9 +58,18 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
     }
   };
 
+  let sortedMovies: Movie[] | undefined =
+    initialMovies && sortMovies(sortType, initialMovies);
+
   return (
-    <>
-      <ul className={styles.container}>
+    <div className={styles.container}>
+      <div className={styles.headerContainer}>
+        <p>
+          <span>{heading}</span> Movies
+        </p>
+        <DropdownMenu onSortChange={handleSortChange} />
+      </div>
+      <ul className={styles.listContainer}>
         {sortedMovies?.map((movie) => (
           <Card
             key={movie.id}
@@ -70,7 +84,7 @@ const MovieList = ({ sortType, listType }: MovieListProps) => {
       {rawMoviesError && <p>{rawMoviesError}</p>}
       {savedMoviesError && <p>{savedMoviesError}</p>}
       <LoadingOverlay isLoading={isLoading} />
-    </>
+    </div>
   );
 };
 

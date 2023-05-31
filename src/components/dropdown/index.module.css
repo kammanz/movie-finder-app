@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    justify-content: end;
+}
+
+.container p {
+    align-self: center;
+    margin: 0;
+    padding-right: 10px;
+}
+
+.container p:first-child span {
+    color: rgb(33, 37, 41);
+}

@@ -5,15 +5,17 @@ import { doc, setDoc } from 'firebase/firestore';
 import { useAuth } from '../../auth/useAuth';
 import { db } from '../../firebase/firebaseSetup';
 import { parseFirebaseError } from '../../utils';
-import { FormType } from '../../types';
+import { isSignup } from '../../types';
 import LoadingOverlay from '../overlay';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
-const Form = ({ formType }: { formType: FormType }) => {
+import styles from './index.module.css';
+
+const Form = ({ isSignup }: { isSignup: isSignup }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [passwordType, setPasswordType] = useState<'password' | 'text'>(
-    'password'
-  );
-  const [error, setError] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [firebaseError, setFirebaseError] = useState('');
   const [isGuest, setIsGuest] = useState(false);
   const {
     formState: { errors },
@@ -28,6 +30,16 @@ const Form = ({ formType }: { formType: FormType }) => {
   const { signup, login, loginGuest } = useAuth();
   const navigate = useNavigate();
 
+  const question = isSignup
+    ? 'Already have an account?'
+    : `Don't have an account?`;
+  const cta = isSignup ? 'Log In' : 'Sign Up';
+  const path = isSignup ? '/login' : '/';
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prevVisible) => !prevVisible);
+  };
+
   const submitGuest = async () => {
     try {
       setIsGuest(true);
@@ -35,7 +47,7 @@ const Form = ({ formType }: { formType: FormType }) => {
       navigate('/homepage');
     } catch (e) {
       if (e instanceof Error) {
-        setError(parseFirebaseError(e));
+        setFirebaseError(parseFirebaseError(e));
       }
     }
   };
@@ -44,81 +56,88 @@ const Form = ({ formType }: { formType: FormType }) => {
     if (!email && !password) return;
     setIsLoading(true);
     try {
-      if (formType === 'signup') {
+      if (isSignup === true) {
         await signup(email.trim(), password.trim());
         await setDoc(doc(db, 'users', email.trim()), {
           movies: [],
         });
-      } else if (formType === 'login') {
+      } else {
         await login(email.trim(), password.trim());
       }
       navigate('/homepage');
     } catch (e) {
-      console.error('e: ', e);
       if (e instanceof Error) {
-        setError(parseFirebaseError(e));
+        setFirebaseError(parseFirebaseError(e));
       }
     }
     setIsLoading(false);
   };
 
   return (
-    <div>
-      <h2>{formType}</h2>
+    <div className={styles.container}>
+      <h2 className={styles.title}>{isSignup ? 'Sign Up' : 'Log In'}</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="email">Email</label>
-        <br />
-        <input
-          id="email"
-          data-testid="email"
-          {...register('email', {
-            required: 'Email required',
-            pattern: {
-              value: /\S+@\S+\.\S+/,
-              message: 'Invalid email format',
-            },
-          })}
-          placeholder="Enter your email"
-        />
-        <p>{!isGuest && errors.email?.message}</p>
-        <p>{formType === 'signup' && error}</p>
-        <br />
-        <label htmlFor="password">Password</label>
-        <br />
-        <input
-          data-testid="password"
-          type={passwordType}
-          id="password"
-          {...register('password', {
-            required: 'Password required',
-            minLength: {
-              value: 6,
-              message: 'Password must be at least 6 characters',
-            },
-          })}
-          placeholder="Enter your password"
-        />
+        <div className={styles.emailContainer}>
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            data-testid="email"
+            {...register('email', {
+              required: 'Email required',
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: 'Invalid email format',
+              },
+            })}
+            placeholder="Enter your email"
+            className={styles.input}
+          />
+          <p className={styles.error}>{!isGuest && errors.email?.message}</p>
+        </div>
+        <div className={styles.passwordContainer}>
+          <label htmlFor="password">Password</label>
+          <div className={styles.inputContainer}>
+            <input
+              type={passwordVisible ? 'text' : 'password'}
+              data-testid="password"
+              id="password"
+              {...register('password', {
+                required: 'Password required',
+                minLength: {
+                  value: 6,
+                  message: 'Password must be at least 6 characters',
+                },
+              })}
+              placeholder="Enter your password"
+              className={styles.input}
+            />
+            <FontAwesomeIcon
+              icon={passwordVisible ? faEyeSlash : faEye}
+              onClick={togglePasswordVisibility}
+              className={styles.eyeIcon}
+            />
+          </div>
+          <p className={styles.error}>{errors.password?.message}</p>
+        </div>
         <button
-          type="button"
-          onClick={() =>
-            setPasswordType(passwordType === 'password' ? 'text' : 'password')
-          }>
-          {passwordType === 'password' ? 'Show Password' : 'Hide Password'}
-        </button>
-        <br />
-        <p>{!isGuest && errors.password?.message}</p>
-        <p>{error}</p>
-        <br />
-        <button data-testid="submit" type="submit" disabled={isLoading}>
+          type="submit"
+          disabled={isLoading}
+          className={styles.submitButton}>
           Submit
         </button>
-        <button onClick={submitGuest}>Continue as guest</button>
-        <br />
-        <Link to={formType === 'signup' ? '/login' : '/'}>
-          {formType === 'signup'
-            ? 'Already have an account? Click here to log in'
-            : 'Dont have an account? Click here to sign up'}
-        </Link>
+        {firebaseError && <p className={styles.error}>{firebaseError}</p>}
+        <div className={styles.linkContainer}>
+          <div>
+            {question}{' '}
+            <span>
+              <Link to={path}>{cta}</Link>
+            </span>
+          </div>
+          <p>OR</p>
+          <button onClick={submitGuest} className={styles.guestButton}>
+            Continue as Guest
+          </button>
+        </div>
       </form>
       <LoadingOverlay isLoading={isLoading} />
     </div>

@@ -19,7 +19,7 @@ jest.mock('../../../../context/AuthContext', () => ({
 const mockCallback = jest.fn();
 
 test('submits signup with correct email and password', async () => {
-  render(<Form formType="signup" />);
+  render(<Form isSignup />);
   const user = userEvent.setup();
 
   const emailInput = screen.getByTestId('email');
@@ -38,7 +38,7 @@ test('submits signup with correct email and password', async () => {
 });
 
 test('submits login with correct email and password', async () => {
-  render(<Form formType="login" />);
+  render(<Form isSignup={false} />);
   const user = userEvent.setup();
 
   const emailInput = screen.getByTestId('email');
@@ -58,7 +58,7 @@ test('submits login with correct email and password', async () => {
 
 test('throws error when submitting with no email or password', async () => {
   mockSignUp.mockRejectedValue('custom error');
-  render(<Form formType="signup" />);
+  render(<Form isSignup />);
   // grab submit button
   const submitButton = screen.getByTestId('submit');
 
@@ -88,7 +88,7 @@ test.only('custom error display', async () => {
       'FirebaseError: Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found).'
     );
   });
-  render(<Form formType="signup" />);
+  render(<Form isSignup />);
   const user = userEvent.setup();
 
   const emailInput = screen.getByTestId('email');

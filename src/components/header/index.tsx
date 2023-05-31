@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';
+import Navbar from '../navbar';
 
-const styles = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  backgroundColor: 'lightsalmon',
-};
+import styles from './index.module.css';
 
 const Header = () => {
   const [error, setError] = useState('');
@@ -46,14 +43,45 @@ const Header = () => {
     password && handleDelete(password);
   };
 
+  const handleRedirect = async (isSignup: boolean) => {
+    setError('');
+    try {
+      await logout();
+
+      if (isSignup) {
+        navigate('/');
+      } else {
+        navigate('/login');
+      }
+    } catch (error) {
+      setError('Failed to redirect');
+    }
+  };
+
   return (
-    <header style={styles}>
-      <h1>Welcome, {name}</h1>
+    <header className={styles.container}>
+      <div className={styles.userContainer}>
+        <h3 className={styles.header}>Welcome, {name}</h3>
+      </div>
+      <div className={styles.navContainer}>
+        <Navbar />
+      </div>
+      <div className={styles.buttonContainer}>
+        {user?.email ? (
+          <>
+            <button onClick={handleLogout}>Logout</button>
+            <button disabled={!user?.email} onClick={handleDeleteRequest}>
+              Delete Account
+            </button>
+          </>
+        ) : (
+          <>
+            <button onClick={() => handleRedirect(true)}>Signup</button>
+            <button onClick={() => handleRedirect(false)}>Login</button>
+          </>
+        )}
+      </div>
       {confirmation && <p>{confirmation}</p>}
-      <button onClick={handleLogout}>Logout</button>
-      <button disabled={!user?.email} onClick={handleDeleteRequest}>
-        Delete Account
-      </button>
       {error && <p>{error}</p>}
     </header>
   );
