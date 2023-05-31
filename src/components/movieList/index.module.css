@@ -39,11 +39,20 @@
 
 @media screen and (max-width: 767px) {
     .container {
-        padding: 0;
+        padding: 15px 32px;
     }
+    
     .listContainer {
         justify-content: center;
         padding: 0;
-    }    
+    }
+    
+    .headerContainer {
+        padding-bottom: 5px;
+    }
+
+    .headerContainer > p {
+        font-size: 16px;
+    }
 } 
     
