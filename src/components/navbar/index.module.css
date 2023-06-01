@@ -1,5 +1,10 @@
+.navContainer {
+    flex-grow: 1;
+}
+
 .listContainer {
     display: flex;
+    flex-grow: 1;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -12,8 +17,9 @@
 }
 
 .listContainer li {
-    padding: 18px 30px;
+    /* padding: 18px 30px; */
     justify-self: center;
+    flex-grow: .15;
 }
 
 .listContainer a {
