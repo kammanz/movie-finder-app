@@ -8,7 +8,7 @@ const Homepage = () => {
     <>
       <Header />
       <Hero />
-      {/* <MovieList listType="databaseMovies" /> */}
+      <MovieList listType="databaseMovies" />
     </>
   );
 };

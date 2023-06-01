@@ -51,6 +51,9 @@
 @media screen and (max-width: 767px) {
     .container {
         position: relative;
+        position: fixed;
+        width: 100%;
+        background-color: var(--white);
         align-items: center;
         margin: 0;
         padding: 0;

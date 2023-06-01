@@ -19,6 +19,7 @@
 @media screen and (max-width:767px) {
    .container {
       padding: 22px 32px;
+      padding-top: 57px;
    }
 
    .titleContainer {
