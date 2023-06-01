@@ -33,7 +33,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
   const question = isSignup
     ? 'Already have an account?'
     : `Don't have an account?`;
-  const cta = isSignup ? 'Log In' : 'Sign Up';
+  const cta = isSignup ? 'Login' : 'Signup';
   const path = isSignup ? '/login' : '/';
 
   const togglePasswordVisibility = () => {
@@ -75,7 +75,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>{isSignup ? 'Sign Up' : 'Log In'}</h2>
+      <h2 className={styles.title}>{isSignup ? 'Signup' : 'Login'}</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.emailContainer}>
           <label htmlFor="email">Email</label>
