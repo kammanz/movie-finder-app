@@ -1,6 +1,13 @@
 import * as React from 'react';
 const Banner = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={462} height={462} fill="none">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="100%"
+    height="100%"
+    viewBox="0 0 462 462"
+    fill="none"
+    style={{ overflow: 'hidden' }}
+    preserveAspectRatio="xMidYMid meet">
     <path
       stroke="#3FC3D8"
       strokeWidth={2}
