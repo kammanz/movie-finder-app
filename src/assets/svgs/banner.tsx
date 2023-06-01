@@ -1,5 +1,5 @@
 import * as React from 'react';
-const FilmMaker = () => (
+const Banner = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width={462} height={462} fill="none">
     <path
       stroke="#3FC3D8"
@@ -347,4 +347,4 @@ const FilmMaker = () => (
     />
   </svg>
 );
-export default FilmMaker;
+export default Banner;

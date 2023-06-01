@@ -12,7 +12,8 @@
 }
 
 .listContainer li {
-    padding: 18px 30px
+    padding: 18px 30px;
+    justify-self: center;
 }
 
 .listContainer a {
@@ -20,16 +21,37 @@
 }
 
 .active {
-    color: lightgrey;
+    color: var(--black);
     pointer-events: none;
 }
 
 .inActive {
-    color: var(--blue)
+    color: var(--blue);
 }
 
 @media screen and (max-width: 767px) {
     .listContainer {
-        background-color: pink;
+        flex-direction: column;
+        font-size: 12px;
+    }
+
+    .listContainer li {
+        padding: 0;
+        /* padding: 9px 15px; */
+        text-align: center;
+        margin-bottom: 12px;
+    }
+
+    .listContainer li:last-child {
+        margin-bottom: 23px;
+        /* padding: 0; */
+        /* padding: 9px 15px; */
+        /* text-align: center; */
+        /* margin-bottom: 12px; */
+    }
+    .listContainer li button {
+        /* padding: 18px 30px;
+        justify-self: center; */
+        margin-bottom: 20px;
     }
 }

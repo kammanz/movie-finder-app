@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';
 import Navbar from '../navbar';
+import HamburgerMenu from '../../assets/svgs/hamburgerMenu';
+import CloseIcon from '../../assets/svgs/closeIcon';
 
 import styles from './index.module.css';
 
 const Header = () => {
   const [error, setError] = useState('');
   const [confirmation, setConfirmation] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
   const { user, logout, deleteUserAccount } = useAuth();
   const navigate = useNavigate();
   const name = user?.email || 'Guest';
@@ -58,27 +61,46 @@ const Header = () => {
     }
   };
 
+  const handleOpenMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <header className={styles.container}>
       <div className={styles.userContainer}>
-        <h3 className={styles.header}>Welcome, {name}</h3>
+        <h3 className={styles.greeting}>Welcome, {name}</h3>
       </div>
-      <div className={styles.navContainer}>
-        <Navbar />
-      </div>
-      <div className={styles.buttonContainer}>
-        {user?.email ? (
-          <>
-            <button onClick={handleLogout}>Logout</button>
-            <button disabled={!user?.email} onClick={handleDeleteRequest}>
-              Delete Account
-            </button>
-          </>
-        ) : (
-          <>
-            <button onClick={() => handleRedirect(true)}>Signup</button>
-            <button onClick={() => handleRedirect(false)}>Login</button>
-          </>
+      <div className={styles.menuContainer}>
+        <div
+          onClick={handleOpenMenu}
+          className={
+            isOpen
+              ? `${styles.svgContainer} ${styles.open}`
+              : styles.svgContainer
+          }>
+          {isOpen ? <CloseIcon /> : <HamburgerMenu />}
+        </div>
+        {isOpen && (
+          <div className={styles.toggleContainer}>
+            <div className={styles.navContainer}>
+              <Navbar />
+            </div>
+            <div className={styles.buttonContainer}>
+              {user?.email ? (
+                <>
+                  <button onClick={handleLogout}>Logout</button>
+                  <button disabled={!user?.email} onClick={handleDeleteRequest}>
+                    Delete Account
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => handleRedirect(true)}>Signup</button>
+                  <button onClick={() => handleRedirect(false)}>Login</button>
+                </>
+              )}
+            </div>
+          </div>
         )}
       </div>
       {confirmation && <p>{confirmation}</p>}

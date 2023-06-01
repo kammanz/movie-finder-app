@@ -6,9 +6,9 @@ import Hero from '../../components/hero';
 const Homepage = () => {
   return (
     <>
-      {/* <Header /> */}
-      {/* <Hero /> */}
-      <MovieList listType="databaseMovies" />
+      <Header />
+      <Hero />
+      {/* <MovieList listType="databaseMovies" /> */}
     </>
   );
 };
