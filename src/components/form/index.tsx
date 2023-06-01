@@ -127,13 +127,18 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
         </button>
         {firebaseError && <p className={styles.error}>{firebaseError}</p>}
         <div className={styles.linkContainer}>
-          <div>
-            {question}{' '}
-            <span>
-              <Link to={path}>{cta}</Link>
-            </span>
+          <div className={styles.navContainer}>
+            <p>
+              {question}{' '}
+              <span>
+                <Link to={path}>{cta}</Link>
+              </span>
+              <br />
+              <br />
+              OR
+            </p>
           </div>
-          <p>OR</p>
+
           <button onClick={submitGuest} className={styles.guestButton}>
             Continue as Guest
           </button>
