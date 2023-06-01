@@ -12,3 +12,7 @@
 .container p:first-child span {
     color: rgb(33, 37, 41);
 }
+
+@media screen and (max-width: 767px) {
+    
+}

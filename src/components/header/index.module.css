@@ -6,7 +6,7 @@
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
 }
 
-.header {
+.greeting {
     padding: 0;
     margin: 0;
     font-family: 'Roboto';
@@ -24,7 +24,6 @@
 .userContainer {
     display: flex;
     align-items: center;
-    padding-left: 20px;
 }
 
 .buttonContainer {
@@ -37,7 +36,7 @@
 .buttonContainer button {
     margin: 0 10px;
     padding: 10px 20px;
-    background: #409DE1;
+    background: var(--blue);
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
     border-radius: 6px;
     border: none;
@@ -46,5 +45,62 @@
     font-weight: 500;
     font-size: 12px;
     line-height: 14px;
-    color: #FFFFFF;
+    color: var(--white);
+}
+
+@media screen and (max-width: 767px) {
+    .container {
+        position: relative;
+        position: fixed;
+        width: 100%;
+        background-color: var(--white);
+        align-items: center;
+        margin: 0;
+        padding: 0;
+        padding-left: 32px;
+        padding-top: 6px; 
+        padding-bottom: 6px;
+    }
+
+    .greeting {
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .menuContainer {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transition: 90ms;
+        background-color: var(--grey);
+        height: 100%;
+    }
+
+    .svgContainer {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        height: 100%;
+        padding-right: 10px;
+        background-color: var(--white);
+    }
+
+    .toggleContainer {
+        padding: 0 28px 20px 28px;
+        background-color: var(--grey);
+    }
+
+    .buttonContainer {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .buttonContainer button {
+        width: 100%;
+        margin: 0 0 20px 0;
+    }
+
+    .open {
+        background-color: var(--grey);
+    }
 }

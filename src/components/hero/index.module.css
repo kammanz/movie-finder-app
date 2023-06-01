@@ -1,16 +1,39 @@
 .container {
    display: flex;
+   justify-content: space-around;
    padding: 32px 100px 60px 100px;
+}
 
+.titleContainer {
+   align-self: center;
 }
 
 .container p {
-   align-self: center;
+   margin: 0;
    font-family: 'Roboto';
-   /* font-style: normal; */
    font-weight: 700;
    font-size: 100px;
    line-height: 117px;
-   padding-right: 75px;
-   /* color: #000000; */
+}
+
+@media screen and (max-width:767px) {
+   .container {
+      padding: 22px 32px;
+      padding-top: 57px;
+   }
+
+   .titleContainer {
+      align-self: center;
+   }
+   
+   .container p {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 28px;
+      letter-spacing: 0em;
+      text-align: left;
+   }
+
+   .bannerContainer {
+   }
 }

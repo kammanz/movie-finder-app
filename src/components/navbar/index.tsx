@@ -12,7 +12,7 @@ function Navbar() {
             className={({ isActive }) =>
               isActive ? styles.active : styles.inActive
             }>
-            Homepage
+            Home
           </NavLink>
         </li>
         <li>
