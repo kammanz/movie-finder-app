@@ -40,7 +40,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
     setPasswordVisible((prevVisible) => !prevVisible);
   };
 
-  const submitGuest = async () => {
+  const handleSubmitGuest = async () => {
     try {
       setIsGuest(true);
       await loginGuest();
@@ -52,7 +52,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
     }
   };
 
-  const onSubmit = async ({ email, password }: any) => {
+  const handleSubmitUser = async ({ email, password }: any) => {
     if (!email && !password) return;
     setIsLoading(true);
     try {
@@ -76,7 +76,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>{isSignup ? 'Signup' : 'Login'}</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(handleSubmitUser)}>
         <div className={styles.emailContainer}>
           <label htmlFor="email">Email</label>
           <input
@@ -117,7 +117,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
               className={styles.eyeIcon}
             />
           </div>
-          <p className={styles.error}>{errors.password?.message}</p>
+          <p className={styles.error}>{!isGuest && errors.password?.message}</p>
         </div>
         <button
           type="submit"
@@ -138,8 +138,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
               OR
             </p>
           </div>
-
-          <button onClick={submitGuest} className={styles.guestButton}>
+          <button onClick={handleSubmitGuest} className={styles.guestButton}>
             Continue as Guest
           </button>
         </div>
