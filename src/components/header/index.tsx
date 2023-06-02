@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';
 import Navbar from '../navbar';
@@ -10,9 +10,25 @@ import styles from './index.module.css';
 const Header = () => {
   const [error, setError] = useState('');
   const [confirmation, setConfirmation] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const { user, logout, deleteUserAccount } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => {
+      console.log('here');
+      const windowWidth = window.innerWidth;
+      setIsOpen(windowWidth > 767);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const name = user?.email || 'Guest';
 
   const handleLogout = async () => {
@@ -73,11 +89,7 @@ const Header = () => {
       <div className={styles.menuContainer}>
         <div
           onClick={handleOpenMenu}
-          className={
-            isOpen
-              ? `${styles.svgContainer} ${styles.open}`
-              : styles.svgContainer
-          }>
+          className={`${styles.svgContainer} ${isOpen ? styles.open : ''}`}>
           {isOpen ? <CloseIcon /> : <HamburgerMenu />}
         </div>
         {isOpen && (
