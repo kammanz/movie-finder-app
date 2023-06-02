@@ -3,11 +3,7 @@ import { recentDays } from '../constants/selectMenuOptions';
 
 export type ClickType = 'add' | 'remove';
 export type DropdownMenu = {
-  // sortType: MovieSortOptions;
   onSortChange: (value: MovieSortOptions) => void;
-  // onResetMovies: () => void;
-  // isDisabled: boolean;
-  // isHomepage: boolean;
 };
 export type UserId = string | null | undefined;
 export type Movie = {
@@ -21,14 +17,9 @@ export type Movie = {
 };
 export type MovieSortOptions = 'newest' | 'oldest' | typeof recentDays;
 export type User = firebase.User | null;
-export type isSignup = boolean;
-
 export type MovieListProps = {
-  // sortType: MovieSortOptions;
   listType: 'databaseMovies' | 'usersSavedMovies';
-  // isHomepage: boolean;
 };
-
 export type CardProps = {
   movie: Movie;
   handleAdd: (movie: Movie) => void;

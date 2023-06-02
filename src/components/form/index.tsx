@@ -5,18 +5,17 @@ import { doc, setDoc } from 'firebase/firestore';
 import { useAuth } from '../../auth/useAuth';
 import { db } from '../../firebase/firebaseSetup';
 import { parseFirebaseError } from '../../utils';
-import { isSignup } from '../../types';
 import LoadingOverlay from '../overlay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './index.module.css';
 
-const Form = ({ isSignup }: { isSignup: isSignup }) => {
+const Form = ({ isSignup }: { isSignup: boolean }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [firebaseError, setFirebaseError] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
+  const [firebaseError, setFirebaseError] = useState('');
   const {
     formState: { errors },
     handleSubmit,
@@ -37,7 +36,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
   const path = isSignup ? '/login' : '/';
 
   const togglePasswordVisibility = () => {
-    setPasswordVisible((prevVisible) => !prevVisible);
+    setIsPasswordVisible((prevVisible) => !prevVisible);
   };
 
   const handleSubmitGuest = async () => {
@@ -98,7 +97,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
           <label htmlFor="password">Password</label>
           <div className={styles.inputContainer}>
             <input
-              type={passwordVisible ? 'text' : 'password'}
+              type={isPasswordVisible ? 'text' : 'password'}
               data-testid="password"
               id="password"
               {...register('password', {
@@ -112,7 +111,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
               className={styles.input}
             />
             <FontAwesomeIcon
-              icon={passwordVisible ? faEyeSlash : faEye}
+              icon={isPasswordVisible ? faEyeSlash : faEye}
               onClick={togglePasswordVisibility}
               className={styles.eyeIcon}
             />
