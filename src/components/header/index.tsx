@@ -16,7 +16,6 @@ const Header = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      console.log('here');
       const windowWidth = window.innerWidth;
       setIsOpen(windowWidth > 767);
     };

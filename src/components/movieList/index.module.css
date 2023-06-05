@@ -37,6 +37,11 @@
     list-style: none;
 }
 
+.listMessage {
+    font-size: 16px;
+    
+}
+
 @media screen and (max-width: 767px) {
     .container {
         padding: 50px 32px;
@@ -53,6 +58,10 @@
 
     .headerContainer > p {
         font-size: 16px;
+    }
+
+    .listMessage {
+        font-size: 10px;
     }
 } 
     
