@@ -21,7 +21,7 @@ export const getSavedMovies = async (UserId: UserId) => {
   const querySnapshot = await getDocs(q);
   let savedMovies: Movie[] | undefined;
 
-  if (querySnapshot.size > 0) {
+  if (!querySnapshot.empty) {
     savedMovies = querySnapshot.docs.map((doc) => {
       const {
         id,
@@ -42,7 +42,7 @@ export const getSavedMovies = async (UserId: UserId) => {
         popularity,
       };
     });
-  } else if (querySnapshot.size === 0) {
+  } else {
     savedMovies = [];
   }
 
