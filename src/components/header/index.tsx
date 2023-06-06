@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';
-import Navbar from '../navbar';
 import HamburgerMenu from '../../assets/svgs/hamburgerMenu';
 import CloseIcon from '../../assets/svgs/closeIcon';
-
+import Navbar from '../navbar';
 import styles from './index.module.css';
 
 const Header = () => {
@@ -16,7 +15,6 @@ const Header = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      console.log('here');
       const windowWidth = window.innerWidth;
       setIsOpen(windowWidth > 767);
     };
@@ -28,8 +26,6 @@ const Header = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
-  const name = user?.email || 'Guest';
 
   const handleLogout = async () => {
     setError('');
@@ -84,7 +80,7 @@ const Header = () => {
   return (
     <header className={styles.container}>
       <div className={styles.userContainer}>
-        <h3 className={styles.greeting}>Welcome, {name}</h3>
+        <h3 className={styles.greeting}>Welcome, {user?.email || 'Guest'}</h3>
       </div>
       <div className={styles.menuContainer}>
         <div

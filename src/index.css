@@ -7,6 +7,5 @@ body {
     --grey: #f9f9f9;
     --white: #fff;
     --error: red;
-    /* font-family: 'Roboto'; */
     font-family: 'Roboto', sans-serif;
 }

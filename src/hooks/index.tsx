@@ -19,51 +19,59 @@ export const getSavedMovies = async (UserId: UserId) => {
   const usersMoviesRef = await collection(db, `users/${UserId}/movies`);
   const q = query(usersMoviesRef);
   const querySnapshot = await getDocs(q);
-  let savedMovies: Array<Movie> = [];
-  querySnapshot.forEach((doc) => {
-    const {
-      id,
-      isAdded,
-      poster_path,
-      release_date,
-      title,
-      isWatched,
-      popularity,
-    } = doc.data();
-    savedMovies.push({
-      id,
-      isAdded,
-      isWatched,
-      poster_path,
-      release_date,
-      title,
-      popularity,
+  let savedMovies: Movie[] | undefined;
+
+  if (!querySnapshot.empty) {
+    savedMovies = querySnapshot.docs.map((doc) => {
+      const {
+        id,
+        isAdded,
+        poster_path,
+        release_date,
+        title,
+        isWatched,
+        popularity,
+      } = doc.data();
+      return {
+        id,
+        isAdded,
+        isWatched,
+        poster_path,
+        release_date,
+        title,
+        popularity,
+      };
     });
-  });
+  } else {
+    savedMovies = [];
+  }
 
   return savedMovies;
 };
 
 export const useFullMovies = () => {
   const [rawMovies, setRawMovies] = useState<Movie[]>([]);
-  const [savedMovies, setSavedMovies] = useState<Movie[]>([]);
+  const [savedMovies, setSavedMovies] = useState<Movie[] | undefined>(
+    undefined
+  );
   const [rawMoviesError, setRawMoviesError] = useState<string>();
   const [savedMoviesError, setSavedMoviesError] = useState<string>();
   const { user } = useAuth();
 
   const getFirestoreMovies = useCallback(async () => {
-    try {
-      const result = await getSavedMovies(user?.uid);
-      setSavedMovies(result);
-    } catch (e) {
-      setSavedMoviesError(e as string);
+    if (user) {
+      try {
+        const result = await getSavedMovies(user.uid);
+        setSavedMovies(result);
+      } catch (e) {
+        setSavedMoviesError(e as string);
+      }
     }
-  }, [user?.uid]);
+  }, [user]);
 
   useEffect(() => {
     getRawMovies()
       .then((rawMovies) => {
-        console.log('raw movies');
         setRawMovies(rawMovies);
       })
       .catch((rawMoviesError: string) => {

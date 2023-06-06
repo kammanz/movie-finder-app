@@ -8,16 +8,14 @@
     margin: 0;
     padding: 0;
     list-style: none;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
     line-height: 23px;
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'Roboto';
     color: var(--black);
 }
 
 .listContainer li {
-    /* padding: 18px 30px; */
     justify-self: center;
     flex-grow: .15;
 }
@@ -27,8 +25,8 @@
 }
 
 .active {
-    color: var(--black);
     pointer-events: none;
+    color: var(--black);
 }
 
 .inActive {
@@ -42,22 +40,15 @@
     }
 
     .listContainer li {
-        padding: 0;
-        /* padding: 9px 15px; */
-        text-align: center;
         margin-bottom: 12px;
+        padding: 0;
+        text-align: center;
     }
 
     .listContainer li:last-child {
         margin-bottom: 23px;
-        /* padding: 0; */
-        /* padding: 9px 15px; */
-        /* text-align: center; */
-        /* margin-bottom: 12px; */
     }
     .listContainer li button {
-        /* padding: 18px 30px;
-        justify-self: center; */
         margin-bottom: 20px;
     }
 }

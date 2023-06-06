@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Movie, MovieListProps } from '../../types';
 import {
   addToFirestore,
@@ -18,6 +18,7 @@ const MovieList = ({ listType }: MovieListProps) => {
   const [sortType, setSortType] = useState<MovieSortOptions>('newest');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
   const {
     getFirestoreMovies,
     moviesToRender,
@@ -26,7 +27,7 @@ const MovieList = ({ listType }: MovieListProps) => {
     savedMoviesError,
   } = useFullMovies();
   const { user } = useAuth();
-  const heading = listType === 'databaseMovies' ? 'Search' : 'Saved';
+
   const initialMovies =
     listType === 'databaseMovies' ? moviesToRender : savedMovies;
 
@@ -58,14 +59,19 @@ const MovieList = ({ listType }: MovieListProps) => {
     }
   };
 
-  let sortedMovies: Movie[] | undefined =
-    initialMovies && sortMovies(sortType, initialMovies);
+  const sortedMovies = useMemo(() => {
+    if (initialMovies) {
+      return sortMovies(sortType, initialMovies);
+    }
+    return undefined;
+  }, [sortType, initialMovies]);
 
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>
         <p>
-          <span>{heading}</span> Movies
+          <span>{listType === 'databaseMovies' ? 'Search' : 'Saved'}</span>{' '}
+          Movies
         </p>
         <DropdownMenu onSortChange={handleSortChange} />
       </div>
@@ -80,6 +86,11 @@ const MovieList = ({ listType }: MovieListProps) => {
           />
         ))}
       </ul>
+      {sortedMovies?.length === 0 && (
+        <p className={styles.listMessage}>
+          <i>You have no movies yet</i>
+        </p>
+      )}
       {error && <p>{error}</p>}
       {rawMoviesError && <p>{rawMoviesError}</p>}
       {savedMoviesError && <p>{savedMoviesError}</p>}

@@ -1,6 +1,6 @@
 import { doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase/firebaseSetup';
 import { subDays, compareAsc } from 'date-fns';
+import { db } from '../firebase/firebaseSetup';
 import { Movie, MovieSortOptions, UserId } from '../types';
 import { SELECT_MENU_OPTIONS } from '../constants/selectMenuOptions';
 

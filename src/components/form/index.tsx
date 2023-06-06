@@ -2,21 +2,19 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../auth/useAuth';
 import { db } from '../../firebase/firebaseSetup';
 import { parseFirebaseError } from '../../utils';
-import { isSignup } from '../../types';
 import LoadingOverlay from '../overlay';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-
 import styles from './index.module.css';
 
-const Form = ({ isSignup }: { isSignup: isSignup }) => {
+const Form = ({ isSignup }: { isSignup: boolean }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [firebaseError, setFirebaseError] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
+  const [firebaseError, setFirebaseError] = useState('');
   const {
     formState: { errors },
     handleSubmit,
@@ -30,17 +28,11 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
   const { signup, login, loginGuest } = useAuth();
   const navigate = useNavigate();
 
-  const question = isSignup
-    ? 'Already have an account?'
-    : `Don't have an account?`;
-  const cta = isSignup ? 'Login' : 'Signup';
-  const path = isSignup ? '/login' : '/';
-
   const togglePasswordVisibility = () => {
-    setPasswordVisible((prevVisible) => !prevVisible);
+    setIsPasswordVisible(!isPasswordVisible);
   };
 
-  const submitGuest = async () => {
+  const handleSubmitGuest = async () => {
     try {
       setIsGuest(true);
       await loginGuest();
@@ -52,7 +44,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
     }
   };
 
-  const onSubmit = async ({ email, password }: any) => {
+  const handleSubmitUser = async ({ email, password }: any) => {
     if (!email && !password) return;
     setIsLoading(true);
     try {
@@ -76,7 +68,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>{isSignup ? 'Signup' : 'Login'}</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(handleSubmitUser)}>
         <div className={styles.emailContainer}>
           <label htmlFor="email">Email</label>
           <input
@@ -98,7 +90,7 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
           <label htmlFor="password">Password</label>
           <div className={styles.inputContainer}>
             <input
-              type={passwordVisible ? 'text' : 'password'}
+              type={isPasswordVisible ? 'text' : 'password'}
               data-testid="password"
               id="password"
               {...register('password', {
@@ -112,12 +104,12 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
               className={styles.input}
             />
             <FontAwesomeIcon
-              icon={passwordVisible ? faEyeSlash : faEye}
+              icon={isPasswordVisible ? faEyeSlash : faEye}
               onClick={togglePasswordVisibility}
               className={styles.eyeIcon}
             />
           </div>
-          <p className={styles.error}>{errors.password?.message}</p>
+          <p className={styles.error}>{!isGuest && errors.password?.message}</p>
         </div>
         <button
           type="submit"
@@ -129,17 +121,18 @@ const Form = ({ isSignup }: { isSignup: isSignup }) => {
         <div className={styles.linkContainer}>
           <div className={styles.navContainer}>
             <p>
-              {question}{' '}
+              {isSignup ? 'Already have an account?' : `Don't have an account?`}{' '}
               <span>
-                <Link to={path}>{cta}</Link>
+                <Link to={isSignup ? '/login' : '/'}>
+                  {isSignup ? 'Login' : 'Signup'}
+                </Link>
               </span>
               <br />
               <br />
               OR
             </p>
           </div>
-
-          <button onClick={submitGuest} className={styles.guestButton}>
+          <button onClick={handleSubmitGuest} className={styles.guestButton}>
             Continue as Guest
           </button>
         </div>

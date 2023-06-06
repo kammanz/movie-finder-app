@@ -1,11 +1,7 @@
 import React from 'react';
 import { FaSpinner } from 'react-icons/fa';
 
-interface Props {
-  isLoading: boolean;
-}
-
-const LoadingOverlay = ({ isLoading }: Props) => {
+const LoadingOverlay = ({ isLoading }: { isLoading: boolean }) => {
   return isLoading ? (
     <div
       style={{
