@@ -2,6 +2,7 @@
     min-height: 100vh;
     padding: 65px 100px 100px 100px;
     background-color: var(--grey);
+    font-family: 'Roboto';
 }
 
 .headerContainer {
@@ -14,10 +15,8 @@
     align-self: center;
     margin: 0;
     line-height: 35px;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
     font-size: 30px;
+    font-weight: 700;
     color: var(--blue);
 }
 
@@ -33,13 +32,12 @@
 .card {
     margin: 4px 8px;
     padding: 4px 8px;
-    background-color: var(--grey);
     list-style: none;
+    background-color: var(--grey);
 }
 
 .listMessage {
     font-size: 16px;
-    
 }
 
 @media screen and (max-width: 767px) {

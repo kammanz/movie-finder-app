@@ -8,12 +8,9 @@
    align-self: center;
 }
 
-
 .bannerContainer {
    width: 32vw;
 }
-
-
 
 .container p {
    margin: 0;
@@ -25,8 +22,7 @@
 
 @media screen and (max-width:767px) {
    .container {
-      padding: 22px 32px;
-      padding-top: 57px;
+      padding: 57px 32px 22px 32px;
    }
 
    .titleContainer {
@@ -39,8 +35,5 @@
       line-height: 28px;
       letter-spacing: 0em;
       text-align: left;
-   }
-
-   .bannerContainer {
    }
 }
