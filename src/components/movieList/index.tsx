@@ -75,7 +75,6 @@ const MovieList = ({ listType }: MovieListProps) => {
         </p>
         <DropdownMenu onSortChange={handleSortChange} />
       </div>
-
       <ul className={styles.listContainer}>
         {sortedMovies?.map((movie) => (
           <Card
@@ -87,7 +86,6 @@ const MovieList = ({ listType }: MovieListProps) => {
           />
         ))}
       </ul>
-
       {sortedMovies?.length === 0 && (
         <p className={styles.listMessage}>
           <i>You have no movies yet</i>

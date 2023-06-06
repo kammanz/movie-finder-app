@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../auth/useAuth';
 import { db } from '../../firebase/firebaseSetup';
 import { parseFirebaseError } from '../../utils';
 import LoadingOverlay from '../overlay';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-
 import styles from './index.module.css';
 
 const Form = ({ isSignup }: { isSignup: boolean }) => {
@@ -29,14 +28,8 @@ const Form = ({ isSignup }: { isSignup: boolean }) => {
   const { signup, login, loginGuest } = useAuth();
   const navigate = useNavigate();
 
-  const question = isSignup
-    ? 'Already have an account?'
-    : `Don't have an account?`;
-  const cta = isSignup ? 'Login' : 'Signup';
-  const path = isSignup ? '/login' : '/';
-
   const togglePasswordVisibility = () => {
-    setIsPasswordVisible((prevVisible) => !prevVisible);
+    setIsPasswordVisible(!isPasswordVisible);
   };
 
   const handleSubmitGuest = async () => {
@@ -128,9 +121,11 @@ const Form = ({ isSignup }: { isSignup: boolean }) => {
         <div className={styles.linkContainer}>
           <div className={styles.navContainer}>
             <p>
-              {question}{' '}
+              {isSignup ? 'Already have an account?' : `Don't have an account?`}{' '}
               <span>
-                <Link to={path}>{cta}</Link>
+                <Link to={isSignup ? '/login' : '/'}>
+                  {isSignup ? 'Login' : 'Signup'}
+                </Link>
               </span>
               <br />
               <br />

@@ -3,8 +3,8 @@ import { format } from 'date-fns';
 import { getImgUrl } from '../../api/index';
 import { CardProps } from '../../types';
 import Star from '../../assets/svgs/star';
-import styles from './index.module.css';
 import posterPlaceholder from '../../assets/svgs/posterPlaceholder.svg';
+import styles from './index.module.css';
 
 const Card = ({ movie, handleAdd, handleRemove, listType }: CardProps) => {
   const date = new Date(movie.release_date);
