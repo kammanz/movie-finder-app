@@ -64,7 +64,7 @@ const Header = () => {
       await logout();
 
       if (isSignup) {
-        navigate('/');
+        navigate('/signup');
       } else {
         navigate('/login');
       }
