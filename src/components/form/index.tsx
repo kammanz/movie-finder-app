@@ -36,7 +36,7 @@ const Form = ({ isSignup }: { isSignup: boolean }) => {
     try {
       setIsGuest(true);
       await loginGuest();
-      navigate('/homepage');
+      navigate('/dashboard');
     } catch (e) {
       if (e instanceof Error) {
         setFirebaseError(parseFirebaseError(e));
@@ -56,7 +56,7 @@ const Form = ({ isSignup }: { isSignup: boolean }) => {
       } else {
         await login(email.trim(), password.trim());
       }
-      navigate('/homepage');
+      navigate('/dashboard');
     } catch (e) {
       if (e instanceof Error) {
         setFirebaseError(parseFirebaseError(e));
@@ -123,7 +123,7 @@ const Form = ({ isSignup }: { isSignup: boolean }) => {
             <p>
               {isSignup ? 'Already have an account?' : `Don't have an account?`}{' '}
               <span>
-                <Link to={isSignup ? '/login' : '/'}>
+                <Link to={isSignup ? '/login' : '/signup'}>
                   {isSignup ? 'Login' : 'Signup'}
                 </Link>
               </span>
