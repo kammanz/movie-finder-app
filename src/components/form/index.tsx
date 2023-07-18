@@ -36,7 +36,7 @@ const Form = ({ isSignup }: { isSignup: boolean }) => {
     try {
       setIsGuest(true);
       await loginGuest();
-      navigate('/dashboard');
+      navigate('/');
     } catch (e) {
       if (e instanceof Error) {
         setFirebaseError(parseFirebaseError(e));
@@ -56,7 +56,7 @@ const Form = ({ isSignup }: { isSignup: boolean }) => {
       } else {
         await login(email.trim(), password.trim());
       }
-      navigate('/dashboard');
+      navigate('/');
     } catch (e) {
       if (e instanceof Error) {
         setFirebaseError(parseFirebaseError(e));

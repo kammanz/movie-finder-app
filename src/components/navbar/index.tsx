@@ -8,7 +8,7 @@ function Navbar() {
       <ul className={styles.listContainer}>
         <li>
           <NavLink
-            to="/dashboard"
+            to="/"
             className={({ isActive }) =>
               isActive ? styles.active : styles.inActive
             }>
