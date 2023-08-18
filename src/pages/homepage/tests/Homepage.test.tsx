@@ -1,12 +1,12 @@
-import React from 'react';
-import { screen, waitFor, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
-// import { expect } from '@jest/globals';
-import Homepage from '..';
-// import { geMovies } from '../Homepage';
+// import React from 'react';
+// import { screen, waitFor, fireEvent } from '@testing-library/react';
+// import '@testing-library/jest-dom';
+// import userEvent from '@testing-library/user-event';
+// // import { expect } from '@jest/globals';
+// import Homepage from '..';
+// // import { geMovies } from '../Homepage';
 
-const mockgeMovies = jest.fn();
+// const mockgeMovies = jest.fn();
 
 // jest.mock('../Homepage.tsx', () => ({
 //   geMovies: (sortType: any) => mockgeMovies,
@@ -18,7 +18,7 @@ const mockgeMovies = jest.fn();
 //   it('displays a list of movies, defaulting to sorted by newest', async () => {
 //     renderWithQueryClient(<Homepage UserId={undefined} />);
 
-//     const movieImages = (await screen.findAllByRole('img', {
+//     const movieImages = (await screen.findAllByRole('img', {q
 //       name: /poster$/i,
 //     })) as unknown as Array<HTMLImageElement>;
 //     const altText = movieImages.map((movie) => {
@@ -92,4 +92,4 @@ const mockgeMovies = jest.fn();
 //   });
 // });
 
-// export {};
+export {};

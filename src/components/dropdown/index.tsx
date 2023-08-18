@@ -8,6 +8,12 @@ import { SELECT_MENU_OPTIONS } from '../../constants/selectMenuOptions';
 import getDropdownStyles from './dropdownStyles';
 import styles from './index.module.css';
 
+export const SELECT_MENU_OPTIONS2 = [
+  { value: 'newest', label: 'Newest' },
+  { value: 'oldest', label: 'Oldest' },
+  { value: 'two days', label: `2 days` },
+];
+
 const DropdownMenu = ({ onSortChange }: DropDownMenuType) => {
   const initialState = window.innerWidth < 767;
   const [isMobile, setIsMobile] = useState(initialState);
@@ -33,7 +39,7 @@ const DropdownMenu = ({ onSortChange }: DropDownMenuType) => {
   return (
     <div className={styles.container}>
       <p>Sort by: </p>
-      <form style={{ position: 'relative' }}>
+      <form data-testid="form" style={{ position: 'relative' }}>
         <Select
           defaultValue={SELECT_MENU_OPTIONS[0]}
           options={SELECT_MENU_OPTIONS}
